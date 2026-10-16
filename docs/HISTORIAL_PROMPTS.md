@@ -18,10 +18,13 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 
 ## 2. Secuencia de prompts
 
-- **Módulo activo:** Módulo 0 — Configuración inicial, EN DESARROLLO.
-- **Bloque activo:** Bloque 6.
-- **Último prompt aprobado:** M0-B5-P1.
-- **Fuente de las aprobaciones:** el prompt M0-B6-P1 confirma revisión externa de los siete prompts anteriores. No se deducen del mero resultado de Codex.
+- **Módulo activo:** Módulo 1 — Frontend e Interfaz de Usuario, EN DESARROLLO.
+- **Módulo 0:** COMPLETADO y aprobado externamente.
+- **Avance del Módulo 1:** 4 de 12 prompts aprobados.
+- **Estado:** listo para relevo al siguiente integrante.
+- **Bloque activo:** Bloque 3 — Página principal.
+- **Último prompt aprobado:** M1-B3-P1.
+- **Fuente de las aprobaciones:** el responsable confirmó el cierre del Módulo 0, el sistema visual y los componentes UI; la aprobación de M1-B2-P1 consta en el prompt M1-B3-P1 y la de M1-B3-P1 en la solicitud expresa de relevo del responsable. No se deducen aprobaciones del mero resultado de Codex.
 
 | Prompt | Descripción | Estado |
 | --- | --- | --- |
@@ -32,13 +35,17 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 | M0-B3-P1 | Configuración de Git y entorno | APROBADO |
 | M0-B4-P1 | Creación de AGENTS.md | APROBADO |
 | M0-B5-P1 | Sistema de continuidad y seguimiento | APROBADO |
-| M0-B6-P1 | Auditoría integral, cierre técnico y primera publicación en GitHub | IMPLEMENTADO — PENDIENTE DE VALIDACIÓN |
+| M0-B6-P1 | Auditoría integral, cierre técnico y primera publicación en GitHub | APROBADO |
+| M1-B1-P1 | Implementación del sistema visual base | APROBADO |
+| M1-B1-P2 | Creación de componentes visuales reutilizables | APROBADO |
+| M1-B2-P1 | Configuración de rutas y estructura de navegación | APROBADO |
+| M1-B3-P1 | Desarrollo de la landing page definitiva | APROBADO |
 
-**Siguiente etapa prevista:** Módulo 1 — Frontend. Autorización PENDIENTE; Módulo 0 sujeto a validación externa de su cierre.
+**Siguiente prompt:** M1-B4-P1 — Formulario de inicio de sesión. Corresponde al siguiente integrante; no ejecutado.
 
 ## 3. Evidencia y observaciones por registro
 
-Las pruebas de los registros anteriores proceden de sus informes; las verificaciones nuevas se atribuyen expresamente a M0-B6-P1. Las rutas acreditan el resultado material, no la repetición de pruebas históricas.
+Las pruebas históricas proceden de sus informes; cada registro atribuye las verificaciones al bloque correspondiente. Las rutas acreditan el resultado material, no la repetición de pruebas anteriores.
 
 ### M0-B1-P1
 
@@ -91,13 +98,60 @@ Las pruebas de los registros anteriores proceden de sus informes; las verificaci
 ### M0-B6-P1
 
 - **Objetivo:** auditar estabilidad, reproducibilidad, seguridad y continuidad, y realizar la primera publicación si todas las condiciones se cumplen.
-- **Resultado:** IMPLEMENTADO — PENDIENTE DE VALIDACIÓN; último aprobado M0-B5-P1. No se declara cerrado ni aprobado el Módulo 0.
+- **Resultado histórico de implementación:** terminó IMPLEMENTADO — PENDIENTE DE VALIDACIÓN, con M0-B5-P1 como último aprobado. El responsable confirmó después su aprobación y el cierre formal del Módulo 0 mediante M1-B1-P1.
 - **Evidencia actual:** versiones e integridad verificadas; `npm ci` con lockfile actual correcto en copia temporal con caché; build y lint correctos en principal y copia; Vite arrancó y se detuvo, nueve utilidades CSS comprobadas; escritorio 1440 × 900 y móvil 390 × 844 inspeccionados sin desbordamiento ni errores de aplicación en consola.
 - **Seguridad y remoto:** contenido de los 25 candidatos y exclusiones comprobados, sin secretos conocidos; GitHub accesible y sin ramas ni etiquetas en la consulta inicial. Visibilidad PUBLIC confirmada y publicación pública autorizada expresamente por el responsable durante este bloque, sustituyendo la expectativa inicial de privacidad.
 - **Publicación comprobada:** commit inicial `10bc0ca12af399a0cdc098584894554b11eaf4c0`, mensaje `chore: inicializar base técnica de AcuerdoSeguro M0`; push normal con upstream a `origin/main` exitoso. Rama remota y árbol GitHub verificados, sin sobrescribir historial.
 - **Prueba de relevo:** clonación HTTPS nueva con los 25 archivos esperados, idénticos al commit inicial; `npm ci` con caché local, build y lint correctos. Instrucciones, continuidad y `.env.example` presentes; sin entornos privados, `node_modules` ni `dist` rastreados.
-- **Cierre documental:** se actualizan únicamente los dos documentos para reflejar las evidencias y la publicación; el commit documental posterior conserva el código ya probado. No se inserta el SHA de ese mismo commit dentro de su contenido.
-- **Pendientes:** revisión externa del bloque, ejecución en los otros cuatro equipos y prueba de carga de instrucciones en una sesión independiente. Módulo 1 sin autorización.
+- **Cierre documental publicado:** `4efefc6327751993459a27d81202533e4b3a5fc9`, mensaje `docs: registrar publicación y cierre técnico M0-B6-P1`; incluía solo continuidad. Ambos commits y la copia clonada quedaron sincronizados y limpios.
+- **Pendientes que continúan:** ejecución en los otros cuatro equipos y carga de instrucciones en una sesión independiente. La aprobación externa y autorización para iniciar Módulo 1 llegaron con M1-B1-P1.
+
+### M1-B1-P1
+
+- **Objetivo:** definir el sistema visual base y adaptar únicamente la bienvenida existente, sin páginas, componentes ni integraciones nuevos.
+- **Resultado histórico:** terminó IMPLEMENTADO — PENDIENTE DE VALIDACIÓN, con M0-B6-P1 como último aprobado. El responsable confirmó su aprobación al solicitar M1-B1-P2. Módulo 0 COMPLETADO y Módulo 1 EN DESARROLLO.
+- **Cambios:** tokens de paleta, fuente, radios y sombra en `src/index.css`; raíz de ancho completo y foco visible; centrado aislado en `src/App.css`; bienvenida institucional en `src/App.tsx`, con los dos textos originales.
+- **Pruebas:** PASS en build final, lint y arranque de Vite, detenido al finalizar; ocho tokens de color y siete utilidades verificados en CSS, paleta calculada correcta e inspección visual a 1440 × 900 y 390 × 844. Mediciones adicionales a 768 y 320 px y texto al 200 % sin desbordamiento ni superposiciones. Contrastes 14,27:1 y 4,76:1 para título y descripción; foco de teclado comprobado mediante sonda temporal del navegador, eliminada tras la prueba; sin errores de aplicación en consola ni animaciones. Las instalaciones y publicación del bloque anterior no se repiten aquí.
+- **Entrega:** cambios únicamente locales en cinco archivos autorizados; sin staging, commits ni push. M1-B1-P2 previsto y no ejecutado.
+
+### M1-B1-P2
+
+- **Objetivo:** implementar siete componentes UI genéricos y exportaciones centralizadas, sin modificar la bienvenida ni el sistema visual aprobado.
+- **Resultado histórico:** terminó IMPLEMENTADO — PENDIENTE DE VALIDACIÓN, con M1-B1-P1 como último aprobado. El responsable aprobó después los componentes mediante M1-B2-P1; el Módulo 1 continúa EN DESARROLLO.
+- **Archivos:** ocho nuevos en `src/components/ui/`: Button, TextField, TextareaField, SelectField, Card, Badge, PageContainer e `index.ts`; se conserva `.gitkeep` y se actualizan únicamente los dos documentos preexistentes.
+- **Diseño:** tokens existentes, controles nativos y clases Tailwind; variantes semánticas locales warning/danger con colores nativos de Tailwind, sin alterar tokens ni añadir dependencias.
+- **Verificaciones:** PASS en build, lint, arranque de Vite, siete exportaciones individuales y centrales, props y refs, IDs únicos/estables, labels y ARIA, tipo por defecto y submit, disabled, edición controlada/no controlada, teclado nativo y foco. Contraste mínimo de botones 4,83:1 y de badges 5,63:1; capturas a 1440 y 390 px y mediciones a 320 px sin desbordamiento. Sin errores ni advertencias de aplicación; montaje temporal retirado, bienvenida restaurada y servidor detenido.
+- **Límites:** hover visual no ejecutado por `hover: none` del navegador; sus reglas y disabled sí se comprobaron en CSS compilado. Pendiente ratón físico, lector de pantalla y los demás equipos; no se declara conformidad WCAG integral.
+- **Entrega:** se conservan los cambios locales de M1-B1-P1; sin staging, commits ni push. M1-B2-P1 previsto y no ejecutado.
+
+### M1-B2-P1
+
+- **Objetivo:** implementar la infraestructura SPA y pantallas temporales, conservando la bienvenida y sin funcionalidades de producto.
+- **Resultado histórico:** terminó IMPLEMENTADO — PENDIENTE DE VALIDACIÓN, con M1-B1-P2 como último aprobado. El responsable confirmó su aprobación mediante M1-B3-P1. Módulo 0 COMPLETADO; Módulo 1 EN DESARROLLO.
+- **Dependencias:** `react-router` 7.18.4 en modo declarativo, con BrowserRouter único en App; sin react-router-dom ni cambios de versión en paquetes anteriores. Manifiesto y lockfile coherentes.
+- **Archivos y arquitectura:** AppLayout con encabezado, navegación de cuatro destinos, NavLink activo, salto al único main y Outlet; HomePage con la bienvenida original, PlaceholderPage reutilizado en seis destinos y NotFoundPage para la ruta desconocida. Solo se adapta App.css para evitar altura de pantalla completa adicional bajo el encabezado.
+- **Rutas:** `/`, `/login`, `/registro`, `/panel`, `/contratos/nuevo`, `/contratos/:id`, `/verificar` y `*`. Panel y contratos NO están protegidos por autenticación; no muestran datos privados ni simulan sesiones. Login, registro, dashboard, contratos y verificación funcional siguen pendientes.
+- **Pruebas:** PASS en build, lint y arranque de Vite, detenido al finalizar. Chrome comprobó siete rutas y 404 por acceso directo, dos IDs de detalle y prioridad de `/contratos/nuevo`, regreso al inicio, SPA sin recargas y Atrás/Adelante con layout persistente. Un main y un h1 por vista, NavLink activo, Tab/Enter y salto al contenido con foco real. Mediciones a 1440, 390 y 320 px sin superposiciones ni desbordamiento; capturas de inicio y placeholder revisadas en escritorio y móvil; sin errores ni advertencias de aplicación.
+- **Límites:** validación en un equipo Linux; sin auditoría WCAG integral ni lector de pantalla. No se agregaron reglas de producción: Vite sirve HTML de desarrollo con HTTP 200 incluso para la vista 404. Reescrituras y protección real de rutas quedan para sus módulos.
+- **Entrega:** avances anteriores preservados, sin staging, commits ni push. M1-B3-P1 previsto, no ejecutado.
+
+### M1-B3-P1
+
+- **Objetivo:** desarrollar exclusivamente la landing en HomePage, conservando layout, rutas, sistema visual y siete componentes UI.
+- **Resultado histórico:** terminó IMPLEMENTADO — PENDIENTE DE VALIDACIÓN, con M1-B2-P1 como último aprobado. El responsable aprobó expresamente M1-B3-P1 en la solicitud posterior de relevo. Módulo 0 COMPLETADO, Módulo 1 EN DESARROLLO con 4 de 12 prompts aprobados.
+- **Implementación:** Hero con aviso de prototipo, fragmento Cómo funciona y enlace a registro; cuatro pasos futuros en lista ordenada; tres capacidades; Stellar, Soroban, privacidad y límites legales; CTA final con enlaces a registro y verificación. PageContainer, Card y Badge existentes, tokens institucionales y Tailwind; sin imágenes ni dependencias nuevas. Funciones pendientes identificadas junto a sus enlaces.
+- **Pruebas:** PASS en build, lint y arranque de Vite, detenido al finalizar. Chrome verificó estructura, fragmento con ratón y teclado, foco del destino, CTA SPA, navegación global, placeholders, siete rutas y 404, regreso e historial. Tab/Enter, salto al contenido y foco visible; foco blanco en CTA sobre azul. Capturas completas inspeccionadas y mediciones a 320 × 700, 390 × 844, 768 × 1024 y 1440 × 900; texto al 200 % en los cuatro tamaños sin scroll horizontal. Sin errores ni advertencias de aplicación en consola.
+- **Contenido y límites:** sin estadísticas, testimonios o contratos ficticios. SHA-256 como detector de cambios; Stellar y Soroban como tecnologías futuras, sin integraciones ni promesas jurídicas automáticas. No se implementaron login, registro, verificación documental, dashboard ni servicios. Pruebas en un equipo Linux; sin lector de pantalla, auditoría WCAG integral ni ratón físico. ESLint permanece sin actualizar.
+- **Entrega:** solo HomePage y ambos documentos de continuidad cambian frente al inicio; los demás archivos conservados byte a byte. Sin archivos nuevos de aplicación, instalaciones, staging, commits ni push. M1-B4-P1 previsto, pendiente de autorización y no ejecutado.
+
+### Relevo al siguiente integrante tras M1-B3-P1
+
+- **Autorización:** el responsable aprobó M1-B3-P1 y solicitó consolidar y publicar todos los avances legítimos pendientes en `main`. No se asigna un identificador de prompt inventado a esta operación.
+- **Continuidad:** Módulo 1, 4 de 12 prompts aprobados; estado listo para relevo al siguiente integrante. Siguiente prompt: M1-B4-P1 — Formulario de inicio de sesión, no ejecutado.
+- **Pruebas nuevas:** build y lint PASS con Node.js 24.22.0 y npm 11.19.1. Revisión de los 37 archivos candidatos y búsqueda de patrones de credenciales sin hallazgos; plantilla pública sin secretos, exclusiones privadas y de compilación verificadas. No se repitieron las pruebas visuales históricas.
+- **Git:** fetch de origin/main satisfactorio, sin divergencias respecto al HEAD anterior. Entrega de 19 archivos legítimos pendientes: siete modificados y doce nuevos, incluidos diseño, UI, layout, páginas, navegación, manifiesto, lockfile y continuidad. Sin funcionalidades nuevas ni cambios en archivos de aplicación durante este relevo.
+- **Commit autorizado de entrega:** `feat: guardar avance frontend M1 y preparar relevo`; su hash se obtiene mediante `git log -1 --format=%H`. El informe de cierre registra el resultado efectivo del push, la igualdad HEAD/origin/main y el estado final del repositorio.
+- **Siguiente integrante:** clonar el repositorio oficial, usar Node.js 24 y `npm ci`, leer AGENTS.md y continuidad, verificar build/lint y ejecutar únicamente el prompt M1-B4-P1 cuando reciba sus instrucciones completas.
 
 ## 4. Mantenimiento acumulativo y relevos
 

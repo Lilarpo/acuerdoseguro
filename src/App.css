@@ -1,6 +1,6 @@
 .welcome {
-  width: 100%;
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  padding: clamp(1.5rem, 5vw, 4rem);
 }

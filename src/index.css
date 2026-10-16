@@ -1,27 +1,47 @@
 @import "tailwindcss";
 
-:root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  line-height: 1.5;
-  color: #1f2937;
-  background-color: #f9fafb;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme static {
+  --color-brand: #142B49;
+  --color-accent: #12A89D;
+  --color-canvas: #F3F6FA;
+  --color-surface: #FFFFFF;
+  --color-ink: #1F2937;
+  --color-muted: #64748B;
+  --color-outline: #DCE4EE;
+  --color-accent-strong: #0B746D;
+
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --radius-control: 0.625rem;
+  --radius-panel: 1.5rem;
+  --shadow-panel: 0 12px 40px -24px rgb(20 43 73 / 0.18);
 }
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  :root {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+    color-scheme: light;
+    overflow-wrap: anywhere;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-body {
-  margin: 0;
-}
+  body {
+    margin: 0;
+  }
 
-#root {
-  display: grid;
-  align-items: center;
-  min-height: 100vh;
-  min-height: 100svh;
+  #root {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-accent-strong);
+    outline-offset: 3px;
+  }
 }

@@ -1,15 +1,26 @@
+import { BrowserRouter, Route, Routes } from 'react-router'
+import { AppLayout } from './components/layout/AppLayout'
+import { HomePage } from './pages/HomePage'
+import { NotFoundPage } from './pages/NotFoundPage'
+import { PlaceholderPage } from './pages/PlaceholderPage'
 import './App.css'
 
 function App() {
   return (
-    <main className="welcome text-center">
-      <h1 className="mb-4 text-3xl font-bold leading-tight wrap-anywhere sm:text-5xl">
-        AcuerdoSeguro
-      </h1>
-      <p className="text-lg text-gray-600">
-        Plataforma de contratos digitales verificables mediante Stellar.
-      </p>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="login" element={<PlaceholderPage title="Inicio de sesión" />} />
+          <Route path="registro" element={<PlaceholderPage title="Registro" />} />
+          <Route path="panel" element={<PlaceholderPage title="Panel de usuario" />} />
+          <Route path="contratos/nuevo" element={<PlaceholderPage title="Crear contrato" />} />
+          <Route path="contratos/:id" element={<PlaceholderPage title="Detalle de contrato" />} />
+          <Route path="verificar" element={<PlaceholderPage title="Verificación documental" />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
