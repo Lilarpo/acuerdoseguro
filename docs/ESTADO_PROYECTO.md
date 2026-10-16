@@ -9,7 +9,7 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 - **Rama de trabajo:** `main`.
 - **Propósito:** plataforma web de contratos digitales verificables mediante Stellar y Soroban.
 - **Versiones verificadas en M0-B6-P1:** Node.js 24.22.0, npm 11.19.1, React y React DOM 19.3.1, TypeScript 5.9.3, Vite 7.3.7, Tailwind CSS y `@tailwindcss/vite` 4.3.3, ESLint 9.39.5.
-- **Herramientas:** Git local y remoto GitHub configurados; publicación inicial pendiente.
+- **Herramientas:** Git local y GitHub configurados; primera publicación realizada y recuperada mediante clonación HTTPS.
 - **Tecnologías futuras, sin integrar:** Supabase, PostgreSQL, Supabase Auth, Supabase Storage, Stellar SDK, Freighter Wallet, Soroban con Rust y Vercel.
 
 ## 2. Estado actual de desarrollo
@@ -21,7 +21,7 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 | Estado del Módulo 0 | EN DESARROLLO |
 | Último prompt aprobado | M0-B5-P1 |
 | Prompt actualmente ejecutado | M0-B6-P1 |
-| Estado del prompt actual | EN EJECUCIÓN |
+| Estado del prompt actual | IMPLEMENTADO — PENDIENTE DE VALIDACIÓN |
 | Siguiente etapa prevista | Módulo 1 — Frontend; autorización PENDIENTE |
 
 Las aprobaciones de los siete prompts anteriores proceden del contexto confirmado por el responsable en M0-B6-P1. La implementación de este bloque no equivale a aprobación externa ni al cierre formal del Módulo 0.
@@ -33,7 +33,7 @@ Las aprobaciones de los siete prompts anteriores proceden del contexto confirmad
 - **Preparación arquitectónica:** `src/components/`, `src/pages/`, `src/types/` y `src/services/{supabase,stellar,documents}/` contienen únicamente sus `.gitkeep`; no implementan módulos funcionales.
 - **Preparación del repositorio:** `.nvmrc`, lockfile npm, `.gitignore`, finales LF y `.env.example` público, sin credenciales reales ni consumo de sus variables.
 - **Instrucciones permanentes:** `AGENTS.md` existe en la raíz.
-- **Continuidad:** los dos documentos de `docs/` fueron creados en M0-B5-P1, aprobado externamente, y se actualizan durante esta auditoría.
+- **Continuidad:** los dos documentos de `docs/` fueron creados en M0-B5-P1, aprobado externamente, y actualizados con los resultados de M0-B6-P1.
 - **Sin implementar:** registro e inicio de sesión, creación de contratos, PDF, hashes documentales, firmas o aprobaciones criptográficas, billeteras, integración Stellar, contratos Soroban, backend Supabase y despliegue Vercel.
 
 ## 4. Estado de los módulos
@@ -69,31 +69,34 @@ Las aprobaciones de los siete prompts anteriores proceden del contexto confirmad
 | Build y lint de la copia aislada | PASS; instalación reproducible verificada con el lockfile actual. |
 | Desarrollo, React, Tailwind y navegador | PASS; Vite arrancó y se detuvo; nueve utilidades verificadas en CSS; escritorio 1440 × 900 y móvil 390 × 844 inspeccionados, sin desbordamiento ni errores de aplicación en consola. |
 | Seguridad y exclusiones Git | PASS sobre los 25 archivos candidatos: contenido inspeccionado, sin secretos conocidos; `.env.example` permitida y entornos privados excluidos. |
-| Remoto y visibilidad | Accesible; sin ramas ni etiquetas al consultar. Visibilidad PUBLIC confirmada; el responsable autorizó expresamente publicar en público durante M0-B6-P1. |
-| Publicación y recuperación desde GitHub | PENDIENTES de concluir las verificaciones previas. |
+| Remoto y visibilidad | Accesible; la consulta inicial no encontró ramas ni etiquetas. Visibilidad PUBLIC confirmada; el responsable autorizó expresamente publicar en público durante M0-B6-P1. |
+| Publicación y recuperación desde GitHub | PASS; push inicial completado, `main` remota verificada y clonación HTTPS nueva con los 25 archivos esperados, incluidos instrucciones, documentos y plantilla pública. |
+| `npm ci`, build y lint desde la clonación nueva | PASS con caché local y lockfile actual; sin modificar dependencias ni configuración. |
+| Integridad y documentación | PASS; solo cambiaron los dos documentos de continuidad frente al inicio del bloque; sin cambios de código, versiones ni arquitectura. |
 
 **Pendiente en otros entornos:** validar instalación, build, lint y desarrollo en los otros cuatro equipos. La carga automática de `AGENTS.md` en una sesión independiente sigue sin comprobarse.
 
 ## 6. Problemas, advertencias y tareas pendientes
 
-- **Bloqueos:** ninguno identificado en configuración o contenido; auditorías técnicas y de seguridad previas a la publicación satisfactorias.
+- **Bloqueos:** ninguno identificado; auditorías técnicas y de seguridad, publicación inicial y prueba desde clonación satisfactorias.
 - **Advertencia conocida:** ESLint 9.39.5 fue reportado fuera de soporte; no se migró de versión.
 - **Advertencia npm previa:** autorización de scripts de esbuild pendiente de revisión; no impidió las últimas comprobaciones técnicas.
-- **Tareas pendientes:** finalizar M0-B6-P1 y someterlo a validación externa; primer commit y publicación autorizados sujetos a las comprobaciones; validación en otros equipos e integraciones futuras.
+- **Tareas pendientes:** validación externa de M0-B6-P1 y del cierre formal del Módulo 0; pruebas en los otros cuatro equipos; autorización del Módulo 1 e integraciones futuras.
 - Los errores de permisos de instalaciones anteriores fueron resueltos y no se consideran bloqueos actuales.
 
 ## 7. Estado de Git y publicación
 
 - **Rama:** `main`; **origin:** `https://github.com/Lilarpo/acuerdoseguro`.
-- **Commits locales:** ninguno; `HEAD` aún no identifica un commit. No consta un último commit publicado de estos avances.
-- **Archivos locales:** los archivos del proyecto y estos documentos están sin seguimiento; el índice no contiene archivos preparados.
-- **Publicación:** pendiente; remoto consultado sin ramas ni etiquetas. Repositorio público, con publicación pública expresamente autorizada por el responsable.
+- **Commit inicial publicado y verificado:** `10bc0ca12af399a0cdc098584894554b11eaf4c0`, mensaje `chore: inicializar base técnica de AcuerdoSeguro M0`.
+- **Archivos:** 25 archivos del proyecto rastreados, incluidos seis `.gitkeep`; dependencias y compilaciones excluidas. La actualización de cierre modifica únicamente estos dos documentos.
+- **Publicación:** primer push normal a `origin/main` completado y upstream configurado; remoto inicialmente sin historial, sin sobrescrituras. Repositorio público, con publicación pública expresamente autorizada por el responsable.
+- **Entrega:** se recuperó el commit inicial desde GitHub mediante clonación nueva; `npm ci`, build y lint pasaron. El ajuste documental de cierre se publica en un commit separado; consulta `git log -1` y compara `HEAD` con `origin/main` para identificar la punta vigente, sin insertar aquí el SHA del propio commit documental.
 - **Exclusiones:** dependencias, compilaciones, entornos privados y temporales ignorados; `.env.example` y los seis `.gitkeep` permitidos según M0-B3-P1.
-- M0-B6-P1 autoriza staging, primer commit y push normal únicamente después de completar satisfactoriamente las auditorías; nunca forzar ni sobrescribir historial.
+- No se publicaron credenciales conocidas, dependencias instaladas ni compilaciones. Los servidores de pruebas se detuvieron; no se inició el Módulo 1.
 
 ## 8. Próxima acción autorizada
 
-- Concluir M0-B6-P1 y someterlo a revisión externa; mantener M0-B5-P1 como último prompt aprobado.
+- Someter M0-B6-P1 a revisión externa; mantener M0-B5-P1 como último prompt aprobado hasta recibir confirmación explícita.
 - Módulo 1 — Frontend es la siguiente etapa prevista y requiere autorización explícita; el Módulo 0 no está cerrado formalmente.
 - No iniciar el Módulo 1 ni implementar funcionalidades nuevas.
 

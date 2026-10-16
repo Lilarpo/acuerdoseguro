@@ -4,7 +4,7 @@ Registro cronológico acumulativo de tareas y resultados. Consulta [ESTADO_PROYE
 
 ## 1. Convención y estados
 
-Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y prompt. El orden inicial sigue la secuencia de ejecución comunicada; no constan fechas, duraciones, identidades ni commits que deban añadirse.
+Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y prompt. Conserva el orden de ejecución y agrega solo fechas, identidades o referencias de commits verificables; las referencias reales de publicación empiezan en M0-B6-P1.
 
 | Estado | Significado |
 | --- | --- |
@@ -32,7 +32,7 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 | M0-B3-P1 | Configuración de Git y entorno | APROBADO |
 | M0-B4-P1 | Creación de AGENTS.md | APROBADO |
 | M0-B5-P1 | Sistema de continuidad y seguimiento | APROBADO |
-| M0-B6-P1 | Auditoría integral, cierre técnico y primera publicación en GitHub | EN EJECUCIÓN |
+| M0-B6-P1 | Auditoría integral, cierre técnico y primera publicación en GitHub | IMPLEMENTADO — PENDIENTE DE VALIDACIÓN |
 
 **Siguiente etapa prevista:** Módulo 1 — Frontend. Autorización PENDIENTE; Módulo 0 sujeto a validación externa de su cierre.
 
@@ -91,10 +91,13 @@ Las pruebas de los registros anteriores proceden de sus informes; las verificaci
 ### M0-B6-P1
 
 - **Objetivo:** auditar estabilidad, reproducibilidad, seguridad y continuidad, y realizar la primera publicación si todas las condiciones se cumplen.
-- **Resultado local:** EN EJECUCIÓN; último aprobado M0-B5-P1. No se declara cerrado ni aprobado el Módulo 0.
+- **Resultado:** IMPLEMENTADO — PENDIENTE DE VALIDACIÓN; último aprobado M0-B5-P1. No se declara cerrado ni aprobado el Módulo 0.
 - **Evidencia actual:** versiones e integridad verificadas; `npm ci` con lockfile actual correcto en copia temporal con caché; build y lint correctos en principal y copia; Vite arrancó y se detuvo, nueve utilidades CSS comprobadas; escritorio 1440 × 900 y móvil 390 × 844 inspeccionados sin desbordamiento ni errores de aplicación en consola.
-- **Seguridad y remoto:** contenido de los 25 candidatos y exclusiones comprobados, sin secretos conocidos; GitHub accesible sin ramas ni etiquetas. Visibilidad PUBLIC confirmada y publicación pública autorizada expresamente por el responsable durante este bloque, sustituyendo la expectativa inicial de privacidad.
-- **Publicación:** staging, commit, push y clonación de verificación pendientes; no se inventan referencias de commits.
+- **Seguridad y remoto:** contenido de los 25 candidatos y exclusiones comprobados, sin secretos conocidos; GitHub accesible y sin ramas ni etiquetas en la consulta inicial. Visibilidad PUBLIC confirmada y publicación pública autorizada expresamente por el responsable durante este bloque, sustituyendo la expectativa inicial de privacidad.
+- **Publicación comprobada:** commit inicial `10bc0ca12af399a0cdc098584894554b11eaf4c0`, mensaje `chore: inicializar base técnica de AcuerdoSeguro M0`; push normal con upstream a `origin/main` exitoso. Rama remota y árbol GitHub verificados, sin sobrescribir historial.
+- **Prueba de relevo:** clonación HTTPS nueva con los 25 archivos esperados, idénticos al commit inicial; `npm ci` con caché local, build y lint correctos. Instrucciones, continuidad y `.env.example` presentes; sin entornos privados, `node_modules` ni `dist` rastreados.
+- **Cierre documental:** se actualizan únicamente los dos documentos para reflejar las evidencias y la publicación; el commit documental posterior conserva el código ya probado. No se inserta el SHA de ese mismo commit dentro de su contenido.
+- **Pendientes:** revisión externa del bloque, ejecución en los otros cuatro equipos y prueba de carga de instrucciones en una sesión independiente. Módulo 1 sin autorización.
 
 ## 4. Mantenimiento acumulativo y relevos
 
