@@ -23,11 +23,11 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 - **Avance del Módulo 1:** 12 de 12 prompts aprobados.
 - **Estado:** M1-B8-P1 APROBADO; cierre formal del Módulo 1 confirmado.
 - **Bloque actual:** M2-B2 — Autenticación real de usuarios con Supabase.
-- **Último prompt de implementación aprobado:** M2-B2-P1.
+- **Último prompt de implementación aprobado:** M2-B2-P2.
 - **Última actividad administrativa de cierre:** CIERRE-DOC-M1, posterior a la aprobación. **Actividad operativa de relevo:** PUBLICACIÓN-RELEVO-M1. Ninguna cuenta como prompt de implementación.
 - **Incorporación operativa posterior:** INCORPORACIÓN-RELEVO-M1; comprobaciones técnicas satisfactorias y contradicción documental pendiente que se corrige durante M2-B1-P1.
 - **M2-B1:** COMPLETADO Y APROBADO; 2/2 prompts aprobados.
-- **Prompt actual:** PUBLICACIÓN-RELEVO-M2-01 — actividad operativa; M2-B2-P1 aprobado. M2 acumula 3 prompts aprobados.
+- **Actividad actual:** PUBLICACIÓN-RELEVO-M2-02 — operación de publicación y relevo. M2 acumula 4 prompts aprobados; M2-B2-P2 fue aprobado tras diez comprobaciones manuales confirmadas por el responsable.
 - **Fuente de las aprobaciones:** el responsable confirmó el cierre del Módulo 0, el sistema visual y los componentes UI; la aprobación de M1-B2-P1 consta en el prompt M1-B3-P1, la de M1-B3-P1 en la solicitud expresa de relevo, la de M1-B4-P1 en M1-B4-P2, la de M1-B4-P2 en M1-B5-P1, la de M1-B5-P1 en M1-B6-P1, la de M1-B6-P1 en M1-B6-P2, la de M1-B6-P2 en M1-B7-P1, la de M1-B7-P1 en M1-B7-P2, la de M1-B7-P2 en M1-B8-P1 y la de M1-B8-P1 en CIERRE-DOC-M1 tras 22 pruebas manuales. No se deducen aprobaciones del mero resultado de Codex.
 
 | Prompt | Descripción | Estado |
@@ -55,8 +55,9 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 | M2-B1-P1 | Configuración segura del cliente Supabase | APROBADO |
 | M2-B1-P2 | Diagnóstico y verificación de conexión Supabase | APROBADO |
 | M2-B2-P1 | Arquitectura de autenticación y estado de sesión | APROBADO |
+| M2-B2-P2 | Registro real de usuarios con Supabase Auth | APROBADO |
 
-**Siguiente acción prevista:** publicar y relevar los avances aprobados; M2-B2-P2 (registro real) sigue pendiente y requiere solicitud expresa.
+**Siguiente prompt:** M2-B2-P3 — Inicio de sesión real con Supabase Auth. **Estado: NO INICIADO.** Incorporar al siguiente integrante sin desarrollar login durante el relevo.
 
 ## 3. Evidencia y observaciones por registro
 
@@ -311,6 +312,30 @@ Las pruebas históricas proceden de sus informes; cada registro atribuye las ver
 - **Base comprobada antes del commit:** `main`, HEAD local, `origin/main` y consulta directa a GitHub coincidieron en `353e73706d343bd56fede23cd97f6c77fc2865d4`; el trabajo aprobado estaba local y sin staging.
 - **Seguridad de relevo:** `.env.local` ignorado y no rastreado; el siguiente integrante obtiene acceso autorizado al mismo proyecto Supabase y configura sus propias variables públicas desde `.env.example`. El HTTP 200 de Auth fue confirmado externamente, sin implicar usuarios, tablas, RLS ni login.
 - **Publicación:** su resultado se verifica después del push; no se presupone en esta entrada.
+
+### INCORPORACIÓN-RELEVO-M2-01 — comprobación recibida
+
+- GitHub confirmó directamente `93c356f8bb03da1352950067faee7a17239e06af`; copia limpia actualizada mediante fast-forward, sin pérdida de archivos ni commits nuevos. Cliente, scripts y arquitectura Auth recibidos. La nota previa de preparación de publicación se conserva como antecedente.
+- `npm ci` PASS tras reintentar con permisos normales por fallo DNS del sandbox; build, lint, 22 pruebas controladas y Vite PASS. Las ocho pantallas fueron comprobadas brevemente en Chrome. La conectividad real quedó pendiente inicialmente por ausencia de `.env.local`; el prompt M2-B2-P2 informa su configuración posterior y HTTP 200, confirmado de nuevo durante el bloque actual.
+
+### M2-B2-P2
+
+- **Resultado histórico de implementación:** PARCIAL al entregar Codex por alta real y aprobación pendientes; implementación y pruebas técnicas/controladas completas. El responsable aprobó posteriormente M2-B2-P2 mediante PUBLICACIÓN-RELEVO-M2-02 tras diez comprobaciones manuales satisfactorias. M0 COMPLETADO, M1 COMPLETADO Y PUBLICADO y M2-B1 COMPLETADO Y APROBADO.
+- **Servicio:** `src/services/supabase/registerUser.ts` reutiliza getSupabaseClient y llama exclusivamente a auth.signUp. Recorta nombre y correo, conserva mayúsculas del correo y contraseña exacta; envía `full_name` como metadato no verificado. Resultado discriminado para configuración, aceptación sin sesión, sesión presente, validación, conectividad, límite y rechazo; no devuelve contraseñas, tokens ni sesión completa. Errores internos y cuenta existente usan mensajes neutrales sin consultas adicionales.
+- **Interfaz:** RegisterPage conserva cuatro campos y todas sus validaciones. Usa ref síncrono y estado de carga para bloquear dobles envíos, deshabilita los campos durante la petición, informa progreso y resultado mediante status/alert. Limpia contraseñas tras aceptación, conserva nombre/correo y no borra los datos por fallos corregibles. Sin redirecciones, persistencia, eventos fabricados, logout o cambios de AuthProvider.
+- **Pruebas nuevas:** build, lint, Vite, diff check y las 22 pruebas del diagnóstico PASS. Salud real HTTP 200, salida 0, tras fallo DNS del sandbox y reintento autorizado. Servicio aislado: 13 escenarios más null y excepción al obtener cliente, normalización y resultados sin valores sensibles. Chrome con SDK instalado y fetch simulado: ocho escenarios de validación sin red, carga, una solicitud ante doble envío síncrono, resultados sin/con sesión, red/reintento, contraseña, límites, cuenta existente neutral, limpieza, no redirección ni almacenamiento. Tab/Enter, foco y ARIA; capturas a 320, 390, 768 y 1440 px, texto 200 % y mensajes sin scroll horizontal. Ocho rutas de regresión renderizadas; no se repitieron todas las interacciones de borradores anteriores.
+- **Red y consola:** las altas fueron interceptadas en el navegador con respuestas controladas, sin crear usuarios reales. Fallos de red simulados producen console.error propio del SDK; sin excepciones nuevas de aplicación. Scripts y capturas temporales fuera del repositorio, sin dependencias nuevas.
+- **Confirmación y límites:** sin emailRedirectTo adicional; Site URL existente conforme a la API oficial. Responsable debe revisar registro Email, confirmación, política de contraseñas y URLs de desarrollo antes de una única alta real. Callback y detección de sesión en URL siguen sin implementar; las tres opciones de sesión permanecen desactivadas. Salud HTTP 200 no demuestra registro ni recepción de correo. Checklist detallada en ESTADO_PROYECTO.md.
+- **Git:** solo un servicio nuevo, RegisterPage y ambos documentos modificados sobre `93c356f`. Cliente, AuthProvider, otras páginas, rutas, UI, configuraciones, dependencias y `.env.local` conservados; sin staging, commit ni push. M2-B2-P3 previsto y no ejecutado.
+
+### PUBLICACIÓN-RELEVO-M2-02 — actividad operativa
+
+- **Aprobación recibida:** el responsable confirmó diez comprobaciones manuales satisfactorias de M2-B2-P2, incluidas validaciones, solicitud real, respuesta de Supabase, revisión del correo y estado de cuenta de prueba, seguridad, navegación y responsive. M2-B2-P2 APROBADO; esas pruebas y la cuenta real no fueron ejecutadas ni creadas por Codex. El estado PARCIAL del informe inicial se conserva como antecedente histórico.
+- **Continuidad:** M0 COMPLETADO, M1 COMPLETADO Y PUBLICADO, M2-B1 COMPLETADO Y APROBADO, M2-B2-P1 APROBADO y M2-B2-P2 APROBADO. Último prompt de implementación aprobado: M2-B2-P2. Siguiente: M2-B2-P3 — Login real — NO INICIADO. Persistencia de sesiones y rutas protegidas pendientes.
+- **Base y alcance:** HEAD y main consultado directamente en GitHub coinciden en `93c356f8bb03da1352950067faee7a17239e06af`; fetch correcto, sin divergencias. Solo se preparan registerUser.ts, RegisterPage y ambos documentos. Código de registro aprobado conservado, sin nuevas funcionalidades ni cambios de AuthProvider o dependencias.
+- **Verificaciones nuevas de Codex:** build, lint, 22 pruebas controladas del diagnóstico y diff check; seguridad revisada sobre los cuatro archivos candidatos, sin secretos ni datos personales de cuentas de prueba. No se repiten altas reales ni pruebas manuales del responsable durante esta publicación.
+- **Commit autorizado:** `feat(auth): implementar registro real Supabase M2-B2-P2`. Su hash y resultado del push se verifican después de crearlo y publicar, mediante HEAD, origin/main, consulta directa a GitHub y estado limpio. Esta entrada no anticipa éxito del push.
+- **Siguiente integrante:** utilizar el mismo proyecto Supabase compartido con acceso propio autorizado y configurar su propio `.env.local`, ignorado por Git, con las variables públicas desde el dashboard. No copiar archivos privados del compañero ni compartir credenciales por chat. Usar Node.js 24, npm 11 y `npm ci`; leer AGENTS.md y continuidad, verificar diagnóstico/build/lint y esperar el prompt completo M2-B2-P3.
 
 ## 4. Mantenimiento acumulativo y relevos
 

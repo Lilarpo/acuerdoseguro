@@ -1,6 +1,7 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router'
 import { Button, Card, PageContainer, TextField } from '../components/ui'
+import { registerUser, type RegisterUserResult } from '../services/supabase/registerUser'
 
 type FieldName = 'name' | 'email' | 'password' | 'confirmation'
 
@@ -17,7 +18,9 @@ export function RegisterPage() {
     confirmation: false,
   })
   const [submitted, setSubmitted] = useState(false)
-  const [formValid, setFormValid] = useState(false)
+  const [result, setResult] = useState<RegisterUserResult | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const submittingRef = useRef(false)
   const nameRef = useRef<HTMLInputElement>(null)
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
@@ -53,10 +56,11 @@ export function RegisterPage() {
     setTouched((current) => ({ ...current, [field]: true }))
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (submittingRef.current) return
     setSubmitted(true)
-    setFormValid(false)
+    setResult(null)
 
     if (fullName.trim() === '') {
       nameRef.current?.focus()
@@ -75,7 +79,21 @@ export function RegisterPage() {
       return
     }
 
-    setFormValid(true)
+    submittingRef.current = true
+    setIsSubmitting(true)
+    try {
+      const response = await registerUser({ name: fullName, email, password })
+      setResult(response)
+      if (response.status === 'accepted' || response.status === 'session_present') {
+        setPassword('')
+        setConfirmation('')
+        setSubmitted(false)
+        setTouched({ name: false, email: false, password: false, confirmation: false })
+      }
+    } finally {
+      submittingRef.current = false
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -85,10 +103,10 @@ export function RegisterPage() {
           <h1 className="text-2xl font-semibold text-brand sm:text-3xl">Crear cuenta</h1>
           <p className="mt-3 leading-relaxed text-ink">Prepara tu acceso a AcuerdoSeguro.</p>
           <p className="mt-5 rounded-control border border-outline bg-canvas p-4 text-sm leading-relaxed text-ink">
-            El registro de usuarios todavía no está habilitado. Esta pantalla permite explorar y validar el formulario.
+            Solicita tu registro con correo y contraseña. Según la configuración del servicio, podrías necesitar confirmar tu correo antes de acceder.
           </p>
 
-          <form noValidate onSubmit={handleSubmit} className="mt-7 space-y-5">
+          <form noValidate aria-busy={isSubmitting} onSubmit={handleSubmit} className="mt-7 space-y-5">
             <TextField
               ref={nameRef}
               id="register-name"
@@ -97,11 +115,12 @@ export function RegisterPage() {
               type="text"
               autoComplete="name"
               required
+              disabled={isSubmitting}
               value={fullName}
               error={nameError}
               onChange={(event) => {
                 setFullName(event.currentTarget.value)
-                setFormValid(false)
+                setResult(null)
               }}
               onBlur={() => markTouched('name')}
             />
@@ -113,13 +132,14 @@ export function RegisterPage() {
               type="email"
               autoComplete="email"
               required
+              disabled={isSubmitting}
               placeholder="nombre@ejemplo.com"
               value={email}
               error={emailError}
               onChange={(event) => {
                 setEmail(event.currentTarget.value)
                 setEmailFormatInvalid(event.currentTarget.validity.typeMismatch)
-                setFormValid(false)
+                setResult(null)
               }}
               onBlur={() => markTouched('email')}
             />
@@ -131,13 +151,14 @@ export function RegisterPage() {
               type="password"
               autoComplete="new-password"
               required
+              disabled={isSubmitting}
               minLength={8}
               helperText="Utiliza al menos 8 caracteres."
               value={password}
               error={passwordError}
               onChange={(event) => {
                 setPassword(event.currentTarget.value)
-                setFormValid(false)
+                setResult(null)
               }}
               onBlur={() => markTouched('password')}
             />
@@ -149,21 +170,30 @@ export function RegisterPage() {
               type="password"
               autoComplete="new-password"
               required
+              disabled={isSubmitting}
               value={confirmation}
               error={confirmationError}
               onChange={(event) => {
                 setConfirmation(event.currentTarget.value)
-                setFormValid(false)
+                setResult(null)
               }}
               onBlur={() => markTouched('confirmation')}
             />
 
-            <Button type="submit" size="lg" className="w-full">Validar formulario</Button>
-            {formValid && (
-              <p role="status" className="rounded-control border border-outline bg-canvas p-4 text-sm leading-relaxed text-ink">
-                Los datos del formulario son válidos, pero el registro de cuentas todavía no está habilitado.
-              </p>
-            )}
+            <Button type="submit" size="lg" disabled={isSubmitting} className="w-full">
+              {isSubmitting ? 'Creando cuenta...' : 'Crear cuenta'}
+            </Button>
+            <div role="status" aria-atomic="true">
+              {isSubmitting && <p className="text-sm text-ink">La solicitud de registro está en proceso.</p>}
+              {result && (result.status === 'accepted' || result.status === 'session_present') && (
+                <p className="rounded-control border border-outline bg-canvas p-4 text-sm leading-relaxed text-ink">{result.message}</p>
+              )}
+            </div>
+            <div role="alert" aria-atomic="true">
+              {result && result.status !== 'accepted' && result.status !== 'session_present' && (
+                <p className="rounded-control border border-outline bg-canvas p-4 text-sm leading-relaxed text-ink">{result.message}</p>
+              )}
+            </div>
           </form>
 
           <p className="mt-7 text-center text-sm text-ink">

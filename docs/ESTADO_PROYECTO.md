@@ -10,7 +10,7 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 - **Propósito:** plataforma web de contratos digitales verificables mediante Stellar y Soroban.
 - **Versiones comprobadas:** Node.js 24.22.0, npm 11.19.1, React y React DOM 19.3.1, TypeScript 5.9.3, Vite 7.3.7, Tailwind CSS y `@tailwindcss/vite` 4.3.3, ESLint 9.39.5. M1-B2-P1 agrega `react-router` 7.18.4; ninguna dependencia anterior cambia de versión.
 - **Herramientas:** Git local y GitHub configurados; primera publicación realizada y recuperada mediante clonación HTTPS.
-- **Tecnologías futuras sin integración funcional:** PostgreSQL, Supabase Storage, Stellar SDK, Freighter Wallet, Soroban con Rust y Vercel. M2-B2-P1 observa eventos de Supabase Auth en un proveedor React; las pantallas aún no ejecutan registro ni login.
+- **Tecnologías futuras sin integración funcional:** PostgreSQL, Supabase Storage, Stellar SDK, Freighter Wallet, Soroban con Rust y Vercel. M2-B2-P1 observa eventos de Supabase Auth en un proveedor React; RegisterPage ejecuta ahora signUp mediante el servicio de M2-B2-P2; login sigue sin conectar.
 
 ## 2. Estado actual de desarrollo
 
@@ -20,11 +20,12 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 | Actividad operativa de relevo previa | PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; no son prompts de implementación |
 | Estado del Módulo 0 | COMPLETADO, aprobado externamente |
 | Estado del Módulo 1 | COMPLETADO Y APROBADO — 12 de 12 prompts aprobados |
-| Estado del Módulo 2 | EN DESARROLLO — M2-B1 completado y aprobado (2/2); M2-B2-P1 aprobado; 3 prompts de M2 aprobados |
-| Último prompt de implementación aprobado | M2-B2-P1 |
-| Prompt actual | PUBLICACIÓN-RELEVO-M2-01 — actividad operativa, sin implementación nueva |
-| Publicación de M1 | Confirmada en `origin/main` mediante `353e73706d343bd56fede23cd97f6c77fc2865d4`; los cambios de M2 permanecen locales |
-| Siguiente trabajo previsto | Incorporación del siguiente integrante; M2-B2-P2 (registro real) solo si el responsable lo solicita |
+| Estado del Módulo 2 | EN DESARROLLO — M2-B1 completado y aprobado (2/2); M2-B2-P1 y M2-B2-P2 aprobados; 4 prompts de M2 aprobados |
+| Último prompt de implementación aprobado | M2-B2-P2 |
+| Prompt actual | PUBLICACIÓN-RELEVO-M2-02 — actividad operativa, sin funcionalidades nuevas |
+| Estado del relevo | Preparado para el siguiente integrante; publicación del nuevo commit sujeta a verificación efectiva de push y Git |
+| Publicaciones previas verificadas | M1 mediante `353e73706d343bd56fede23cd97f6c77fc2865d4`; M2 hasta M2-B2-P1 mediante `93c356f8bb03da1352950067faee7a17239e06af` |
+| Siguiente trabajo previsto | M2-B2-P3 — Inicio de sesión real con Supabase Auth — NO INICIADO |
 
 El responsable confirmó después del informe de M1-B8-P1 que completó satisfactoriamente 22 comprobaciones manuales de regresión integral, sin defectos bloqueantes comunicados, y aprobó M1-B8-P1 y el cierre del Módulo 1. Codex no ejecutó esas pruebas de navegador. La publicación posterior de M1 se verificó durante PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; ninguna de esas actividades acredita funcionamiento de integraciones futuras.
 
@@ -37,18 +38,19 @@ El responsable confirmó después del informe de M1-B8-P1 que completó satisfac
 - **Navegación SPA local:** un BrowserRouter en `App.tsx`, Routes/Route declarativos y `AppLayout` con Outlet, encabezado, NavLink activo y salto al único `main`. Enlaces visibles a Inicio, Verificar, Iniciar sesión y Registrarse, sin menús complejos.
 - **Rutas:** `/` muestra HomePage; `/login` muestra LoginPage; `/registro` muestra RegisterPage; `/panel` muestra DashboardPage; `/contratos/nuevo` muestra CreateContractPage; `/contratos/:id` muestra ContractDetailPage; `/verificar` muestra VerifyDocumentPage. `*` muestra NotFoundPage, sin redirección silenciosa.
 - **Login aprobado:** formulario con correo y contraseña controlados, errores locales, aviso de autenticación no disponible y enlace SPA a `/registro`. Su aprobación y pruebas manuales de navegador fueron comunicadas por el responsable en M1-B4-P2; Codex no las ejecutó en su entorno.
-- **Registro aprobado:** cuatro campos controlados, validación local y aviso de registro no disponible. El responsable comunicó en M1-B5-P1 que completó pruebas manuales de formulario, navegación, responsive, consola, red, almacenamiento y zoom al 200 %, y aprobó M1-B4-P2; Codex no las ejecutó en su entorno.
+- **Registro frontend aprobado en M1:** cuatro campos controlados y validación local, originalmente sin alta real. El responsable comunicó en M1-B5-P1 que completó pruebas manuales de formulario, navegación, responsive, consola, red, almacenamiento y zoom al 200 %, y aprobó M1-B4-P2; Codex no las ejecutó en su entorno.
+- **Registro conectado en M2-B2-P2:** RegisterPage utiliza `src/services/supabase/registerUser.ts` para llamar al cliente aprobado y `auth.signUp`. Envía nombre recortado como `full_name`, correo sin espacios exteriores (sin cambiar mayúsculas, conforme al formulario) y contraseña intacta. El servicio devuelve solo estado discriminado y mensaje seguro, nunca sesiones, tokens ni contraseñas. Metadatos no equivalen a identidad legal verificada. Carga con campos bloqueados, ref contra doble envío y limpieza de ambas contraseñas al aceptar; no hay redirección automática. El responsable confirmó diez comprobaciones manuales satisfactorias, incluida solicitud real, respuesta de Supabase, revisión del correo y estado de cuenta de prueba, seguridad, navegación y responsive; M2-B2-P2 APROBADO. Estas comprobaciones externas no fueron ejecutadas por Codex.
 - **Dashboard aprobado:** vista preliminar sin datos consultados, con accesos a creación y verificación. El responsable comunicó en M1-B6-P1 que realizó nueve pruebas manuales de navegador, incluidas navegación, responsive, zoom, teclado, consola y ausencia de consultas privadas o sesiones ficticias, y aprobó M1-B5-P1; Codex no las ejecutó en su entorno.
 - **Formulario de borrador aprobado:** siete campos, validación local de campos y correos, aviso de validación local y ausencia de persistencia. El responsable confirmó 15 pruebas manuales satisfactorias y aprobó M1-B6-P1; Codex no las ejecutó en su entorno.
 - **Revisión local aprobada:** tras validar los valores actuales, una acción explícita muestra título, descripción, ambos participantes y cláusulas desde el estado React; volver a editar conserva los valores. El responsable comunicó 15 pruebas manuales satisfactorias y aprobó M1-B6-P2; Codex no las ejecutó en su entorno.
 - **Detalle preliminar aprobado:** `/contratos/:id` muestra la referencia solicitada como no verificada, limita su representación visible si es larga y ofrece secciones de información, participantes, aprobaciones y evidencia con datos no disponibles. El responsable comunicó 14 pruebas manuales satisfactorias y aprobó M1-B7-P1; Codex no las ejecutó en su entorno.
 - **Interfaz de verificación aprobada:** `/verificar` permite seleccionar un archivo sin leerlo ni subirlo y validar localmente el formato de una huella SHA-256 de referencia. El aviso de formato válido no constituye verificación de integridad. El responsable comunicó 15 comprobaciones manuales satisfactorias y aprobó M1-B7-P2; Codex no las ejecutó en su entorno.
 - **Seguridad de rutas:** `/panel`, `/contratos/nuevo` y `/contratos/:id` son públicas temporalmente y no consultan ni almacenan datos privados. La protección real corresponde al módulo de autenticación; no existen controles de sesión ficticios.
-- **Preparación arquitectónica:** se conservan todos los `.gitkeep`; `src/types/` y los tres servicios siguen reservados y sin integraciones. La lógica criptográfica y las consultas reales permanecen pendientes.
-- **Preparación del repositorio:** `.nvmrc`, lockfile npm, `.gitignore`, finales LF y `.env.example` público, sin credenciales reales. M2-B1-P1 lee solo las dos variables públicas Supabase cuando se solicita el cliente; las pantallas no consumen el módulo.
+- **Preparación arquitectónica:** se conservan todos los `.gitkeep`; `src/types/`, documentos y Stellar siguen reservados; Supabase contiene ahora el servicio de registro y conserva `.gitkeep`. La lógica criptográfica y las consultas reales permanecen pendientes.
+- **Preparación del repositorio:** `.nvmrc`, lockfile npm, `.gitignore`, finales LF y `.env.example` público, sin credenciales reales. M2-B1-P1 lee solo las dos variables públicas Supabase cuando se solicita el cliente; RegisterPage lo consume indirectamente mediante el nuevo servicio.
 - **Preparación Supabase de M2-B1-P1:** `@supabase/supabase-js` 2.118.0 y `src/lib/supabaseClient.ts` proporcionan un cliente tipado y diferido, o `null` si faltan datos públicos, la clave no es publicable o la URL no es HTTP(S). La sesión no se persiste, renueva ni restaura automáticamente; no se hacen consultas ni autenticación. El responsable confirmó posteriormente configuración local y conexión real de salud de Auth; no equivale a login.
 - **Diagnóstico opt-in de M2-B1-P2:** `npm run supabase:check` carga `.env.local` si existe y consulta únicamente `GET /auth/v1/health` de un proyecto HTTPS alojado en Supabase. Rechaza claves no publicables, URLs inseguras y dominios ajenos antes de enviar la clave; usa timeout y no sigue redirecciones. `npm run supabase:check:test` ejecuta pruebas simuladas sin internet. El diagnóstico no forma parte del frontend ni se ejecuta al arrancar Vite.
-- **Arquitectura Auth de M2-B2-P1:** `src/auth/` define estados tipados (`not_configured`, `initializing`, `signed_out`, `session_present`, `error`), contexto, proveedor y `useAuth`. El proveedor reutiliza `getSupabaseClient()`, observa `INITIAL_SESSION`, `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED` y `USER_UPDATED`, y cancela su suscripción al desmontarse. Solo expone `id` y correo opcional de una sesión observada; esto no verifica identidad ni autoriza datos. `main.tsx` lo integra bajo `StrictMode`. Sin configuración, deja la UI disponible y no se suscribe. El SDK mantiene `persistSession`, `autoRefreshToken` y `detectSessionInUrl` desactivados; no hay registro, login, cierre de sesión ni rutas protegidas.
+- **Arquitectura Auth de M2-B2-P1:** `src/auth/` define estados tipados (`not_configured`, `initializing`, `signed_out`, `session_present`, `error`), contexto, proveedor y `useAuth`. El proveedor reutiliza `getSupabaseClient()`, observa `INITIAL_SESSION`, `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED` y `USER_UPDATED`, y cancela su suscripción al desmontarse. Solo expone `id` y correo opcional de una sesión observada; esto no verifica identidad ni autoriza datos. `main.tsx` lo integra bajo `StrictMode`. Sin configuración, deja la UI disponible y no se suscribe. El SDK mantiene `persistSession`, `autoRefreshToken` y `detectSessionInUrl` desactivados; el proveedor no implementa acciones de registro, login, cierre de sesión ni protección de rutas. El registro se ejecuta ahora en su servicio independiente, sin modificar este proveedor.
 - **Proyecto Supabase de desarrollo:** el responsable creó el proyecto y configuró localmente su URL y clave publishable en `.env.local`, ignorado por Git. Confirmó dos veces HTTP 200 del endpoint de salud de Auth desde su terminal. El acceso del siguiente integrante se gestiona desde la organización del dashboard y requiere sus propios valores públicos locales; Git no transfiere el proyecto remoto. No constan tablas, migraciones ni políticas RLS ejecutadas.
 - **Instrucciones permanentes:** `AGENTS.md` existe en la raíz.
 - **Auditoría final aprobada:** rutas, formularios, validaciones, accesibilidad, seguridad del alcance frontend y regresión integral revisadas. Build, lint y Vite pasaron en la auditoría técnica; el responsable confirmó 22 pruebas manuales satisfactorias. No se modificó código durante M1-B8-P1.
@@ -62,7 +64,7 @@ La aprobación de cada interfaz no significa que sus integraciones reales estén
 | --- | --- | --- |
 | `/` | Landing | Interfaz aprobada |
 | `/login` | Inicio de sesión | Interfaz y validación local aprobadas |
-| `/registro` | Registro | Interfaz y validación local aprobadas |
+| `/registro` | Registro | Registro real implementado y aprobado tras diez comprobaciones manuales externas |
 | `/panel` | Dashboard | Interfaz y estado vacío aprobados |
 | `/contratos/nuevo` | Creación y revisión local | Interfaz y validaciones locales aprobadas |
 | `/contratos/:id` | Detalle preliminar | Interfaz aprobada; referencia de URL no verificada |
@@ -71,7 +73,7 @@ La aprobación de cada interfaz no significa que sus integraciones reales estén
 
 ### Funcionalidades pendientes de integración
 
-No existen todavía operaciones reales de registro o login, cuentas persistentes, base de datos de contratos, almacenamiento documental, guardado y consulta reales de acuerdos, aprobaciones criptográficas, integración de billeteras Stellar, cálculo SHA-256 sobre documentos, comparación criptográfica, registro o consulta de evidencia en Stellar, integración Soroban ni escrow. También siguen pendientes generación documental, backend de datos Supabase y despliegue. Las pantallas no representan operaciones reales.
+El registro real con Supabase Auth está implementado y aprobado tras validación manual del responsable. Codex no creó usuarios reales durante sus pruebas controladas. Siguen pendientes login real, persistencia de sesión, base de datos de contratos, almacenamiento documental, guardado y consulta reales de acuerdos, aprobaciones criptográficas, integración de billeteras Stellar, cálculo SHA-256 sobre documentos, comparación criptográfica, registro o consulta de evidencia en Stellar, integración Soroban ni escrow. También siguen pendientes generación documental, backend de datos Supabase y despliegue. El resto de pantallas conserva su alcance local o preliminar.
 
 ## 4. Estado de los módulos
 
@@ -79,7 +81,7 @@ No existen todavía operaciones reales de registro o login, cuentas persistentes
 | --- | --- | --- | --- |
 | 0 | Configuración inicial | COMPLETADO | Ocho prompts aprobados externamente; base publicada en GitHub. |
 | 1 | Frontend e Interfaz de Usuario | COMPLETADO Y APROBADO | 12 de 12 prompts aprobados, incluida M1-B8-P1 tras 22 comprobaciones manuales externas satisfactorias. Publicado en `origin/main` mediante `353e73706d343bd56fede23cd97f6c77fc2865d4`. |
-| 2 | Backend y Supabase | EN DESARROLLO | M2-B1-P1, M2-B1-P2 y M2-B2-P1 aprobados; M2-B1 completado y aprobado (2/2). Sin registro, login ni base de datos de contratos conectados. |
+| 2 | Backend y Supabase | EN DESARROLLO | M2-B1-P1, M2-B1-P2 y M2-B2-P1 aprobados; M2-B1 completado y aprobado (2/2). M2-B2-P2 APROBADO tras diez comprobaciones manuales externas. Registro real implementado; login, persistencia de sesiones, rutas protegidas y datos contractuales pendientes. |
 | 3 | Stellar y Soroban | PENDIENTE | Carpeta reservada, sin SDK ni contratos. |
 | 4 | Documentos y verificación | PENDIENTE | Carpeta reservada, sin lógica documental. |
 | 5 | Integración, pruebas y despliegue | PENDIENTE | Sin despliegue ni integración entre servicios. |
@@ -323,12 +325,45 @@ El comando de diagnóstico usa salida 0 solo para salud de Auth confirmada, 1 pa
 
 **Aprobación posterior de M2-B2-P1:** el responsable confirmó catorce comprobaciones manuales satisfactorias del frontend con AuthProvider integrado. Supabase Auth respondió HTTP 200 desde su terminal, las ocho rutas permanecieron operativas, no hubo regresiones en consola ni Network, no se introdujo persistencia de sesiones y Git conservó los cambios locales. Codex no ejecutó esas pruebas de navegador. M2-B2-P1 queda APROBADO; login y registro reales aún no existen y sus transiciones no se han probado.
 
+### Verificaciones de M2-B2-P2
+
+| Comprobación | Resultado |
+| --- | --- |
+| Build, lint y diff check | PASS; TypeScript/Vite y ESLint sin errores; permanece la advertencia de bundle mayor de 500 kB. |
+| Desarrollo | PASS; Vite en `http://localhost:5173/`, detenido al terminar. |
+| Diagnóstico Supabase controlado | PASS, 22/22 casos existentes, sin cambios en los scripts. |
+| Diagnóstico real de salud | PASS, SERVICIO ACCESIBLE — HTTP 200, salida 0. Primer intento en sandbox falló por DNS; reintento autorizado correcto. No acredita creación de usuarios. |
+| Servicio aislado | PASS con TypeScript instalado y cliente simulado: 13 escenarios de respuesta, más configuración ausente y excepción de configuración. Verifica trim de nombre/correo, contraseña intacta, una llamada y resultado sin valores sensibles. |
+| Registro en Chrome con SDK instalado | PASS; ocho casos inválidos sin solicitudes; envío válido, doble envío síncrono, bloqueo de campos, progreso, respuestas sin sesión y con sesión, red y reintento, contraseña rechazada, límite y cuenta existente con mensaje neutral. Contraseñas borradas al aceptar, datos conservados ante error, sin redirección ni localStorage/sessionStorage/cookies. Respuestas de red interceptadas antes de arrancar la app; no se enviaron altas al servidor ni se crearon usuarios. |
+| Accesibilidad y responsive | PASS en revisión básica: errores ARIA y foco al primer campo inválido, regiones status/alert, Tab/Enter y foco visible. Capturas revisadas a 320, 390, 768 y 1440 px; mensajes de error y carga sin scroll horizontal; errores comprobados también con texto al 200 %. No es auditoría WCAG integral. |
+| Regresión | Ocho rutas renderizadas en Chrome; cliente, proveedor Auth, login, dashboard, borrador/revisión, detalle, verificación, layout y landing sin modificaciones. No se repitió toda la matriz funcional histórica. |
+| Consola y red | Sin excepciones nuevas de aplicación; los fallos de red simulados provocan el console.error propio del SDK. Network controlado durante altas, sin peticiones reales de registro ni reintentos automáticos. |
+| Alta real y correo, ejecución de Codex | NO EJECUTADO por Codex; las pruebas de navegador anteriores utilizaron respuestas controladas. El responsable confirmó después diez comprobaciones manuales satisfactorias y aprobó M2-B2-P2. |
+
+**Aprobación posterior:** en PUBLICACIÓN-RELEVO-M2-02, el responsable confirmó diez comprobaciones manuales satisfactorias del registro real: validaciones, solicitud real, respuesta de Supabase, revisión del correo y estado de cuenta de prueba, seguridad, navegación y responsive. M2-B2-P2 queda APROBADO. Esta evidencia externa cierra el estado PARCIAL del informe inicial; no se atribuye a Codex la creación de la cuenta ni esas comprobaciones.
+
+### Checklist externa original de M2-B2-P2 — antecedente de la validación
+
+1. En el proyecto compartido, revisar Authentication → Providers → Email (o ubicación equivalente): registro por correo habilitado, confirmación activa o inactiva y política de contraseña. No se consultaron ni cambiaron automáticamente estos ajustes.
+2. Revisar Authentication → URL Configuration: Site URL y URLs permitidas para el origen de desarrollo `http://localhost:5173`. Aprobar cualquier cambio necesario; sin dominios arbitrarios ni redirecciones abiertas.
+3. El servicio omite `emailRedirectTo` y conserva el Site URL configurado según el comportamiento de [signUp](https://supabase.com/docs/reference/javascript/auth-signup). No hay callback nuevo ni procesamiento de tokens: `detectSessionInUrl` sigue desactivado. Confirmar el correo no implica inicio de sesión automático en esta aplicación.
+4. Con una única cuenta de prueba propia autorizada, comprobar una sola solicitud, respuesta real y mensaje adecuado; recepción del correo si corresponde y está disponible, ausencia de redirección, errores inesperados y almacenamiento de contraseñas. No compartir credenciales por chat ni crear cuentas repetidas para sortear límites.
+5. La aprobación fue recibida mediante PUBLICACIÓN-RELEVO-M2-02; M2-B2-P2 es ahora el último aprobado. No iniciar M2-B2-P3 durante el relevo.
+
+### Verificaciones de PUBLICACIÓN-RELEVO-M2-02
+
+- Se revisaron únicamente los cuatro archivos de entrega aprobados, sin cambios funcionales durante esta operación. `.env.local`, `.env`, dependencias y compilaciones permanecen excluidos; no se incluyen secretos, valores de configuración ni datos personales de cuentas de prueba.
+- Se consultó directamente GitHub y se ejecutó `git fetch origin main`; referencia remota y HEAD previos coinciden en `93c356f8bb03da1352950067faee7a17239e06af`, sin divergencia ni staging previo desconocido.
+- Pruebas técnicas nuevas de Codex: `npm run build`, `npm run lint`, `npm run supabase:check:test` (22/22) y `git diff --check`. Resultados efectivos comprobados antes de publicar; las pruebas manuales del registro corresponden al responsable, no a esta operación.
+- No se instalaron dependencias, no se configuró Supabase ni se crearon o eliminaron usuarios. La solicitud autoriza un único commit y push normales después de revisar el staging; publicación y limpieza se acreditan únicamente mediante la comprobación final de Git.
+
 ## 6. Problemas, advertencias y tareas pendientes
 
 - **Cierre funcional del frontend:** M1-B8-P1 y el Módulo 1 fueron aprobados externamente tras 22 comprobaciones manuales satisfactorias. Codex no repitió esas pruebas en su entorno sin navegador.
 - **Advertencia conocida:** ESLint 9.39.5 fue reportado fuera de soporte; no se migró de versión.
 - **Advertencia npm previa:** autorización de scripts de esbuild pendiente de revisión; no impidió las últimas comprobaciones técnicas.
-- **Tareas pendientes:** incorporación técnica del siguiente integrante y validación en su equipo. Registro, login, consulta contractual y verificación criptográfica reales requieren prompts futuros autorizados. Acceso directo en producción y reescrituras del servidor se resolverán en despliegue. La 404 es una vista SPA; Vite devuelve el HTML base con HTTP 200 durante desarrollo.
+- **Tareas pendientes:** incorporación del siguiente integrante y M2-B2-P3 — Login real. Persistencia de sesiones, rutas protegidas, consulta contractual y verificación criptográfica reales siguen pendientes y requieren sus prompts autorizados. Acceso directo en producción y reescrituras del servidor se resolverán en despliegue. La 404 es una vista SPA; Vite devuelve el HTML base con HTTP 200 durante desarrollo.
+- **Advertencia Vite:** bundle mayor de 500 kB; build correcto, sin cambiar configuración ni dependencias para silenciarlo.
 - Los errores de permisos de instalaciones anteriores fueron resueltos y no se consideran bloqueos actuales.
 
 ## 7. Estado de Git y publicación
@@ -341,17 +376,19 @@ El comando de diagnóstico usa salida 0 solo para salud de Auth confirmada, 1 pa
 - **Remoto:** repositorio público, con publicación pública expresamente autorizada por el responsable desde M0-B6-P1. En este relevo se consultó `origin/main`: sin divergencia respecto al HEAD previo; publicación normal, sin force push.
 - **Base anterior a PUBLICACIÓN-RELEVO-M1:** `main`, HEAD y `origin/main` coincidían en `987ae95f95573fd8ad5c0efb6e46ec8dfca9fe92` antes de preparar la entrega. Ese hash es histórico, no el resultado del relevo actual.
 - **Publicación final de M1:** PUBLICACIÓN-RELEVO-M1 reunió las interfaces de login, registro, panel, creación y revisión local, detalle y verificación visual, la integración de rutas y estos dos documentos. El push se verificó en `origin/main` con `353e73706d343bd56fede23cd97f6c77fc2865d4`; INCORPORACIÓN-RELEVO-M1 volvió a confirmar ese hash directamente en GitHub.
-- **Preparación de PUBLICACIÓN-RELEVO-M2-01:** trabajo aprobado de M2-B1-P1, M2-B1-P2 y M2-B2-P1 sobre `353e737`: SDK, lockfile, cliente, dos scripts de diagnóstico, arquitectura Auth, integración en `main.tsx` y continuidad. La actividad de relevo autoriza un commit y push normales solo tras las verificaciones; esta nota no acredita aún la publicación. `.env.local` está presente e ignorado por `.gitignore`.
+- **Preparación de PUBLICACIÓN-RELEVO-M2-01:** trabajo aprobado de M2-B1-P1, M2-B1-P2 y M2-B2-P1 sobre `353e737`: SDK, lockfile, cliente, dos scripts de diagnóstico, arquitectura Auth, integración en `main.tsx` y continuidad. La publicación posterior se confirmó durante la incorporación: `93c356f8bb03da1352950067faee7a17239e06af`, mensaje `feat(supabase): preparar integracion y arquitectura auth M2`. `.env.local` está presente e ignorado por `.gitignore`.
+- **Entrega preparada en PUBLICACIÓN-RELEVO-M2-02:** exclusivamente el servicio nuevo `src/services/supabase/registerUser.ts`, RegisterPage y ambos documentos de continuidad sobre `93c356f8bb03da1352950067faee7a17239e06af`. Cliente, AuthProvider, rutas, UI, dependencias y `.env.local` conservados.
+- **Commit autorizado:** `feat(auth): implementar registro real Supabase M2-B2-P2`. Esta documentación forma parte del commit; su hash y publicación efectiva se verifican en Git y en el informe final posterior al push. No se presupone el resultado de publicación en esta nota.
 - **Exclusiones:** dependencias, compilaciones, entornos privados y temporales ignorados; `.env.example` y los seis `.gitkeep` permitidos según M0-B3-P1.
 - CIERRE-DOC-M1 no autorizó una publicación. PUBLICACIÓN-RELEVO-M1 es la autorización operativa separada para un commit y un push normales, sujetos a sus controles previos.
 
 ## 8. Próxima acción y relevo
 
-- **Estado:** Módulo 0 COMPLETADO; Módulo 1 COMPLETADO, APROBADO Y PUBLICADO, con 12 de 12 prompts aprobados. Módulo 2 EN DESARROLLO: M2-B1 completado y aprobado (2/2); M2-B2-P1 aprobado. Tres prompts de M2 aprobados.
-- **Último prompt de implementación aprobado:** M2-B2-P1. **Actividad operativa actual:** PUBLICACIÓN-RELEVO-M2-01; no cuenta como prompt de implementación.
-- **Siguiente acción prevista:** incorporar al siguiente integrante desde GitHub cuando se confirme el push. M2-B2-P2 — registro real — está pendiente y requiere solicitud expresa.
+- **Estado:** Módulo 0 COMPLETADO; Módulo 1 COMPLETADO, APROBADO Y PUBLICADO, con 12 de 12 prompts aprobados. Módulo 2 EN DESARROLLO: M2-B1 completado y aprobado (2/2); M2-B2-P1 y M2-B2-P2 aprobados. Cuatro prompts de M2 aprobados.
+- **Último prompt de implementación aprobado:** M2-B2-P2. **Actividad actual:** PUBLICACIÓN-RELEVO-M2-02; no cuenta como prompt de implementación.
+- **Siguiente prompt:** M2-B2-P3 — Inicio de sesión real con Supabase Auth. **Estado: NO INICIADO.** El siguiente integrante debe recibir y leer sus instrucciones completas; este relevo no implementa login.
 - Clona `https://github.com/Lilarpo/acuerdoseguro`, entra en `acuerdoseguro`, usa Node.js 24 (`nvm use` si utilizas nvm) y ejecuta `npm ci`, `npm run build` y `npm run lint`. Para trabajar, `npm run dev`.
-- Lee AGENTS.md y ambos documentos de continuidad; confirma rama `main`, HEAD, `origin/main` y cambios locales. Los doce prompts de frontend están aprobados según el responsable. El cliente Supabase alimenta únicamente el proveedor de estado Auth; las páginas no consumen aún ese estado ni ejecutan registro o login.
+- Lee AGENTS.md y ambos documentos de continuidad; confirma rama `main`, HEAD, `origin/main` y cambios locales. Los doce prompts de frontend están aprobados según el responsable. El cliente Supabase es compartido por AuthProvider y el servicio de registro. Login continúa local; no hay persistencia de sesión ni rutas protegidas.
 
 ## 9. Indicaciones para el siguiente integrante
 
@@ -363,7 +400,7 @@ El comando de diagnóstico usa salida 0 solo para salud de Auth confirmada, 1 pa
 6. Ejecuta las pruebas pertinentes y contrasta sus resultados con el código real, sin confiar ciegamente en este estado.
 7. Continúa únicamente desde el siguiente prompt autorizado.
 8. Obtén acceso autorizado al mismo proyecto Supabase de desarrollo desde el dashboard, sin utilizar la cuenta personal del responsable. Configura tu propio `.env.local` desde `.env.example` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`; no guardes contraseñas, claves secretas, `service_role` ni tokens administrativos en el frontend o Git.
-9. Ejecuta `npm run supabase:check`, `npm run supabase:check:test`, `npm run build`, `npm run lint` y `npm run dev`; verifica las rutas y Git. No presupongas usuarios, sesiones persistentes, tablas, migraciones, RLS, Stellar o Soroban. Espera el prompt independiente M2-B2-P2 antes de desarrollar registro.
+9. Ejecuta `npm run supabase:check`, `npm run supabase:check:test`, `npm run build`, `npm run lint` y `npm run dev`; verifica las rutas y Git. No presupongas usuarios, sesiones persistentes, tablas, migraciones, RLS, Stellar o Soroban. M2-B2-P2 está aprobado; espera el prompt independiente M2-B2-P3 antes de desarrollar login.
 
 ## 10. Registro del relevo al terminar cada turno
 
