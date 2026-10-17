@@ -22,9 +22,12 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 - **Módulo 0:** COMPLETADO y aprobado externamente.
 - **Avance del Módulo 1:** 12 de 12 prompts aprobados.
 - **Estado:** M1-B8-P1 APROBADO; cierre formal del Módulo 1 confirmado.
-- **Último bloque de implementación:** Bloque 8 — Auditoría final del frontend.
-- **Último prompt de implementación aprobado:** M1-B8-P1.
+- **Bloque actual:** M2-B2 — Autenticación real de usuarios con Supabase.
+- **Último prompt de implementación aprobado:** M2-B2-P1.
 - **Última actividad administrativa de cierre:** CIERRE-DOC-M1, posterior a la aprobación. **Actividad operativa de relevo:** PUBLICACIÓN-RELEVO-M1. Ninguna cuenta como prompt de implementación.
+- **Incorporación operativa posterior:** INCORPORACIÓN-RELEVO-M1; comprobaciones técnicas satisfactorias y contradicción documental pendiente que se corrige durante M2-B1-P1.
+- **M2-B1:** COMPLETADO Y APROBADO; 2/2 prompts aprobados.
+- **Prompt actual:** PUBLICACIÓN-RELEVO-M2-01 — actividad operativa; M2-B2-P1 aprobado. M2 acumula 3 prompts aprobados.
 - **Fuente de las aprobaciones:** el responsable confirmó el cierre del Módulo 0, el sistema visual y los componentes UI; la aprobación de M1-B2-P1 consta en el prompt M1-B3-P1, la de M1-B3-P1 en la solicitud expresa de relevo, la de M1-B4-P1 en M1-B4-P2, la de M1-B4-P2 en M1-B5-P1, la de M1-B5-P1 en M1-B6-P1, la de M1-B6-P1 en M1-B6-P2, la de M1-B6-P2 en M1-B7-P1, la de M1-B7-P1 en M1-B7-P2, la de M1-B7-P2 en M1-B8-P1 y la de M1-B8-P1 en CIERRE-DOC-M1 tras 22 pruebas manuales. No se deducen aprobaciones del mero resultado de Codex.
 
 | Prompt | Descripción | Estado |
@@ -49,8 +52,11 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 | M1-B7-P1 | Interfaz preliminar de detalle de contrato | APROBADO |
 | M1-B7-P2 | Interfaz de verificación documental y validación local | APROBADO |
 | M1-B8-P1 | Auditoría final, regresión y preparación de cierre | APROBADO |
+| M2-B1-P1 | Configuración segura del cliente Supabase | APROBADO |
+| M2-B1-P2 | Diagnóstico y verificación de conexión Supabase | APROBADO |
+| M2-B2-P1 | Arquitectura de autenticación y estado de sesión | APROBADO |
 
-**Siguiente acción operativa recomendada:** comprobar el commit de relevo en `origin/main` y esperar un nuevo prompt autorizado. No hay otro prompt de desarrollo autorizado ni un módulo nuevo iniciado.
+**Siguiente acción prevista:** publicar y relevar los avances aprobados; M2-B2-P2 (registro real) sigue pendiente y requiere solicitud expresa.
 
 ## 3. Evidencia y observaciones por registro
 
@@ -261,6 +267,50 @@ Las pruebas históricas proceden de sus informes; cada registro atribuye las ver
 - **Base histórica:** `987ae95f95573fd8ad5c0efb6e46ec8dfca9fe92`; antes de preparar la entrega, HEAD y el `origin/main` consultado en GitHub coincidían. La referencia al commit de relevo y la publicación efectiva deben comprobarse en Git y en el informe final.
 - **Contenido previsto del relevo:** `src/App.tsx`, las seis páginas nuevas de login, registro, panel, creación, detalle y verificación, `src/components/contracts/ContractDraftReview.tsx` y ambos documentos de continuidad. No incluye dependencias, configuración, compilaciones ni integraciones futuras.
 - **Continuidad:** Módulo 0 COMPLETADO y Módulo 1 COMPLETADO Y APROBADO, 12 de 12; último prompt aprobado M1-B8-P1 y cierre administrativo CIERRE-DOC-M1. El siguiente integrante debe verificar `origin/main`, ejecutar las comprobaciones pertinentes y esperar instrucciones para el próximo módulo.
+
+### INCORPORACIÓN-RELEVO-M1 — actividad operativa
+
+- En WSL2, sobre `main` limpio y el remoto oficial, se verificó directamente que GitHub, HEAD y `origin/main` coincidían en `353e73706d343bd56fede23cd97f6c77fc2865d4`; no se requirió avance de rama.
+- Node.js 24.22.0, npm 11.19.1, `npm ci`, build, lint y arranque de Vite pasaron. El primer `npm ci` falló por `EPERM` del sandbox al ejecutar esbuild; el reintento autorizado terminó correctamente. Vite respondió por HTTP; no hubo inspección visual de navegador ni cambios funcionales, staging, commit o push.
+- Se detectó la afirmación vigente incorrecta «Publicación de cambios locales pendiente» en la tabla de módulos del estado. Se corrigió durante M2-B1-P1, conservando las referencias históricas.
+
+### M2-B1-P1
+
+- **Objetivo:** preparar el cliente Supabase sin conectar las pantallas, las sesiones, la base de datos ni los servicios futuros.
+- **Resultado:** IMPLEMENTADO — PENDIENTE DE APROBACIÓN EXTERNA. Módulo 2 INICIADO; Módulos 0 y 1 permanecen completados, y M1 conserva 12 de 12 aprobados.
+- **Implementación:** `@supabase/supabase-js` 2.118.0 como única dependencia directa nueva; `.env.example` ya declaraba `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`, y `.gitignore` ya protegía `.env.local`. `src/lib/supabaseClient.ts` ofrece `getSupabaseClient(): SupabaseClient | null`, con inicialización diferida, URL HTTP(S) y clave publicable, sin persistencia, renovación ni restauración automática de sesión. No se configuraron credenciales reales ni se modificaron páginas.
+- **Pruebas:** `npm run build`, `npm run lint`, `npm run dev` y `git diff --check` PASS. Prueba controlada sin credenciales: ausentes, parciales, clave no publicable y URL inválida devuelven `null`; URL local y clave publicable de prueba producen cliente reutilizable sin peticiones externas. Vite sirvió HTML base en las ocho rutas; no acredita navegación SPA. Navegador y conexión real NO EJECUTADOS.
+- **Instalación:** el primer `npm install` falló por `EAI_AGAIN` de DNS en el sandbox; el reintento autorizado pasó. No se actualizaron otras dependencias directas.
+- **Git y continuidad:** cambios locales limitados a `package.json`, `package-lock.json`, `src/lib/supabaseClient.ts` y los dos documentos. Sin staging, commit ni push. Siguiente trabajo previsto: M2-B1-P2, sujeto a aprobación e instrucciones; no ejecutado.
+- **Aprobación posterior:** el responsable informó 12 comprobaciones manuales satisfactorias de rutas, ausencia de errores nuevos y solicitudes inesperadas, ausencia de sesiones persistidas y Git coherente. No comunicó regresiones y aprobó M2-B1-P1. Codex no ejecutó esas pruebas manuales.
+
+### M2-B1-P2
+
+- **Objetivo:** diagnosticar de manera explícita y segura la disponibilidad HTTP de Supabase Auth, sin autenticar usuarios ni consultar datos.
+- **Resultado inicial:** PARCIAL — implementación del diagnóstico completa; conectividad real pendiente en aquella ejecución. Entonces no existía `.env.local` ni se realizó una petición real. La aprobación posterior figura al final de este registro.
+- **Herramienta:** `scripts/check-supabase-connection.mjs`, ejecutado solo con `npm run supabase:check`. Node 24 carga `.env.local` si existe. Valida URL HTTPS de proyecto oficial `*.supabase.co` y clave `sb_publishable_`, rechaza parámetros, credenciales embebidas, dominios ajenos y claves no públicas. Usa una sola petición GET a `/auth/v1/health`, cabecera publishable, timeout de 8 segundos y redirecciones manuales. Exige HTTP 200 y respuesta JSON que identifique Auth; no imprime configuración ni cuerpos remotos.
+- **Estados y salidas:** 0 para salud de Auth confirmada; 1 para configuración inválida o conexión no confirmada; 2 para configuración ausente sin petición. El HTTP de salud no prueba permisos, login, RLS ni acceso a base de datos.
+- **Pruebas:** `npm run supabase:check:test` PASS con 22 casos `node:test` simulados y sin internet: ausencia/parcialidad, entradas inseguras, salud válida y engañosa, respuestas HTTP, DNS y timeout. `npm run supabase:check` devolvió CONFIGURACIÓN AUSENTE y salida 2. Build, lint, Vite y `git diff --check` PASS; Vite sirvió HTML base de ocho rutas. Navegador y conectividad real NO EJECUTADOS.
+- **Alcance y Git:** frontend y cliente de P1 conservados; sin dependencias nuevas ni cambio intencional del lockfile durante P2. Cambios locales acumulados sobre `353e737`, sin staging, commit ni push; ninguna credencial se añadió a Git.
+- **Continuidad inicial:** se solicitó al responsable comprobar un proyecto propio con `.env.local` ignorado y validar externamente la salud de Auth; esa comprobación se completó posteriormente.
+- **Aprobación posterior:** el responsable confirmó una conexión real satisfactoria con Supabase Auth, HTTP 200, más las 22 pruebas automatizadas controladas de diagnóstico y la regresión manual de rutas. Confirmó que `.env.local` permanece ignorado por Git. Las comprobaciones manuales fueron externas a Codex. M2-B1-P2 queda APROBADO; M2-B1, COMPLETADO Y APROBADO (2/2).
+
+### M2-B2-P1
+
+- **Objetivo y estado inicial:** arquitectura de observación de sesión Auth implementada; quedó PARCIAL al entregarla Codex por validación visual externa pendiente y por no confirmar la conexión real desde su sandbox. La aprobación posterior figura al final de este registro.
+- **Archivos:** `src/auth/authTypes.ts`, `authContext.ts`, `AuthProvider.tsx` y `useAuth.ts` nuevos; `src/main.tsx` integra el proveedor bajo `StrictMode`. Solo estos archivos de aplicación y los dos documentos fueron tocados en este prompt; los cambios previos de M2-B1 permanecen locales.
+- **Estados y eventos:** unión discriminada para ausencia de configuración, inicialización, salida, sesión observada y error; el hook deriva usuario mínimo (`id`, correo opcional) y `hasSession`. La suscripción procesa `INITIAL_SESSION`, `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED` y `USER_UPDATED`; callback síncrono, baja de listener y guardia tras desmontaje. El SDK instalado emite `INITIAL_SESSION` al suscribirse incluso con `skipAutoInitialize: true`.
+- **Límites:** sin sesiones completas ni tokens en Context; sin persistencia, renovación automática, registro, login, cierre de sesión, rutas protegidas ni autorización de datos. La sesión observada no equivale a identidad verificada ni sustituye RLS.
+- **Pruebas:** build y lint PASS; `supabase:check:test` PASS (22 pruebas simuladas); Vite arrancó y se detuvo; `git diff --check` PASS. `supabase:check` en sandbox devolvió salida 1 por DNS. Navegador, consola, Network, almacenamiento, recarga y transiciones reales NO EJECUTADOS EN CODEX — REQUIEREN VALIDACIÓN MANUAL EXTERNA. La conexión HTTP 200 previa corresponde a la confirmación externa de M2-B1-P2.
+- **Git y continuidad:** cambios acumulados sobre `353e737` sin staging, commit ni push; `.env.local` presente e ignorado. Revisar M2-B2-P1 externamente. M2-B2-P2 (registro real) es el siguiente prompt previsto, no ejecutado.
+- **Aprobación posterior:** el responsable confirmó catorce comprobaciones manuales satisfactorias del frontend con AuthProvider integrado. Supabase Auth respondió HTTP 200 desde su terminal, las ocho rutas permanecieron operativas, no hubo regresiones en consola ni Network, no se introdujo persistencia de sesiones y Git conservó los cambios locales. Codex no ejecutó esas comprobaciones manuales. M2-B2-P1 queda APROBADO; las transiciones de registro y login con usuarios reales siguen sin implementar ni probar.
+
+### PUBLICACIÓN-RELEVO-M2-01 — actividad operativa
+
+- **Objetivo:** preparar un único commit y publicación normal de los avances aprobados M2-B1-P1, M2-B1-P2 y M2-B2-P1, sin implementar funcionalidades nuevas. Esta actividad no cuenta como prompt de implementación.
+- **Base comprobada antes del commit:** `main`, HEAD local, `origin/main` y consulta directa a GitHub coincidieron en `353e73706d343bd56fede23cd97f6c77fc2865d4`; el trabajo aprobado estaba local y sin staging.
+- **Seguridad de relevo:** `.env.local` ignorado y no rastreado; el siguiente integrante obtiene acceso autorizado al mismo proyecto Supabase y configura sus propias variables públicas desde `.env.example`. El HTTP 200 de Auth fue confirmado externamente, sin implicar usuarios, tablas, RLS ni login.
+- **Publicación:** su resultado se verifica después del push; no se presupone en esta entrada.
 
 ## 4. Mantenimiento acumulativo y relevos
 

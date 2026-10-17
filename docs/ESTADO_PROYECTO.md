@@ -10,21 +10,23 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 - **Propósito:** plataforma web de contratos digitales verificables mediante Stellar y Soroban.
 - **Versiones comprobadas:** Node.js 24.22.0, npm 11.19.1, React y React DOM 19.3.1, TypeScript 5.9.3, Vite 7.3.7, Tailwind CSS y `@tailwindcss/vite` 4.3.3, ESLint 9.39.5. M1-B2-P1 agrega `react-router` 7.18.4; ninguna dependencia anterior cambia de versión.
 - **Herramientas:** Git local y GitHub configurados; primera publicación realizada y recuperada mediante clonación HTTPS.
-- **Tecnologías futuras, sin integrar:** Supabase, PostgreSQL, Supabase Auth, Supabase Storage, Stellar SDK, Freighter Wallet, Soroban con Rust y Vercel.
+- **Tecnologías futuras sin integración funcional:** PostgreSQL, Supabase Storage, Stellar SDK, Freighter Wallet, Soroban con Rust y Vercel. M2-B2-P1 observa eventos de Supabase Auth en un proveedor React; las pantallas aún no ejecutan registro ni login.
 
 ## 2. Estado actual de desarrollo
 
 | Campo | Valor |
 | --- | --- |
 | Último módulo cerrado | Módulo 1 — Frontend e Interfaz de Usuario |
-| Actividad operativa de relevo | PUBLICACIÓN-RELEVO-M1 — auditoría y entrega de los avances aprobados; no es un prompt de implementación |
+| Actividad operativa de relevo previa | PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; no son prompts de implementación |
 | Estado del Módulo 0 | COMPLETADO, aprobado externamente |
 | Estado del Módulo 1 | COMPLETADO Y APROBADO — 12 de 12 prompts aprobados |
-| Último prompt de implementación ejecutado y aprobado | M1-B8-P1 |
-| Estado de la publicación | Verificar en GitHub comparando `git rev-parse HEAD` con `git ls-remote --heads origin main`; este documento no acredita por sí solo el push |
-| Siguiente acción operativa | Recibir el relevo, comprobar el commit publicado y esperar un nuevo prompt autorizado; no hay nuevo módulo iniciado |
+| Estado del Módulo 2 | EN DESARROLLO — M2-B1 completado y aprobado (2/2); M2-B2-P1 aprobado; 3 prompts de M2 aprobados |
+| Último prompt de implementación aprobado | M2-B2-P1 |
+| Prompt actual | PUBLICACIÓN-RELEVO-M2-01 — actividad operativa, sin implementación nueva |
+| Publicación de M1 | Confirmada en `origin/main` mediante `353e73706d343bd56fede23cd97f6c77fc2865d4`; los cambios de M2 permanecen locales |
+| Siguiente trabajo previsto | Incorporación del siguiente integrante; M2-B2-P2 (registro real) solo si el responsable lo solicita |
 
-El responsable confirmó después del informe de M1-B8-P1 que completó satisfactoriamente 22 comprobaciones manuales de regresión integral, sin defectos bloqueantes comunicados, y aprobó M1-B8-P1 y el cierre del Módulo 1. Codex no ejecutó esas pruebas de navegador. La aprobación funcional y técnica del frontend no acredita publicación de los cambios locales ni funcionamiento de integraciones futuras.
+El responsable confirmó después del informe de M1-B8-P1 que completó satisfactoriamente 22 comprobaciones manuales de regresión integral, sin defectos bloqueantes comunicados, y aprobó M1-B8-P1 y el cierre del Módulo 1. Codex no ejecutó esas pruebas de navegador. La publicación posterior de M1 se verificó durante PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; ninguna de esas actividades acredita funcionamiento de integraciones futuras.
 
 ## 3. Capacidades y preparación existentes
 
@@ -43,7 +45,11 @@ El responsable confirmó después del informe de M1-B8-P1 que completó satisfac
 - **Interfaz de verificación aprobada:** `/verificar` permite seleccionar un archivo sin leerlo ni subirlo y validar localmente el formato de una huella SHA-256 de referencia. El aviso de formato válido no constituye verificación de integridad. El responsable comunicó 15 comprobaciones manuales satisfactorias y aprobó M1-B7-P2; Codex no las ejecutó en su entorno.
 - **Seguridad de rutas:** `/panel`, `/contratos/nuevo` y `/contratos/:id` son públicas temporalmente y no consultan ni almacenan datos privados. La protección real corresponde al módulo de autenticación; no existen controles de sesión ficticios.
 - **Preparación arquitectónica:** se conservan todos los `.gitkeep`; `src/types/` y los tres servicios siguen reservados y sin integraciones. La lógica criptográfica y las consultas reales permanecen pendientes.
-- **Preparación del repositorio:** `.nvmrc`, lockfile npm, `.gitignore`, finales LF y `.env.example` público, sin credenciales reales ni consumo de sus variables.
+- **Preparación del repositorio:** `.nvmrc`, lockfile npm, `.gitignore`, finales LF y `.env.example` público, sin credenciales reales. M2-B1-P1 lee solo las dos variables públicas Supabase cuando se solicita el cliente; las pantallas no consumen el módulo.
+- **Preparación Supabase de M2-B1-P1:** `@supabase/supabase-js` 2.118.0 y `src/lib/supabaseClient.ts` proporcionan un cliente tipado y diferido, o `null` si faltan datos públicos, la clave no es publicable o la URL no es HTTP(S). La sesión no se persiste, renueva ni restaura automáticamente; no se hacen consultas ni autenticación. El responsable confirmó posteriormente configuración local y conexión real de salud de Auth; no equivale a login.
+- **Diagnóstico opt-in de M2-B1-P2:** `npm run supabase:check` carga `.env.local` si existe y consulta únicamente `GET /auth/v1/health` de un proyecto HTTPS alojado en Supabase. Rechaza claves no publicables, URLs inseguras y dominios ajenos antes de enviar la clave; usa timeout y no sigue redirecciones. `npm run supabase:check:test` ejecuta pruebas simuladas sin internet. El diagnóstico no forma parte del frontend ni se ejecuta al arrancar Vite.
+- **Arquitectura Auth de M2-B2-P1:** `src/auth/` define estados tipados (`not_configured`, `initializing`, `signed_out`, `session_present`, `error`), contexto, proveedor y `useAuth`. El proveedor reutiliza `getSupabaseClient()`, observa `INITIAL_SESSION`, `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED` y `USER_UPDATED`, y cancela su suscripción al desmontarse. Solo expone `id` y correo opcional de una sesión observada; esto no verifica identidad ni autoriza datos. `main.tsx` lo integra bajo `StrictMode`. Sin configuración, deja la UI disponible y no se suscribe. El SDK mantiene `persistSession`, `autoRefreshToken` y `detectSessionInUrl` desactivados; no hay registro, login, cierre de sesión ni rutas protegidas.
+- **Proyecto Supabase de desarrollo:** el responsable creó el proyecto y configuró localmente su URL y clave publishable en `.env.local`, ignorado por Git. Confirmó dos veces HTTP 200 del endpoint de salud de Auth desde su terminal. El acceso del siguiente integrante se gestiona desde la organización del dashboard y requiere sus propios valores públicos locales; Git no transfiere el proyecto remoto. No constan tablas, migraciones ni políticas RLS ejecutadas.
 - **Instrucciones permanentes:** `AGENTS.md` existe en la raíz.
 - **Auditoría final aprobada:** rutas, formularios, validaciones, accesibilidad, seguridad del alcance frontend y regresión integral revisadas. Build, lint y Vite pasaron en la auditoría técnica; el responsable confirmó 22 pruebas manuales satisfactorias. No se modificó código durante M1-B8-P1.
 - **Continuidad:** documentos actualizados para el cierre del Módulo 1, conservando las evidencias y el historial del Módulo 0.
@@ -65,15 +71,15 @@ La aprobación de cada interfaz no significa que sus integraciones reales estén
 
 ### Funcionalidades pendientes de integración
 
-No existen todavía autenticación real, cuentas persistentes, base de datos de contratos, almacenamiento documental, guardado y consulta reales de acuerdos, aprobaciones criptográficas, integración de billeteras Stellar, cálculo SHA-256 sobre documentos, comparación criptográfica, registro o consulta de evidencia en Stellar, integración Soroban ni escrow. También siguen pendientes generación documental, backend Supabase y despliegue. Estas capacidades estaban fuera del alcance aprobado del Módulo 1; las pantallas no representan operaciones reales.
+No existen todavía operaciones reales de registro o login, cuentas persistentes, base de datos de contratos, almacenamiento documental, guardado y consulta reales de acuerdos, aprobaciones criptográficas, integración de billeteras Stellar, cálculo SHA-256 sobre documentos, comparación criptográfica, registro o consulta de evidencia en Stellar, integración Soroban ni escrow. También siguen pendientes generación documental, backend de datos Supabase y despliegue. Las pantallas no representan operaciones reales.
 
 ## 4. Estado de los módulos
 
 | Módulo | Nombre | Estado | Observaciones |
 | --- | --- | --- | --- |
 | 0 | Configuración inicial | COMPLETADO | Ocho prompts aprobados externamente; base publicada en GitHub. |
-| 1 | Frontend e Interfaz de Usuario | COMPLETADO Y APROBADO | 12 de 12 prompts aprobados, incluida M1-B8-P1 tras 22 comprobaciones manuales externas satisfactorias. Publicación de cambios locales pendiente. |
-| 2 | Backend y Supabase | PENDIENTE | Carpeta reservada, sin integración. |
+| 1 | Frontend e Interfaz de Usuario | COMPLETADO Y APROBADO | 12 de 12 prompts aprobados, incluida M1-B8-P1 tras 22 comprobaciones manuales externas satisfactorias. Publicado en `origin/main` mediante `353e73706d343bd56fede23cd97f6c77fc2865d4`. |
+| 2 | Backend y Supabase | EN DESARROLLO | M2-B1-P1, M2-B1-P2 y M2-B2-P1 aprobados; M2-B1 completado y aprobado (2/2). Sin registro, login ni base de datos de contratos conectados. |
 | 3 | Stellar y Soroban | PENDIENTE | Carpeta reservada, sin SDK ni contratos. |
 | 4 | Documentos y verificación | PENDIENTE | Carpeta reservada, sin lógica documental. |
 | 5 | Integración, pruebas y despliegue | PENDIENTE | Sin despliegue ni integración entre servicios. |
@@ -272,12 +278,57 @@ No se identificaron defectos corregibles dentro del alcance y de las comprobacio
 | `git diff --check` | PASS; sin errores de formato en cambios rastreados. |
 | Alcance | Solo se editaron los dos documentos de continuidad durante este cierre; código, dependencias y configuración conservados. |
 
+### Verificaciones de M2-B1-P1
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm install @supabase/supabase-js` | PASS con permiso de red; el primer intento falló por `EAI_AGAIN`. Solo se añadió esta dependencia directa. |
+| `npm run build`, `npm run lint`, `git diff --check` | PASS. |
+| Configuración ausente y parcial | PASS en prueba controlada: URL o clave ausentes, clave no publicable y URL inválida devuelven `null`; con URL local y clave publicable de prueba se obtiene un cliente reutilizado. Cero peticiones externas observadas. |
+| `npm run dev` | PASS; Vite arrancó y se detuvo. Ocho rutas recibieron HTML base con HTTP 200; no acredita navegación SPA ni inspección visual. |
+| Navegador y conexión Supabase real | NO EJECUTADO; no hay navegador disponible ni credenciales públicas configuradas para este bloque. |
+
+La incorporación previa confirmó en WSL2 el commit publicado `353e737`, Node.js 24.22.0, npm 11.19.1, `npm ci`, build, lint y Vite. El primer `npm ci` falló por `EPERM` del sandbox; el reintento autorizado pasó. No se modificaron pantallas ni rutas durante la incorporación. La contradicción vigente sobre la publicación de M1 se corrigió en la tabla de módulos durante M2-B1-P1.
+
+**Aprobación posterior de M2-B1-P1:** el responsable confirmó 12 comprobaciones manuales satisfactorias de las rutas, ausencia de errores y solicitudes nuevas a Supabase, ausencia de sesiones persistidas y Git coherente. Codex no ejecutó esas pruebas de navegador. M2-B1-P1 queda APROBADO.
+
+### Verificaciones de M2-B1-P2
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run supabase:check:test` | PASS; 22 casos simulados, sin peticiones a internet. |
+| `npm run supabase:check` | CONFIGURACIÓN AUSENTE; salida 2, sin petición real porque no existen `.env.local` ni variables exportadas. |
+| `npm run build`, `npm run lint`, `git diff --check` | PASS. |
+| `npm run dev` | PASS; Vite arrancó y se detuvo. Ocho rutas sirvieron HTML base con HTTP 200; no acredita navegación SPA. |
+| Navegador y salud de Auth real | NO EJECUTADO; no hay navegador ni configuración de proyecto propio en este entorno. |
+
+El comando de diagnóstico usa salida 0 solo para salud de Auth confirmada, 1 para configuración inválida o conexión no confirmada y 2 cuando falta configuración. Un HTTP positivo de Auth no demuestra permisos, login, RLS ni base de datos.
+
+**Aprobación posterior de M2-B1-P2:** el responsable confirmó una conexión real satisfactoria con Supabase Auth (HTTP 200), las 22 pruebas automatizadas del diagnóstico, regresión manual de rutas y `.env.local` ignorado por Git. Codex no ejecutó esa regresión manual. M2-B1-P2 queda APROBADO y M2-B1 COMPLETADO Y APROBADO (2/2).
+
+### Verificaciones de M2-B2-P1
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` | PASS; TypeScript y Vite compilaron. Vite advirtió que el bundle supera 500 kB; no impidió el build. |
+| `npm run lint` | PASS. |
+| `npm run supabase:check:test` | PASS; 22 pruebas simuladas sin internet. |
+| `npm run supabase:check` | NO CONFIRMADO en Codex: la ejecución en sandbox devolvió fallo DNS y salida 1. La conexión HTTP 200 anterior fue confirmada externamente por el responsable. |
+| `npm run dev` | PASS de arranque de Vite fuera del sandbox; servidor detenido. La consulta HTTP local no se completó por restricciones del entorno. |
+| `git diff --check` | PASS. |
+| Transiciones de Auth | Revisadas por inspección del proveedor y SDK instalado; no se ejecutaron operaciones de usuario ni simulaciones de eventos. |
+| Navegador, consola, Network, almacenamiento y recarga | NO EJECUTADO EN CODEX — REQUIERE VALIDACIÓN MANUAL EXTERNA. |
+
+**Estado inicial de M2-B2-P1 al entregar Codex:** PARCIAL por validación de navegador pendiente y diagnóstico real no confirmado en Codex; arquitectura implementada, entonces aún no aprobada. Una sesión observada en el cliente no sustituye identidad verificada por servidor ni políticas RLS. No se modificaron formularios, rutas o cliente Supabase.
+
+**Aprobación posterior de M2-B2-P1:** el responsable confirmó catorce comprobaciones manuales satisfactorias del frontend con AuthProvider integrado. Supabase Auth respondió HTTP 200 desde su terminal, las ocho rutas permanecieron operativas, no hubo regresiones en consola ni Network, no se introdujo persistencia de sesiones y Git conservó los cambios locales. Codex no ejecutó esas pruebas de navegador. M2-B2-P1 queda APROBADO; login y registro reales aún no existen y sus transiciones no se han probado.
+
 ## 6. Problemas, advertencias y tareas pendientes
 
 - **Cierre funcional del frontend:** M1-B8-P1 y el Módulo 1 fueron aprobados externamente tras 22 comprobaciones manuales satisfactorias. Codex no repitió esas pruebas en su entorno sin navegador.
 - **Advertencia conocida:** ESLint 9.39.5 fue reportado fuera de soporte; no se migró de versión.
 - **Advertencia npm previa:** autorización de scripts de esbuild pendiente de revisión; no impidió las últimas comprobaciones técnicas.
-- **Tareas pendientes:** confirmar el resultado de PUBLICACIÓN-RELEVO-M1 con la comparación de hashes del informe final; validar instalación y ejecución en los otros cuatro equipos cuando corresponda; desarrollar consulta contractual y verificación criptográfica reales en módulos futuros autorizados. Acceso directo en producción y reescrituras del servidor se resolverán en despliegue, sin configuración añadida ahora. La 404 es una vista SPA; Vite devuelve el HTML base con HTTP 200 durante desarrollo.
+- **Tareas pendientes:** incorporación técnica del siguiente integrante y validación en su equipo. Registro, login, consulta contractual y verificación criptográfica reales requieren prompts futuros autorizados. Acceso directo en producción y reescrituras del servidor se resolverán en despliegue. La 404 es una vista SPA; Vite devuelve el HTML base con HTTP 200 durante desarrollo.
 - Los errores de permisos de instalaciones anteriores fueron resueltos y no se consideran bloqueos actuales.
 
 ## 7. Estado de Git y publicación
@@ -286,20 +337,21 @@ No se identificaron defectos corregibles dentro del alcance y de las comprobacio
 - **Commit inicial publicado y verificado:** `10bc0ca12af399a0cdc098584894554b11eaf4c0`, mensaje `chore: inicializar base técnica de AcuerdoSeguro M0`.
 - **Cierre del Módulo 0 publicado:** `4efefc6327751993459a27d81202533e4b3a5fc9`; conservado como antecesor del relevo.
 - **Entrega del Módulo 1:** sistema visual, siete componentes UI con exportaciones, AppLayout, rutas, HomePage definitiva, placeholders, 404, React Router y lockfile, estilos y ambos documentos. Son 19 archivos de avance: siete modificados y doce nuevos respecto al cierre del Módulo 0; los seis `.gitkeep` se conservan.
-- **Commit de relevo autorizado:** `feat: guardar avance frontend M1 y preparar relevo`. Para obtener su hash consulta `git log -1 --format=%H`; el propio commit contiene esta documentación. El informe de cierre acredita el resultado del push y la comparación con `origin/main`.
+- **Commit del relevo intermedio de M1:** `987ae95f95573fd8ad5c0efb6e46ec8dfca9fe92`, mensaje `feat: guardar avance frontend M1 y preparar relevo`.
 - **Remoto:** repositorio público, con publicación pública expresamente autorizada por el responsable desde M0-B6-P1. En este relevo se consultó `origin/main`: sin divergencia respecto al HEAD previo; publicación normal, sin force push.
 - **Base anterior a PUBLICACIÓN-RELEVO-M1:** `main`, HEAD y `origin/main` coincidían en `987ae95f95573fd8ad5c0efb6e46ec8dfca9fe92` antes de preparar la entrega. Ese hash es histórico, no el resultado del relevo actual.
-- **Entrega operativa:** PUBLICACIÓN-RELEVO-M1 reúne las interfaces de login, registro, panel, creación y revisión local, detalle y verificación visual, la integración de rutas y estos dos documentos. El hash del nuevo commit y el resultado real del push se comprueban en Git y en el informe final; no se deducen de esta documentación.
+- **Publicación final de M1:** PUBLICACIÓN-RELEVO-M1 reunió las interfaces de login, registro, panel, creación y revisión local, detalle y verificación visual, la integración de rutas y estos dos documentos. El push se verificó en `origin/main` con `353e73706d343bd56fede23cd97f6c77fc2865d4`; INCORPORACIÓN-RELEVO-M1 volvió a confirmar ese hash directamente en GitHub.
+- **Preparación de PUBLICACIÓN-RELEVO-M2-01:** trabajo aprobado de M2-B1-P1, M2-B1-P2 y M2-B2-P1 sobre `353e737`: SDK, lockfile, cliente, dos scripts de diagnóstico, arquitectura Auth, integración en `main.tsx` y continuidad. La actividad de relevo autoriza un commit y push normales solo tras las verificaciones; esta nota no acredita aún la publicación. `.env.local` está presente e ignorado por `.gitignore`.
 - **Exclusiones:** dependencias, compilaciones, entornos privados y temporales ignorados; `.env.example` y los seis `.gitkeep` permitidos según M0-B3-P1.
 - CIERRE-DOC-M1 no autorizó una publicación. PUBLICACIÓN-RELEVO-M1 es la autorización operativa separada para un commit y un push normales, sujetos a sus controles previos.
 
 ## 8. Próxima acción y relevo
 
-- **Estado:** Módulo 0 COMPLETADO; Módulo 1 COMPLETADO Y APROBADO, con 12 de 12 prompts aprobados. La entrega de sus avances corresponde a PUBLICACIÓN-RELEVO-M1; comprueba el resultado remoto antes de considerarlos publicados.
-- **Último prompt de implementación aprobado:** M1-B8-P1. **Última actividad administrativa de cierre:** CIERRE-DOC-M1. **Actividad operativa de relevo:** PUBLICACIÓN-RELEVO-M1; ninguna de estas actividades incrementa el contador de prompts de implementación.
-- **Siguiente acción recomendada:** verificar el commit de relevo en `origin/main` y continuar solo cuando el responsable autorice un nuevo prompt. No se ha iniciado otro módulo.
+- **Estado:** Módulo 0 COMPLETADO; Módulo 1 COMPLETADO, APROBADO Y PUBLICADO, con 12 de 12 prompts aprobados. Módulo 2 EN DESARROLLO: M2-B1 completado y aprobado (2/2); M2-B2-P1 aprobado. Tres prompts de M2 aprobados.
+- **Último prompt de implementación aprobado:** M2-B2-P1. **Actividad operativa actual:** PUBLICACIÓN-RELEVO-M2-01; no cuenta como prompt de implementación.
+- **Siguiente acción prevista:** incorporar al siguiente integrante desde GitHub cuando se confirme el push. M2-B2-P2 — registro real — está pendiente y requiere solicitud expresa.
 - Clona `https://github.com/Lilarpo/acuerdoseguro`, entra en `acuerdoseguro`, usa Node.js 24 (`nvm use` si utilizas nvm) y ejecuta `npm ci`, `npm run build` y `npm run lint`. Para trabajar, `npm run dev`.
-- Lee AGENTS.md y ambos documentos de continuidad; confirma rama `main`, HEAD, `origin/main` y cambios locales. Los doce prompts de frontend están aprobados según el responsable; las integraciones reales siguen pendientes. Comprueba la publicación en GitHub mediante hashes, no solo con esta documentación.
+- Lee AGENTS.md y ambos documentos de continuidad; confirma rama `main`, HEAD, `origin/main` y cambios locales. Los doce prompts de frontend están aprobados según el responsable. El cliente Supabase alimenta únicamente el proveedor de estado Auth; las páginas no consumen aún ese estado ni ejecutan registro o login.
 
 ## 9. Indicaciones para el siguiente integrante
 
@@ -310,6 +362,8 @@ No se identificaron defectos corregibles dentro del alcance y de las comprobacio
 5. Comprueba Node.js con `.nvmrc` y las dependencias; usa npm y el lockfile para instalar cuando corresponda.
 6. Ejecuta las pruebas pertinentes y contrasta sus resultados con el código real, sin confiar ciegamente en este estado.
 7. Continúa únicamente desde el siguiente prompt autorizado.
+8. Obtén acceso autorizado al mismo proyecto Supabase de desarrollo desde el dashboard, sin utilizar la cuenta personal del responsable. Configura tu propio `.env.local` desde `.env.example` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`; no guardes contraseñas, claves secretas, `service_role` ni tokens administrativos en el frontend o Git.
+9. Ejecuta `npm run supabase:check`, `npm run supabase:check:test`, `npm run build`, `npm run lint` y `npm run dev`; verifica las rutas y Git. No presupongas usuarios, sesiones persistentes, tablas, migraciones, RLS, Stellar o Soroban. Espera el prompt independiente M2-B2-P2 antes de desarrollar registro.
 
 ## 10. Registro del relevo al terminar cada turno
 

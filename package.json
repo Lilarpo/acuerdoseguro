@@ -11,9 +11,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "supabase:check": "node --env-file-if-exists=.env.local scripts/check-supabase-connection.mjs",
+    "supabase:check:test": "node scripts/check-supabase-connection.test.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router": "^7.18.4"
