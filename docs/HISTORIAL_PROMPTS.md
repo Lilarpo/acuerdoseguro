@@ -18,13 +18,14 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 
 ## 2. Secuencia de prompts
 
-- **Módulo activo:** Módulo 1 — Frontend e Interfaz de Usuario, EN DESARROLLO.
+- **Último módulo cerrado:** Módulo 1 — Frontend e Interfaz de Usuario, COMPLETADO Y APROBADO.
 - **Módulo 0:** COMPLETADO y aprobado externamente.
-- **Avance del Módulo 1:** 4 de 12 prompts aprobados.
-- **Estado:** listo para relevo al siguiente integrante.
-- **Bloque activo:** Bloque 3 — Página principal.
-- **Último prompt aprobado:** M1-B3-P1.
-- **Fuente de las aprobaciones:** el responsable confirmó el cierre del Módulo 0, el sistema visual y los componentes UI; la aprobación de M1-B2-P1 consta en el prompt M1-B3-P1 y la de M1-B3-P1 en la solicitud expresa de relevo del responsable. No se deducen aprobaciones del mero resultado de Codex.
+- **Avance del Módulo 1:** 12 de 12 prompts aprobados.
+- **Estado:** M1-B8-P1 APROBADO; cierre formal del Módulo 1 confirmado.
+- **Último bloque de implementación:** Bloque 8 — Auditoría final del frontend.
+- **Último prompt de implementación aprobado:** M1-B8-P1.
+- **Última actividad administrativa de cierre:** CIERRE-DOC-M1, posterior a la aprobación. **Actividad operativa de relevo:** PUBLICACIÓN-RELEVO-M1. Ninguna cuenta como prompt de implementación.
+- **Fuente de las aprobaciones:** el responsable confirmó el cierre del Módulo 0, el sistema visual y los componentes UI; la aprobación de M1-B2-P1 consta en el prompt M1-B3-P1, la de M1-B3-P1 en la solicitud expresa de relevo, la de M1-B4-P1 en M1-B4-P2, la de M1-B4-P2 en M1-B5-P1, la de M1-B5-P1 en M1-B6-P1, la de M1-B6-P1 en M1-B6-P2, la de M1-B6-P2 en M1-B7-P1, la de M1-B7-P1 en M1-B7-P2, la de M1-B7-P2 en M1-B8-P1 y la de M1-B8-P1 en CIERRE-DOC-M1 tras 22 pruebas manuales. No se deducen aprobaciones del mero resultado de Codex.
 
 | Prompt | Descripción | Estado |
 | --- | --- | --- |
@@ -40,8 +41,16 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 | M1-B1-P2 | Creación de componentes visuales reutilizables | APROBADO |
 | M1-B2-P1 | Configuración de rutas y estructura de navegación | APROBADO |
 | M1-B3-P1 | Desarrollo de la landing page definitiva | APROBADO |
+| M1-B4-P1 | Interfaz de inicio de sesión y validación local | APROBADO |
+| M1-B4-P2 | Interfaz de registro y validación local | APROBADO |
+| M1-B5-P1 | Dashboard y estados vacíos | APROBADO |
+| M1-B6-P1 | Formulario local de creación de contratos | APROBADO |
+| M1-B6-P2 | Interfaz de revisión local del borrador | APROBADO |
+| M1-B7-P1 | Interfaz preliminar de detalle de contrato | APROBADO |
+| M1-B7-P2 | Interfaz de verificación documental y validación local | APROBADO |
+| M1-B8-P1 | Auditoría final, regresión y preparación de cierre | APROBADO |
 
-**Siguiente prompt:** M1-B4-P1 — Formulario de inicio de sesión. Corresponde al siguiente integrante; no ejecutado.
+**Siguiente acción operativa recomendada:** comprobar el commit de relevo en `origin/main` y esperar un nuevo prompt autorizado. No hay otro prompt de desarrollo autorizado ni un módulo nuevo iniciado.
 
 ## 3. Evidencia y observaciones por registro
 
@@ -152,6 +161,106 @@ Las pruebas históricas proceden de sus informes; cada registro atribuye las ver
 - **Git:** fetch de origin/main satisfactorio, sin divergencias respecto al HEAD anterior. Entrega de 19 archivos legítimos pendientes: siete modificados y doce nuevos, incluidos diseño, UI, layout, páginas, navegación, manifiesto, lockfile y continuidad. Sin funcionalidades nuevas ni cambios en archivos de aplicación durante este relevo.
 - **Commit autorizado de entrega:** `feat: guardar avance frontend M1 y preparar relevo`; su hash se obtiene mediante `git log -1 --format=%H`. El informe de cierre registra el resultado efectivo del push, la igualdad HEAD/origin/main y el estado final del repositorio.
 - **Siguiente integrante:** clonar el repositorio oficial, usar Node.js 24 y `npm ci`, leer AGENTS.md y continuidad, verificar build/lint y ejecutar únicamente el prompt M1-B4-P1 cuando reciba sus instrucciones completas.
+
+### M1-B4-P1
+
+- **Objetivo:** sustituir el placeholder de `/login` por interfaz y validación local, sin autenticación real.
+- **Resultado:** PARCIAL; LoginPage y la ruta están implementados, pero las pruebas interactivas y visuales obligatorias no se ejecutaron por ausencia de navegador. Último aprobado: M1-B3-P1; Módulo 1 conserva 4 de 12 prompts aprobados.
+- **Implementación:** formulario semántico con correo y contraseña controlados; validación de vacíos y formato de correo mediante validez nativa; errores de TextField asociados mediante ARIA; foco al primer campo inválido; aviso accesible cuando ambos campos son válidos; enlace SPA a `/registro`. Sin envío de credenciales, almacenamiento, sesiones, redirecciones ni Supabase.
+- **Verificaciones realizadas:** build, lint y arranque de Vite PASS; servidor detenido. HTTP de `/`, `/login`, `/registro`, `/verificar` y ruta desconocida sirvió el HTML base. El renderizado estático comprobó h1, form, tipos de campo, botón y enlace. Estas pruebas no acreditan comportamiento en navegador.
+- **Pendiente:** probar en navegador los casos de validación y corrección, Enter, rutas y enlaces SPA, consola y ausencia de peticiones de autenticación; inspeccionar 320, 390, 768 y 1440 px y zoom al 200 %. Después solicitar revisión externa. M1-B4-P2 sigue previsto, sin autorización ni ejecución.
+- **Git:** cambios locales limitados a LoginPage, App.tsx y los dos documentos de continuidad; sin dependencias nuevas, staging, commit ni push.
+- **Aprobación posterior:** el responsable informó en M1-B4-P2 que las pruebas manuales de navegador finalizaron satisfactoriamente y aprobó M1-B4-P1. La ausencia de pruebas propias de Codex en su informe original se conserva como evidencia histórica.
+
+### M1-B4-P2
+
+- **Objetivo:** sustituir el placeholder de `/registro` por interfaz y validación local, sin crear cuentas ni sesiones.
+- **Resultado:** PARCIAL; RegisterPage y la ruta están implementados, pero las pruebas interactivas y visuales obligatorias no se ejecutaron por ausencia de navegador. Último aprobado: M1-B4-P1; Módulo 1 tiene 5 de 12 prompts aprobados.
+- **Implementación:** cuatro campos controlados; nombre no vacío, correo con validez nativa, contraseña de al menos ocho caracteres y confirmación exacta; errores de TextField asociados mediante ARIA, ayuda de contraseña, foco al primer campo inválido, aviso accesible cuando todos los datos son localmente válidos y enlace SPA a `/login`. Sin solicitudes, persistencia, cuentas, sesiones ni Supabase.
+- **Verificaciones realizadas:** build, lint y arranque de Vite PASS; servidor detenido. HTTP de `/`, `/login`, `/registro`, `/verificar` y ruta desconocida sirvió el HTML base. Renderizado estático comprobó h1, form, cuatro inputs y labels, ayuda, botón y enlace; no acredita comportamiento en navegador.
+- **Pendiente:** probar en navegador los casos de validación, corrección y Enter; enlaces y rutas SPA, consola, red y almacenamiento; inspeccionar 320, 390, 768 y 1440 px y zoom al 200 %. Después solicitar revisión externa. M1-B5-P1 sigue previsto, sin autorización ni ejecución.
+- **Git:** se conservan los cambios locales de M1-B4-P1. Este prompt añade RegisterPage y modifica solo App.tsx y continuidad; sin dependencias nuevas, staging, commit ni push.
+- **Aprobación posterior:** el responsable informó en M1-B5-P1 que probó los nueve escenarios de validación, navegación a login, responsive, consola, red, almacenamiento y zoom al 200 %, y aprobó M1-B4-P2. La ausencia de pruebas propias de Codex en el informe original se conserva como evidencia histórica.
+
+### M1-B5-P1
+
+- **Objetivo:** sustituir el placeholder de `/panel` por un dashboard preliminar y estados vacíos honestos, sin datos reales ni simulados.
+- **Resultado:** PARCIAL; DashboardPage y la ruta están implementados, pero las pruebas interactivas y visuales obligatorias no se ejecutaron por ausencia de navegador. Último aprobado: M1-B4-P2; Módulo 1 tiene 6 de 12 prompts aprobados.
+- **Implementación:** encabezado y aviso de vista preliminar; sección Mis acuerdos sin consulta de datos; enlaces a `/contratos/nuevo` y `/verificar`; tres capacidades futuras. `PageContainer`, `Card` y `Badge` existentes, sin nuevas dependencias ni protección de sesión ficticia. `/panel` sigue pública y sin datos privados.
+- **Verificaciones realizadas:** build, lint y arranque de Vite PASS; servidor detenido. HTTP de rutas existentes sirvió el HTML base. Renderizado estático comprobó h1, tres secciones, estado vacío y destinos de enlaces; no acredita navegación SPA en navegador.
+- **Pendiente:** probar en navegador los enlaces, rutas, teclado, consola, red y almacenamiento; inspeccionar 320, 390, 768 y 1440 px y zoom al 200 %. Después solicitar revisión externa. M1-B6-P1 sigue previsto, sin autorización ni ejecución.
+- **Git:** se conservan los cambios locales de M1-B4-P1 y M1-B4-P2. Este prompt añade DashboardPage y modifica solo App.tsx y continuidad; sin dependencias nuevas, staging, commit ni push.
+- **Aprobación posterior:** el responsable informó en M1-B6-P1 que completó nueve pruebas manuales del dashboard, incluidas navegación, teclado, responsive, zoom, consola y ausencia de consultas privadas o sesiones ficticias, y aprobó M1-B5-P1. La ausencia de pruebas propias de Codex en el informe original se conserva como evidencia histórica.
+
+### M1-B6-P1
+
+- **Objetivo:** sustituir el placeholder de `/contratos/nuevo` por un formulario de borrador local con validaciones, sin contratos reales ni persistencia.
+- **Resultado:** PARCIAL; CreateContractPage y la ruta están implementados, pero las pruebas interactivas y visuales obligatorias no se ejecutaron por ausencia de navegador. Último aprobado: M1-B5-P1; Módulo 1 tiene 7 de 12 prompts aprobados.
+- **Implementación:** título, descripción, dos participantes con nombre y correo, y cláusulas; validación local de campos vacíos, título de 120 caracteres, formato y duplicación de correos; errores de TextField y TextareaField asociados mediante ARIA, foco al primer campo inválido, aviso accesible de validación local y enlace SPA a `/panel`. Sin guardado, documentos, hashes, firmas, Stellar ni Supabase.
+- **Verificaciones realizadas:** build, lint y arranque de Vite PASS; servidor detenido. HTTP de rutas existentes sirvió el HTML base. Renderizado estático comprobó h1, tres secciones, siete campos, aviso de no guardado y enlace; no acredita navegación ni validación en navegador.
+- **Pendiente:** probar en navegador los casos de validación, corrección, Enter en inputs y textareas, navegación SPA, consola, red, almacenamiento y recarga; inspeccionar 320, 390, 768 y 1440 px y zoom al 200 %. Después solicitar revisión externa. M1-B6-P2 sigue previsto, sin autorización ni ejecución.
+- **Git:** se conservan los cambios locales de M1-B4-P1, M1-B4-P2 y M1-B5-P1. Este prompt añade CreateContractPage y modifica solo App.tsx y continuidad; sin dependencias nuevas, staging, commit ni push.
+- **Aprobación posterior:** el responsable informó en M1-B6-P2 que completó satisfactoriamente 15 pruebas manuales del formulario, incluidas validaciones, teclado, responsive, zoom, consola, ausencia de envío y persistencia, y descarte tras recarga; M1-B6-P1 fue aprobado externamente. Codex no ejecutó esas pruebas de navegador.
+
+### M1-B6-P2
+
+- **Objetivo:** añadir revisión de lectura del borrador dentro de `/contratos/nuevo`, con acceso explícito tras validación y regreso a edición sin perder los valores.
+- **Resultado:** PARCIAL; implementación y verificaciones técnicas correctas, pero faltan pruebas interactivas y visuales obligatorias por ausencia de navegador. Último aprobado: M1-B6-P1; Módulo 1 tiene 8 de 12 prompts aprobados.
+- **Implementación:** `ContractDraftReview` presenta los siete valores del estado React mediante props, agrupados en información, participantes y cláusulas. Conserva saltos de línea y muestra contenido como texto React. La página invalida la validación al editar, compara los valores actuales con los validados y vuelve a comprobarlos antes de abrir la revisión. El botón para volver conserva los valores; no hay persistencia, contrato real, PDF, hashes, aprobaciones, Supabase, Stellar ni Soroban. La ruta de detalle continúa como placeholder.
+- **Verificaciones realizadas:** build, lint y arranque de Vite PASS; servidor detenido. HTTP solo acreditó HTML base. Renderizado estático comprobó formulario inicial, estructura de revisión, texto especial escapado y saltos de línea; no acredita interacción de navegador.
+- **Pendiente:** probar en navegador validación, paso a revisión, datos, regreso, nueva edición, teclado, red, consola, almacenamiento, recarga y rutas previas; inspeccionar 320, 390, 768 y 1440 px y zoom al 200 %. Después solicitar validación externa. M1-B7-P1 sigue previsto, sin autorización ni ejecución.
+- **Git:** se conservaron los cambios locales anteriores. Este prompt añade `ContractDraftReview.tsx` y modifica `CreateContractPage.tsx` y los dos documentos de continuidad; sin dependencias nuevas, staging, commit ni push.
+- **Aprobación posterior:** el responsable informó en M1-B7-P1 que completó satisfactoriamente 15 pruebas manuales en navegador, incluidas alternancia, conservación de valores, texto seguro, teclado, responsive, zoom, consola y ausencia de envío y almacenamiento; M1-B6-P2 fue aprobado externamente. Codex no ejecutó esas pruebas.
+
+### M1-B7-P1
+
+- **Objetivo:** sustituir el placeholder de `/contratos/:id` por un detalle preliminar sin consultar ni simular contratos reales.
+- **Resultado:** PARCIAL; implementación y verificaciones técnicas correctas, pero faltan pruebas interactivas y visuales obligatorias por ausencia de navegador. Último aprobado: M1-B6-P2; Módulo 1 tiene 9 de 12 prompts aprobados.
+- **Implementación:** `ContractDetailPage` presenta la referencia de URL como no verificada, con truncamiento visible cuando supera 120 caracteres. Secciones de información del acuerdo, dos participantes, aprobaciones, evidencia e integridad muestran solo disponibilidad pendiente. Enlaces a panel, creación y verificación. Sin consulta, persistencia, firmas, hashes, transacciones ni integración Supabase, Stellar o Soroban. `/verificar` sigue como placeholder.
+- **Verificaciones realizadas:** build, lint y arranque de Vite PASS; servidor detenido. HTTP solo acreditó HTML base. Renderizado estático comprobó un h1, cuatro secciones, referencia dinámica, enlaces, escape de HTML y truncamiento; no acredita navegación SPA en navegador.
+- **Pendiente:** probar en navegador referencias, enlaces y rutas existentes, teclado, consola, red, almacenamiento y presentación a 320, 390, 768 y 1440 px y zoom al 200 %. Después solicitar validación externa. M1-B7-P2 sigue previsto, sin autorización ni ejecución.
+- **Git:** se conservaron los cambios locales anteriores. Este prompt añade `ContractDetailPage.tsx` y modifica solo `App.tsx` y los dos documentos de continuidad; sin dependencias nuevas, staging, commit ni push.
+- **Aprobación posterior:** el responsable informó en M1-B7-P2 que completó satisfactoriamente 14 pruebas manuales del detalle, incluidas rutas, parámetros dinámicos, referencias no verificadas, texto seguro, teclado, responsive, zoom, consola, red y almacenamiento; M1-B7-P1 fue aprobado externamente. Codex no ejecutó esas pruebas.
+
+### M1-B7-P2
+
+- **Objetivo:** sustituir el placeholder de `/verificar` por una interfaz frontend para seleccionar un archivo y validar el formato de una huella SHA-256 introducida por el usuario.
+- **Resultado:** PARCIAL; implementación y verificaciones técnicas correctas, pero faltan pruebas interactivas y visuales obligatorias por ausencia de navegador. Último aprobado: M1-B7-P1; Módulo 1 tiene 10 de 12 prompts aprobados.
+- **Implementación:** `VerifyDocumentPage` contiene formulario semántico con selector nativo de un archivo, nombre mostrado como texto React, campo de huella controlado, errores accesibles y foco al primer campo inválido. Acepta únicamente formato hexadecimal de 64 caracteres; el aviso de datos válidos se invalida al cambiar entradas. Explica el proceso futuro y límites de SHA-256, con enlaces a panel y creación. No lee ni sube archivos, calcula o compara hashes, consulta Stellar, conecta Supabase ni persiste datos; no produce un resultado de verificación criptográfica.
+- **Verificaciones realizadas:** build, lint y arranque de Vite PASS; servidor detenido. HTTP solo acreditó HTML base. Renderizado estático comprobó un h1, formulario, controles, pasos y enlaces sin errores ni aviso de éxito inicial; no acredita validación interactiva en navegador.
+- **Pendiente:** probar en navegador archivo ausente, huella vacía, corta, larga, inválida, válida y en mayúsculas; cambio de entradas, mensajes y foco, nombre de archivo largo o especial, teclado, navegación, consola, red, almacenamiento, recarga y presentación a 320, 390, 768 y 1440 px y zoom al 200 %. Después solicitar validación externa. M1-B8-P1 sigue previsto, sin autorización ni ejecución.
+- **Git:** se conservaron los cambios locales anteriores. Este prompt añade `VerifyDocumentPage.tsx` y modifica solo `App.tsx` y los dos documentos de continuidad; sin dependencias nuevas, staging, commit ni push.
+- **Aprobación posterior:** el responsable informó en M1-B8-P1 que completó satisfactoriamente 15 comprobaciones manuales de selección de archivo, validación de huella, correcciones, navegación, teclado, responsive, zoom, consola, red y almacenamiento; M1-B7-P2 fue aprobado externamente. Codex no ejecutó esas pruebas.
+
+### M1-B8-P1
+
+- **Objetivo:** auditar transversalmente las rutas, pantallas, componentes, formularios, accesibilidad, seguridad frontend, dependencias y Git antes del cierre formal del Módulo 1.
+- **Resultado:** PARCIAL; build, lint, arranque de Vite y renderizado estático de las ocho rutas pasaron. Faltan pruebas nuevas de regresión interactiva, accesibilidad por teclado, consola, red, almacenamiento y responsive en navegador. Último aprobado: M1-B7-P2; Módulo 1 tiene 11 de 12 prompts aprobados y permanece EN DESARROLLO.
+- **Inspección:** BrowserRouter, AppLayout y siete componentes UI conservados; formularios locales y avisos honestos. Las rutas esperadas muestran sus vistas, incluida 404 y distinción entre `/contratos/nuevo` y `/contratos/:id`. Revisión de código sin llamadas externas, persistencia, lectura o subida de archivos, credenciales visibles ni integraciones Supabase, Stellar, Freighter o Soroban. No equivale a auditoría de seguridad externa.
+- **Verificaciones realizadas:** `npm run build`, `npm run lint` y `npm run dev` PASS; Vite detenido. HTTP entregó el HTML base para ocho rutas, sin acreditar navegación SPA. Renderizado estático de cada ruta comprobó un main y h1, título esperado, IDs únicos, enlace de salto con destino y enlaces internos a rutas declaradas. No existe script de pruebas automatizadas configurado.
+- **Hallazgos y correcciones:** no se identificaron defectos corregibles dentro del alcance y de las comprobaciones ejecutadas; no se modificó código. La falta de navegador impide afirmar ausencia de problemas interactivos o visuales.
+- **Pendiente:** ejecutar la matriz manual de formularios, revisión del borrador, rutas, teclado, foco, consola, red, almacenamiento, recarga, 320, 390, 768 y 1440 px y zoom al 200 %. Después obtener la decisión externa de cierre. No iniciar un módulo nuevo.
+- **Git:** avances locales anteriores conservados; este prompt modifica únicamente los dos documentos de continuidad. `git diff --check` PASS; sin staging, commit ni push.
+- **Aprobación posterior:** el responsable confirmó en CIERRE-DOC-M1 que ejecutó satisfactoriamente 22 pruebas manuales de regresión integral del Módulo 1: rutas, formularios, creación y revisión de borradores, detalle, verificación documental, navegación, accesibilidad, responsive, zoom al 200 %, consola, red, almacenamiento y recarga. No comunicó defectos bloqueantes y aprobó M1-B8-P1. Codex no ejecutó esas pruebas de navegador; el estado PARCIAL del informe técnico anterior queda como antecedente histórico.
+
+### HITO — MÓDULO 1 FRONTEND COMPLETADO Y APROBADO
+
+- **Resultado:** 12 de 12 prompts de implementación aprobados. Auditoría técnica de M1-B8-P1 satisfactoria y regresión manual integral de 22 comprobaciones confirmada por el responsable.
+- **Alcance:** sistema visual, UI reutilizable, navegación, landing, login y registro locales, dashboard preliminar, creación y revisión local de borradores, detalle preliminar y pantalla de verificación de formato completados dentro del alcance frontend. Autenticación, persistencia, documentos, aprobaciones y evidencia blockchain reales siguen pendientes de integración.
+- **Publicación:** los cambios posteriores al relevo `987ae95` permanecen locales; este hito no supone publicación en GitHub.
+
+### CIERRE-DOC-M1 — actividad administrativa
+
+- Actualización de ambos documentos posterior a la aprobación de M1-B8-P1. No crea funcionalidades ni incrementa el contador de prompts del Módulo 1.
+- `npm run build`, `npm run lint` y `git diff --check` PASS con el código existente. No se modificaron código, dependencias ni configuración; sin staging, commit ni push.
+- Siguiente acción recomendada: publicación segura y relevo bajo instrucciones y autorización separadas. No se inicia un nuevo módulo.
+
+### PUBLICACIÓN-RELEVO-M1 — actividad operativa
+
+- **Objetivo:** auditar, versionar y publicar exclusivamente los avances frontend aprobados del Módulo 1 y los dos documentos de continuidad. No añade funcionalidades ni incrementa los 12 prompts aprobados.
+- **Base histórica:** `987ae95f95573fd8ad5c0efb6e46ec8dfca9fe92`; antes de preparar la entrega, HEAD y el `origin/main` consultado en GitHub coincidían. La referencia al commit de relevo y la publicación efectiva deben comprobarse en Git y en el informe final.
+- **Contenido previsto del relevo:** `src/App.tsx`, las seis páginas nuevas de login, registro, panel, creación, detalle y verificación, `src/components/contracts/ContractDraftReview.tsx` y ambos documentos de continuidad. No incluye dependencias, configuración, compilaciones ni integraciones futuras.
+- **Continuidad:** Módulo 0 COMPLETADO y Módulo 1 COMPLETADO Y APROBADO, 12 de 12; último prompt aprobado M1-B8-P1 y cierre administrativo CIERRE-DOC-M1. El siguiente integrante debe verificar `origin/main`, ejecutar las comprobaciones pertinentes y esperar instrucciones para el próximo módulo.
 
 ## 4. Mantenimiento acumulativo y relevos
 

@@ -1,8 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 import { AppLayout } from './components/layout/AppLayout'
+import { ContractDetailPage } from './pages/ContractDetailPage'
+import { CreateContractPage } from './pages/CreateContractPage'
+import { DashboardPage } from './pages/DashboardPage'
 import { HomePage } from './pages/HomePage'
+import { LoginPage } from './pages/LoginPage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { PlaceholderPage } from './pages/PlaceholderPage'
+import { RegisterPage } from './pages/RegisterPage'
+import { VerifyDocumentPage } from './pages/VerifyDocumentPage'
 import './App.css'
 
 function App() {
@@ -11,12 +16,12 @@ function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<HomePage />} />
-          <Route path="login" element={<PlaceholderPage title="Inicio de sesión" />} />
-          <Route path="registro" element={<PlaceholderPage title="Registro" />} />
-          <Route path="panel" element={<PlaceholderPage title="Panel de usuario" />} />
-          <Route path="contratos/nuevo" element={<PlaceholderPage title="Crear contrato" />} />
-          <Route path="contratos/:id" element={<PlaceholderPage title="Detalle de contrato" />} />
-          <Route path="verificar" element={<PlaceholderPage title="Verificación documental" />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="registro" element={<RegisterPage />} />
+          <Route path="panel" element={<DashboardPage />} />
+          <Route path="contratos/nuevo" element={<CreateContractPage />} />
+          <Route path="contratos/:id" element={<ContractDetailPage />} />
+          <Route path="verificar" element={<VerifyDocumentPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

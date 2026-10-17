@@ -16,17 +16,15 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 
 | Campo | Valor |
 | --- | --- |
-| Módulo actual | Módulo 1 — Frontend e Interfaz de Usuario |
-| Bloque actual | Bloque 3 — Página principal |
+| Último módulo cerrado | Módulo 1 — Frontend e Interfaz de Usuario |
+| Actividad operativa de relevo | PUBLICACIÓN-RELEVO-M1 — auditoría y entrega de los avances aprobados; no es un prompt de implementación |
 | Estado del Módulo 0 | COMPLETADO, aprobado externamente |
-| Estado del Módulo 1 | EN DESARROLLO — 4 de 12 prompts aprobados |
-| Último prompt aprobado | M1-B3-P1 |
-| Prompt actualmente ejecutado | M1-B3-P1 |
-| Estado del prompt actual | APROBADO por el responsable en la solicitud de relevo |
-| Estado del relevo | Listo para relevo al siguiente integrante |
-| Siguiente prompt previsto | M1-B4-P1 — Formulario de inicio de sesión; no ejecutado |
+| Estado del Módulo 1 | COMPLETADO Y APROBADO — 12 de 12 prompts aprobados |
+| Último prompt de implementación ejecutado y aprobado | M1-B8-P1 |
+| Estado de la publicación | Verificar en GitHub comparando `git rev-parse HEAD` con `git ls-remote --heads origin main`; este documento no acredita por sí solo el push |
+| Siguiente acción operativa | Recibir el relevo, comprobar el commit publicado y esperar un nuevo prompt autorizado; no hay nuevo módulo iniciado |
 
-El responsable aprobó expresamente M1-B3-P1 y autorizó guardar y publicar los avances en su solicitud de relevo. Módulo 0 COMPLETADO; Módulo 1 EN DESARROLLO con cuatro prompts aprobados: M1-B1-P1, M1-B1-P2, M1-B2-P1 y M1-B3-P1. Listo para relevo al siguiente integrante; M1-B4-P1 no se ha iniciado.
+El responsable confirmó después del informe de M1-B8-P1 que completó satisfactoriamente 22 comprobaciones manuales de regresión integral, sin defectos bloqueantes comunicados, y aprobó M1-B8-P1 y el cierre del Módulo 1. Codex no ejecutó esas pruebas de navegador. La aprobación funcional y técnica del frontend no acredita publicación de los cambios locales ni funcionamiento de integraciones futuras.
 
 ## 3. Capacidades y preparación existentes
 
@@ -35,20 +33,46 @@ El responsable aprobó expresamente M1-B3-P1 y autorizó guardar y publicar los 
 - **Sistema visual local aprobado:** tokens `@theme` de Tailwind v4 para marca, acento, fondo, superficie, texto, borde y variante oscura del acento para foco; fuente de sistema, radios y sombra sutil. Usa la escala nativa de espaciado y breakpoints. `#root` ocupa todo el ancho; la antigua regla `.welcome` se conserva sin uso en la landing. Verifica contraste en cada combinación nueva; el texto secundario se utiliza sobre blanco.
 - **UI genérica local aprobada:** `src/components/ui/` conserva intactos sus siete componentes y exportaciones. El layout reutiliza PageContainer; las páginas temporales y 404 reutilizan Card y PageContainer.
 - **Navegación SPA local:** un BrowserRouter en `App.tsx`, Routes/Route declarativos y `AppLayout` con Outlet, encabezado, NavLink activo y salto al único `main`. Enlaces visibles a Inicio, Verificar, Iniciar sesión y Registrarse, sin menús complejos.
-- **Rutas:** `/` muestra HomePage; `/login`, `/registro`, `/panel`, `/contratos/nuevo`, `/contratos/:id` y `/verificar` comparten PlaceholderPage con títulos distintos y aviso de implementación pendiente. `*` muestra NotFoundPage, sin redirección silenciosa.
-- **Seguridad de rutas:** `/panel` y las rutas de contratos NO están protegidas por autenticación; solo muestran placeholders sin datos privados. La protección real corresponde al Módulo 2; no existen controles de sesión ficticios.
-- **Preparación arquitectónica:** se conservan todos los `.gitkeep`; `src/types/` y los tres servicios siguen reservados y sin integraciones. No se crearon páginas definitivas de login, registro, dashboard ni contratos.
+- **Rutas:** `/` muestra HomePage; `/login` muestra LoginPage; `/registro` muestra RegisterPage; `/panel` muestra DashboardPage; `/contratos/nuevo` muestra CreateContractPage; `/contratos/:id` muestra ContractDetailPage; `/verificar` muestra VerifyDocumentPage. `*` muestra NotFoundPage, sin redirección silenciosa.
+- **Login aprobado:** formulario con correo y contraseña controlados, errores locales, aviso de autenticación no disponible y enlace SPA a `/registro`. Su aprobación y pruebas manuales de navegador fueron comunicadas por el responsable en M1-B4-P2; Codex no las ejecutó en su entorno.
+- **Registro aprobado:** cuatro campos controlados, validación local y aviso de registro no disponible. El responsable comunicó en M1-B5-P1 que completó pruebas manuales de formulario, navegación, responsive, consola, red, almacenamiento y zoom al 200 %, y aprobó M1-B4-P2; Codex no las ejecutó en su entorno.
+- **Dashboard aprobado:** vista preliminar sin datos consultados, con accesos a creación y verificación. El responsable comunicó en M1-B6-P1 que realizó nueve pruebas manuales de navegador, incluidas navegación, responsive, zoom, teclado, consola y ausencia de consultas privadas o sesiones ficticias, y aprobó M1-B5-P1; Codex no las ejecutó en su entorno.
+- **Formulario de borrador aprobado:** siete campos, validación local de campos y correos, aviso de validación local y ausencia de persistencia. El responsable confirmó 15 pruebas manuales satisfactorias y aprobó M1-B6-P1; Codex no las ejecutó en su entorno.
+- **Revisión local aprobada:** tras validar los valores actuales, una acción explícita muestra título, descripción, ambos participantes y cláusulas desde el estado React; volver a editar conserva los valores. El responsable comunicó 15 pruebas manuales satisfactorias y aprobó M1-B6-P2; Codex no las ejecutó en su entorno.
+- **Detalle preliminar aprobado:** `/contratos/:id` muestra la referencia solicitada como no verificada, limita su representación visible si es larga y ofrece secciones de información, participantes, aprobaciones y evidencia con datos no disponibles. El responsable comunicó 14 pruebas manuales satisfactorias y aprobó M1-B7-P1; Codex no las ejecutó en su entorno.
+- **Interfaz de verificación aprobada:** `/verificar` permite seleccionar un archivo sin leerlo ni subirlo y validar localmente el formato de una huella SHA-256 de referencia. El aviso de formato válido no constituye verificación de integridad. El responsable comunicó 15 comprobaciones manuales satisfactorias y aprobó M1-B7-P2; Codex no las ejecutó en su entorno.
+- **Seguridad de rutas:** `/panel`, `/contratos/nuevo` y `/contratos/:id` son públicas temporalmente y no consultan ni almacenan datos privados. La protección real corresponde al módulo de autenticación; no existen controles de sesión ficticios.
+- **Preparación arquitectónica:** se conservan todos los `.gitkeep`; `src/types/` y los tres servicios siguen reservados y sin integraciones. La lógica criptográfica y las consultas reales permanecen pendientes.
 - **Preparación del repositorio:** `.nvmrc`, lockfile npm, `.gitignore`, finales LF y `.env.example` público, sin credenciales reales ni consumo de sus variables.
 - **Instrucciones permanentes:** `AGENTS.md` existe en la raíz.
-- **Continuidad:** documentos actualizados para el inicio de Módulo 1, conservando las evidencias y el historial del Módulo 0.
-- **Sin implementar:** registro e inicio de sesión, creación de contratos, PDF, hashes documentales, firmas o aprobaciones criptográficas, billeteras, integración Stellar, contratos Soroban, backend Supabase y despliegue Vercel.
+- **Auditoría final aprobada:** rutas, formularios, validaciones, accesibilidad, seguridad del alcance frontend y regresión integral revisadas. Build, lint y Vite pasaron en la auditoría técnica; el responsable confirmó 22 pruebas manuales satisfactorias. No se modificó código durante M1-B8-P1.
+- **Continuidad:** documentos actualizados para el cierre del Módulo 1, conservando las evidencias y el historial del Módulo 0.
+
+### Matriz de rutas del frontend aprobado
+
+La aprobación de cada interfaz no significa que sus integraciones reales estén disponibles. Las rutas de panel y contratos aún no tienen protección por autenticación.
+
+| Ruta | Pantalla | Estado |
+| --- | --- | --- |
+| `/` | Landing | Interfaz aprobada |
+| `/login` | Inicio de sesión | Interfaz y validación local aprobadas |
+| `/registro` | Registro | Interfaz y validación local aprobadas |
+| `/panel` | Dashboard | Interfaz y estado vacío aprobados |
+| `/contratos/nuevo` | Creación y revisión local | Interfaz y validaciones locales aprobadas |
+| `/contratos/:id` | Detalle preliminar | Interfaz aprobada; referencia de URL no verificada |
+| `/verificar` | Verificación documental frontend | Interfaz y formato de huella aprobados; sin verificación criptográfica |
+| `*` | Página 404 | Interfaz aprobada |
+
+### Funcionalidades pendientes de integración
+
+No existen todavía autenticación real, cuentas persistentes, base de datos de contratos, almacenamiento documental, guardado y consulta reales de acuerdos, aprobaciones criptográficas, integración de billeteras Stellar, cálculo SHA-256 sobre documentos, comparación criptográfica, registro o consulta de evidencia en Stellar, integración Soroban ni escrow. También siguen pendientes generación documental, backend Supabase y despliegue. Estas capacidades estaban fuera del alcance aprobado del Módulo 1; las pantallas no representan operaciones reales.
 
 ## 4. Estado de los módulos
 
 | Módulo | Nombre | Estado | Observaciones |
 | --- | --- | --- | --- |
 | 0 | Configuración inicial | COMPLETADO | Ocho prompts aprobados externamente; base publicada en GitHub. |
-| 1 | Frontend e Interfaz de Usuario | EN DESARROLLO | 4 de 12 prompts aprobados: sistema visual, UI, navegación y landing. Listo para relevo; formularios y páginas funcionales pendientes. |
+| 1 | Frontend e Interfaz de Usuario | COMPLETADO Y APROBADO | 12 de 12 prompts aprobados, incluida M1-B8-P1 tras 22 comprobaciones manuales externas satisfactorias. Publicación de cambios locales pendiente. |
 | 2 | Backend y Supabase | PENDIENTE | Carpeta reservada, sin integración. |
 | 3 | Stellar y Soroban | PENDIENTE | Carpeta reservada, sin SDK ni contratos. |
 | 4 | Documentos y verificación | PENDIENTE | Carpeta reservada, sin lógica documental. |
@@ -139,12 +163,121 @@ Evidencia del cierre anterior aprobado; no atribuir estas instalaciones ni la cl
 - `git fetch origin main`: PASS; HEAD previo y origin/main sin divergencia. Se autoriza consolidar únicamente los 19 archivos legítimos pendientes, sin modificar código durante el relevo.
 - Pruebas ejecutadas con Node.js 24.22.0 y npm 11.19.1 en Linux; no se repitió la inspección visual ni se ejecutó el siguiente prompt. El resultado final del push y el hash del commit se informan al cerrar el relevo.
 
+### Verificaciones de M1-B4-P1
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` y `npm run lint` | PASS; TypeScript, Vite y ESLint sin errores. |
+| `npm run dev` | PASS; Vite arrancó con permiso de red local y se detuvo al finalizar. |
+| HTTP de rutas en desarrollo | PASS; `/`, `/login`, `/registro`, `/verificar` y ruta desconocida devolvieron el HTML de la SPA. La respuesta HTTP no prueba el renderizado de React. |
+| Marcado inicial | PASS mediante renderizado estático: un h1, un form, ningún main adicional, ambos tipos de entrada, botón submit y enlace a `/registro`. |
+| Interacción y responsive | NO EJECUTADO; no hay navegador disponible en este entorno. Pendientes casos de validación, teclado, navegación SPA, consola, peticiones de red y mediciones a 320, 390, 768 y 1440 px con zoom al 200 %. |
+
+El responsable informó posteriormente que completó satisfactoriamente las pruebas manuales de navegador y aprobó M1-B4-P1. Este reporte no convierte las pruebas no ejecutadas por Codex en pruebas propias.
+
+### Verificaciones de M1-B4-P2
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` y `npm run lint` | PASS; TypeScript, Vite y ESLint sin errores. |
+| `npm run dev` | PASS; Vite arrancó en localhost con permiso de red local y se detuvo al finalizar. |
+| HTTP de rutas en desarrollo | PASS; `/`, `/login`, `/registro`, `/verificar` y ruta desconocida devolvieron el HTML de la SPA. No acredita renderizado de React. |
+| Marcado inicial | PASS mediante renderizado estático: un h1, un form, cuatro inputs y labels, ayuda de contraseña, botón submit y enlace a `/login`; sin main adicional. |
+| Interacción y responsive | NO EJECUTADO; no hay navegador disponible en este entorno. Pendientes validaciones, teclado, navegación SPA, consola, red, almacenamiento y mediciones a 320, 390, 768 y 1440 px con zoom al 200 %. |
+
+El responsable informó posteriormente en M1-B5-P1 que completó las pruebas manuales de validación, navegación, responsive, consola, red, almacenamiento y zoom al 200 %, y aprobó M1-B4-P2. No se atribuyen esas pruebas a Codex.
+
+### Verificaciones de M1-B5-P1
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` y `npm run lint` | PASS; TypeScript, Vite y ESLint sin errores. |
+| `npm run dev` | PASS; Vite arrancó en localhost con permiso de red local y se detuvo al finalizar. |
+| HTTP de rutas en desarrollo | PASS; `/panel`, `/contratos/nuevo`, `/verificar`, `/login`, `/registro`, `/` y ruta desconocida devolvieron el HTML de la SPA. No acredita navegación React. |
+| Marcado inicial del dashboard | PASS mediante renderizado estático: un h1, tres secciones con h2, ningún main adicional, estado vacío explícito y destinos de los enlaces previstos. |
+| Interacción y responsive | NO EJECUTADO; no hay navegador disponible en este entorno. Pendientes navegación SPA, teclado, consola, red, almacenamiento y mediciones a 320, 390, 768 y 1440 px con zoom al 200 %. |
+
+El responsable informó posteriormente en M1-B6-P1 que completó nueve pruebas manuales del dashboard y aprobó M1-B5-P1. No se atribuyen esas pruebas a Codex.
+
+### Verificaciones de M1-B6-P1
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` y `npm run lint` | PASS; TypeScript, Vite y ESLint sin errores. |
+| `npm run dev` | PASS; Vite arrancó en localhost con permiso de red local y se detuvo al finalizar. |
+| HTTP de rutas en desarrollo | PASS; `/contratos/nuevo`, `/contratos/ejemplo`, `/panel`, `/login`, `/registro`, `/verificar`, `/` y ruta desconocida devolvieron el HTML de la SPA. No acredita navegación React. |
+| Marcado inicial del formulario | PASS mediante renderizado estático: un h1, tres secciones, siete campos con etiquetas, botón submit, aviso de no guardado y enlace a `/panel`; sin main adicional. |
+| Interacción y responsive | NO EJECUTADO; no hay navegador disponible en este entorno. Pendientes validaciones, teclado, navegación SPA, consola, red, almacenamiento y mediciones a 320, 390, 768 y 1440 px con zoom al 200 %. |
+
+El responsable informó posteriormente en M1-B6-P2 que completó satisfactoriamente 15 pruebas manuales, incluidas validaciones, navegación, teclado, responsive, zoom, consola, ausencia de envío y persistencia, y descarte tras recarga; aprobó M1-B6-P1. No se atribuyen esas pruebas a Codex.
+
+### Verificaciones de M1-B6-P2
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` y `npm run lint` | PASS; TypeScript, Vite y ESLint sin errores. |
+| `npm run dev` | PASS; Vite arrancó en localhost y se detuvo. |
+| HTTP de rutas en desarrollo | PASS; Vite sirvió el HTML base para las rutas comprobadas. No acredita navegación ni renderizado React. |
+| Marcado inicial y revisión estática | PASS mediante renderizado estático: edición con un h1, siete campos y revisión inicialmente ausente; revisión con un h1, tres secciones, sin main adicional, texto especial escapado y saltos de línea conservados. |
+| Interacción y responsive | NO EJECUTADO; no hay navegador disponible. Pendientes validación y alternancia reales, conservación de valores, teclado, consola, red, almacenamiento, recarga, rutas previas, 320, 390, 768 y 1440 px, y zoom al 200 %. |
+
+El responsable informó posteriormente en M1-B7-P1 que completó satisfactoriamente 15 pruebas manuales de la revisión local, incluidas alternancia, conservación, texto seguro, teclado, responsive, zoom, consola y ausencia de envío y almacenamiento; aprobó M1-B6-P2. No se atribuyen esas pruebas a Codex.
+
+### Verificaciones de M1-B7-P1
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` y `npm run lint` | PASS; TypeScript, Vite y ESLint sin errores. |
+| `npm run dev` | PASS; Vite arrancó en localhost tras permiso de red local y se detuvo. El intento inicial en sandbox falló con `listen EPERM`. |
+| HTTP de rutas en desarrollo | PASS; Vite sirvió el HTML base para las rutas comprobadas. No acredita navegación ni renderizado React. |
+| Renderizado estático del detalle | PASS; un h1, cuatro secciones, sin main adicional, referencia dinámica, tres enlaces previstos, escape de caracteres especiales y truncamiento de referencia larga. |
+| Interacción y responsive | NO EJECUTADO; no hay navegador disponible. Pendientes navegación SPA, teclado, consola, red, almacenamiento, 320, 390, 768 y 1440 px, y zoom al 200 %. |
+
+El responsable informó posteriormente en M1-B7-P2 que completó satisfactoriamente 14 pruebas manuales del detalle, incluidas rutas dinámicas, referencias no verificadas, texto seguro, navegación, teclado, responsive, zoom, consola, red y almacenamiento; aprobó M1-B7-P1. No se atribuyen esas pruebas a Codex.
+
+### Verificaciones de M1-B7-P2
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` y `npm run lint` | PASS; TypeScript, Vite y ESLint sin errores. |
+| `npm run dev` | PASS; Vite arrancó en localhost y se detuvo. |
+| HTTP de rutas en desarrollo | PASS; Vite sirvió el HTML base para las rutas comprobadas. No acredita navegación ni renderizado React. |
+| Renderizado estático inicial | PASS; un h1, formulario, selector de archivo, campo de huella, tres pasos, enlaces previstos y ningún aviso de éxito o error inicial. |
+| Interacción y responsive | NO EJECUTADO; no hay navegador disponible. Pendientes validaciones, correcciones, teclado, consola, red, almacenamiento, recarga, rutas previas, 320, 390, 768 y 1440 px, y zoom al 200 %. |
+
+El responsable informó posteriormente en M1-B8-P1 que completó satisfactoriamente 15 comprobaciones manuales de la interfaz de verificación, incluidos archivo, validación de huella, correcciones, navegación, teclado, responsive, zoom, consola, red y almacenamiento; aprobó M1-B7-P2. No se atribuyen esas pruebas a Codex.
+
+### Verificaciones de M1-B8-P1
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` y `npm run lint` | PASS; TypeScript, Vite y ESLint sin errores. No existe script de pruebas automatizadas en `package.json`. |
+| `npm run dev` | PASS; Vite arrancó en localhost y se detuvo. |
+| HTTP de rutas en desarrollo | PASS; Vite sirvió el HTML base de las ocho rutas inspeccionadas. No acredita navegación SPA. |
+| Renderizado estático de rutas | PASS; landing, login, registro, panel, creación, detalle, verificación y 404 mostraron el título esperado, un único `main` y `h1`, IDs únicos, enlace de salto con destino válido y enlaces internos hacia rutas declaradas. No acredita interacciones. |
+| Inspección transversal de código | PASS dentro del alcance: formularios locales, avisos honestos, rutas y componentes UI coherentes; sin nuevas dependencias, credenciales visibles, llamadas externas, persistencia o integraciones blockchain en `src/`. No equivale a una auditoría de seguridad externa. |
+| Regresión interactiva y visual | NO EJECUTADO; no hay navegador disponible. Pendientes formularios, edición/revisión, teclado, foco, consola, red, almacenamiento, recarga, 320, 390, 768 y 1440 px, y zoom al 200 %. |
+| Git | `git diff --check` PASS; `main`, HEAD y `origin/main` iguales; cambios locales anteriores conservados, sin staging, commit ni push. |
+
+No se identificaron defectos corregibles dentro del alcance y de las comprobaciones ejecutadas. No se modificó código durante esta auditoría.
+
+**Validación externa posterior:** el responsable confirmó 22 comprobaciones manuales de regresión integral satisfactorias de rutas, formularios, creación y revisión de borradores, detalle, verificación documental, navegación, teclado, foco, responsive, zoom al 200 %, consola, red, almacenamiento y recarga. No comunicó defectos bloqueantes y aprobó M1-B8-P1. Estas pruebas fueron realizadas por el responsable, no por Codex. El estado PARCIAL consignado en el informe técnico original corresponde al momento anterior a esta confirmación.
+
+### Verificaciones de CIERRE-DOC-M1
+
+| Comprobación | Resultado |
+| --- | --- |
+| `npm run build` | PASS; TypeScript y Vite compilaron con las dependencias existentes. |
+| `npm run lint` | PASS; ESLint sin errores. |
+| `git diff --check` | PASS; sin errores de formato en cambios rastreados. |
+| Alcance | Solo se editaron los dos documentos de continuidad durante este cierre; código, dependencias y configuración conservados. |
+
 ## 6. Problemas, advertencias y tareas pendientes
 
-- **Bloqueos:** ninguno identificado; pruebas obligatorias de la landing finalizadas correctamente. Accesibilidad limitada al alcance, sin auditoría integral con lector de pantalla.
+- **Cierre funcional del frontend:** M1-B8-P1 y el Módulo 1 fueron aprobados externamente tras 22 comprobaciones manuales satisfactorias. Codex no repitió esas pruebas en su entorno sin navegador.
 - **Advertencia conocida:** ESLint 9.39.5 fue reportado fuera de soporte; no se migró de versión.
 - **Advertencia npm previa:** autorización de scripts de esbuild pendiente de revisión; no impidió las últimas comprobaciones técnicas.
-- **Tareas pendientes:** ejecución de M1-B4-P1 en el siguiente turno, hover con ratón físico y pruebas en los otros cuatro equipos; páginas y servicios reales en sus bloques. Acceso directo en producción y reescrituras del servidor se resolverán en despliegue, sin configuración añadida ahora. La 404 es una vista SPA; Vite devuelve el HTML base con HTTP 200 durante desarrollo.
+- **Tareas pendientes:** confirmar el resultado de PUBLICACIÓN-RELEVO-M1 con la comparación de hashes del informe final; validar instalación y ejecución en los otros cuatro equipos cuando corresponda; desarrollar consulta contractual y verificación criptográfica reales en módulos futuros autorizados. Acceso directo en producción y reescrituras del servidor se resolverán en despliegue, sin configuración añadida ahora. La 404 es una vista SPA; Vite devuelve el HTML base con HTTP 200 durante desarrollo.
 - Los errores de permisos de instalaciones anteriores fueron resueltos y no se consideran bloqueos actuales.
 
 ## 7. Estado de Git y publicación
@@ -155,23 +288,25 @@ Evidencia del cierre anterior aprobado; no atribuir estas instalaciones ni la cl
 - **Entrega del Módulo 1:** sistema visual, siete componentes UI con exportaciones, AppLayout, rutas, HomePage definitiva, placeholders, 404, React Router y lockfile, estilos y ambos documentos. Son 19 archivos de avance: siete modificados y doce nuevos respecto al cierre del Módulo 0; los seis `.gitkeep` se conservan.
 - **Commit de relevo autorizado:** `feat: guardar avance frontend M1 y preparar relevo`. Para obtener su hash consulta `git log -1 --format=%H`; el propio commit contiene esta documentación. El informe de cierre acredita el resultado del push y la comparación con `origin/main`.
 - **Remoto:** repositorio público, con publicación pública expresamente autorizada por el responsable desde M0-B6-P1. En este relevo se consultó `origin/main`: sin divergencia respecto al HEAD previo; publicación normal, sin force push.
+- **Base anterior a PUBLICACIÓN-RELEVO-M1:** `main`, HEAD y `origin/main` coincidían en `987ae95f95573fd8ad5c0efb6e46ec8dfca9fe92` antes de preparar la entrega. Ese hash es histórico, no el resultado del relevo actual.
+- **Entrega operativa:** PUBLICACIÓN-RELEVO-M1 reúne las interfaces de login, registro, panel, creación y revisión local, detalle y verificación visual, la integración de rutas y estos dos documentos. El hash del nuevo commit y el resultado real del push se comprueban en Git y en el informe final; no se deducen de esta documentación.
 - **Exclusiones:** dependencias, compilaciones, entornos privados y temporales ignorados; `.env.example` y los seis `.gitkeep` permitidos según M0-B3-P1.
-- La solicitud de relevo autoriza staging, commit y `git push origin main` tras verificaciones satisfactorias; no autoriza funcionalidades nuevas, force push ni comandos destructivos.
+- CIERRE-DOC-M1 no autorizó una publicación. PUBLICACIÓN-RELEVO-M1 es la autorización operativa separada para un commit y un push normales, sujetos a sus controles previos.
 
 ## 8. Próxima acción y relevo
 
-- **Estado:** listo para relevo al siguiente integrante.
-- **Último prompt aprobado:** M1-B3-P1; Módulo 1 con 4 de 12 prompts aprobados.
-- **Siguiente prompt:** M1-B4-P1 — Formulario de inicio de sesión. El siguiente integrante debe leer su prompt completo antes de implementarlo; no se ha iniciado en este turno.
+- **Estado:** Módulo 0 COMPLETADO; Módulo 1 COMPLETADO Y APROBADO, con 12 de 12 prompts aprobados. La entrega de sus avances corresponde a PUBLICACIÓN-RELEVO-M1; comprueba el resultado remoto antes de considerarlos publicados.
+- **Último prompt de implementación aprobado:** M1-B8-P1. **Última actividad administrativa de cierre:** CIERRE-DOC-M1. **Actividad operativa de relevo:** PUBLICACIÓN-RELEVO-M1; ninguna de estas actividades incrementa el contador de prompts de implementación.
+- **Siguiente acción recomendada:** verificar el commit de relevo en `origin/main` y continuar solo cuando el responsable autorice un nuevo prompt. No se ha iniciado otro módulo.
 - Clona `https://github.com/Lilarpo/acuerdoseguro`, entra en `acuerdoseguro`, usa Node.js 24 (`nvm use` si utilizas nvm) y ejecuta `npm ci`, `npm run build` y `npm run lint`. Para trabajar, `npm run dev`.
-- Lee AGENTS.md y ambos documentos de continuidad; confirma rama `main`, HEAD y estado limpio. Login y registro continúan como placeholders, sin autenticación ni servicios externos.
+- Lee AGENTS.md y ambos documentos de continuidad; confirma rama `main`, HEAD, `origin/main` y cambios locales. Los doce prompts de frontend están aprobados según el responsable; las integraciones reales siguen pendientes. Comprueba la publicación en GitHub mediante hashes, no solo con esta documentación.
 
 ## 9. Indicaciones para el siguiente integrante
 
 1. Abre el repositorio en VS Code y confirma la raíz, rama y remoto correctos.
 2. Lee `AGENTS.md`, este documento y, cuando sea necesario, `docs/HISTORIAL_PROMPTS.md`.
 3. Revisa Git y preserva los cambios locales antes de cualquier sincronización autorizada.
-4. Confirma con el responsable que tienes la última versión disponible; la documentación local no acredita publicación en GitHub.
+4. Consulta `git ls-remote --heads origin main` y compara su hash con el commit de relevo informado; conserva cualquier cambio local antes de sincronizar.
 5. Comprueba Node.js con `.nvmrc` y las dependencias; usa npm y el lockfile para instalar cuando corresponda.
 6. Ejecuta las pruebas pertinentes y contrasta sus resultados con el código real, sin confiar ciegamente en este estado.
 7. Continúa únicamente desde el siguiente prompt autorizado.
