@@ -20,13 +20,13 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 | Actividad operativa de relevo previa | PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; no son prompts de implementación |
 | Estado del Módulo 0 | COMPLETADO, aprobado externamente |
 | Estado del Módulo 1 | COMPLETADO Y APROBADO — 12 de 12 prompts aprobados |
-| Estado del Módulo 2 | EN DESARROLLO — M2-B1 y M2-B2 COMPLETADOS Y APROBADOS TÉCNICAMENTE; contratos/RLS pendientes |
-| Últimos prompts aprobados | M2-B2-P9 y M2-B2-P9-C1 — aprobación externa tras diez comprobaciones manuales de F-01; P1–P8 conservan sus aprobaciones |
-| Prompt actual y último ejecutado | M2-B2-CIERRE-P1 — cierre documental y publicación controlada |
-| Estado del prompt actual | CIERRE DOCUMENTAL PREPARADO; PUBLICACIÓN PENDIENTE hasta verificación del push |
+| Estado del Módulo 2 | EN DESARROLLO — M2-B1 y M2-B2 aprobados; M2-B3 iniciado, migración local sin aplicar |
+| Último prompt aprobado | M2-B3-P3-A — aprobado como preflight documental; P1/P2 aprobados en sus alcances limitados |
+| Actividad actual | M2-B3-RESPALDO-P1 — publicación controlada de seis archivos; resultado Git se confirma en el informe final |
+| Estado del preflight | APROBADO COMO DOCUMENTO; inventario remoto y despliegue siguen pendientes de autorizaciones separadas |
 | Corrección puntual local | M2-B2-P4-C1 — CORRECCIÓN APROBADA dentro de P4 por el responsable; no aumenta el conteo funcional |
-| Publicaciones previas verificadas | M1 mediante `353e73706d343bd56fede23cd97f6c77fc2865d4`; M2 hasta M2-B2-P2 mediante `0e23f15039802537ee2708120526d797a8acae59` |
-| Siguiente trabajo previsto | M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos, PROPUESTO — NO EJECUTADO |
+| Última publicación verificada | M2-B2-CIERRE-P1 en rama de relevo, `dae6bbe7516afb5c01660fb143e32e12ee96cd5c` |
+| Siguiente trabajo previsto | M2-B3-P3-INSPECCIÓN — inventario remoto de solo lectura, pendiente de autorización específica; P3-B NO AUTORIZADO |
 
 El responsable confirmó después del informe de M1-B8-P1 que completó satisfactoriamente 22 comprobaciones manuales de regresión integral, sin defectos bloqueantes comunicados, y aprobó M1-B8-P1 y el cierre del Módulo 1. Codex no ejecutó esas pruebas de navegador. La publicación posterior de M1 se verificó durante PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; ninguna de esas actividades acredita funcionamiento de integraciones futuras.
 
@@ -603,6 +603,42 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 - **Alcance cerrado:** arquitectura y estados Auth, registro, login, logout local, persistencia, renovación automática configurada, rutas privadas y retorno seguro, concurrencia de logout y auditoría. P1–P8, P9 y P9-C1 están aprobados; P4-C1 sigue incluida en P4. R1 fue verificación técnica favorable, no aprobación independiente.
 - **Límites:** renovación remota real todavía no observada directamente; guard React no autoriza filas. Contratos PostgreSQL, RLS contractual, Stellar y Soroban no están implementados. El Módulo 2 sigue en desarrollo. M2-B3-P1 es el siguiente diseño propuesto y NO EJECUTADO.
 
+### M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos
+
+- **Estado:** DISEÑO ELABORADO — PENDIENTE DE REVISIÓN EXTERNA. M2-B3, Persistencia y seguridad de contratos, está INICIADO EN FASE DE DISEÑO; no hay tablas, migraciones, políticas ni servicios contractuales implementados.
+- **Resultado:** [PLAN_MODELO_DATOS_RLS_CONTRATOS.md](PLAN_MODELO_DATOS_RLS_CONTRATOS.md) documenta las cuatro pantallas actuales, entidades mínimas de borrador privado y participación confirmada, entidades posteriores, esquema/diagrama, dos partes, invitaciones, ciclo de vida, matriz de permisos, RLS conceptual, Storage, verificación pública, 24 amenazas, 41 pruebas futuras NO EJECUTADAS, implementación gradual, reversión y decisiones de negocio pendientes.
+- **Límites:** crear un borrador privado no concede a una contraparte acceso por conocer su correo. `RequireAuth` protege vistas, no filas ni API. Decisiones imprescindibles sobre creador, edición, eliminación, borrado de cuenta/FK, límites de texto y mapeo del formulario deben revisarse antes de P2. Renovación real de tokens, RLS contractual, Storage y Stellar/Soroban siguen pendientes.
+- **Verificaciones de P1:** `npm run build` PASS (advertencia conocida de bundle de 544,90 kB); `npm run lint` PASS; `npm run supabase:check:test` PASS (22/22 simulaciones locales); `git diff --check` PASS. Las 41 pruebas del plan son futuras y NO EJECUTADAS; no hubo SQL, acceso remoto a tablas ni pruebas manuales de navegador.
+- **Git:** base `dae6bbe7516afb5c01660fb143e32e12ee96cd5c` en rama de relevo; solo este plan nuevo y ambos documentos de continuidad cambian localmente. Sin staging, commit ni push. M2-B3-P2 queda PROPUESTO — NO EJECUTADO y podría dividirse tras revisar P1.
+
+**Aprobación externa posterior de M2-B3-P1 recibida en P2:** el responsable aprobó empezar solo con borradores privados, acceso y modificación por creador autenticado, RLS desde el inicio, y posponer participantes, invitaciones, aceptación, firma y conexión React. M2-B3-P1 APROBADO. El plan original conserva su estado histórico previo a esta decisión; la aprobación no acredita SQL ejecutado.
+
+### M2-B3-P2 — Migración local PostgreSQL y RLS para borradores privados
+
+- **Estado:** MIGRACIÓN PREPARADA LOCALMENTE — PENDIENTE DE REVISIÓN EXTERNA. [`20261018032013_create_private_contract_drafts.sql`](../supabase/migrations/20261018032013_create_private_contract_drafts.sql) define solo `public.contracts` para borradores privados; [VALIDACION_ESQUEMA_RLS_M2_B3_P2.md](VALIDACION_ESQUEMA_RLS_M2_B3_P2.md) registra revisión, 30 pruebas futuras y preflight/reversión.
+- **Seguridad propuesta:** propietario `created_by` ligado a `auth.uid()` y `auth.users(id)`; SELECT/INSERT/UPDATE propios con RLS; UPDATE e INSERT limitados a columnas de contenido; DELETE sin grant/política. Sin participantes, invitaciones, versiones, Storage o integración frontend. `ON DELETE RESTRICT` y límites de texto requieren revisión antes de aplicar.
+- **Límites:** no había migraciones, CLI Supabase, `psql`, `postgres`, `pg_ctl`, Docker ni base aislada demostrada. VALIDACIÓN SQL REAL — NO EJECUTADA; PRUEBAS REALES DE RLS — NO EJECUTADAS. La existencia de objetos en Supabase remoto es desconocida. Ningún SQL se ejecutó allí.
+- **Verificaciones de P2:** `npm run build` PASS (advertencia conocida: JS 544,90 kB), `npm run lint` PASS, `npm run supabase:check:test` PASS (22/22 simulaciones), `git diff --check` PASS; 30 escenarios de SQL/RLS diseñados, todos NO EJECUTADOS. Node v24.22.0 y npm 11.19.1.
+- **Git:** P1 preservado y P2 local en la rama de relevo, HEAD `dae6bbe7516afb5c01660fb143e32e12ee96cd5c`. Sin staging, commit ni push. M2-B3-P3 PREVISTO — NO EJECUTADO.
+
+**Aprobación externa posterior de M2-B3-P2 recibida en P3-A:** el responsable aprobó la migración **como preparación local y revisión estática**. No atribuyó despliegue ni pruebas reales de RLS. M2-B3-P2 APROBADO en ese alcance.
+
+### M2-B3-P3-A — Preflight de despliegue e inventario remoto preparado
+
+- **Estado:** PREFLIGHT PREPARADO — PENDIENTE DE REVISIÓN EXTERNA. Despliegue BLOQUEADO hasta confirmar proyecto, objetos e historial remotos, privilegios, FK, límites, respaldo, cuentas/limpieza, coordinación y autorización específica. M2-B3-P3-B NO AUTORIZADO — NO EJECUTADO.
+- **Entrega:** [PREFLIGHT_DESPLIEGUE_RLS_M2_B3_P3.md](PREFLIGHT_DESPLIEGUE_RLS_M2_B3_P3.md) registra integridad de la migración, consultas de catálogo **solo preparadas**, matriz de decisiones, 30 pruebas futuras A/B/anónimo, roles efectivos, datos ficticios y limpieza, método versionado y recuperación.
+- **Integridad:** migración P2 intacta, 2.165 bytes, SHA-256 `5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac`. Sin CLI/PostgreSQL local; `.env.local` ignorado y no leído. URL/ref del proyecto, tabla, políticas y grants remotos NO CONFIRMADOS. No hubo SQL remoto, usuarios ni datos de prueba.
+- **Verificaciones de P3-A:** `npm run build` PASS (advertencia conocida: JS 544,90 kB), `npm run lint` PASS, `npm run supabase:check:test` PASS (22/22 simulaciones), `git diff --check` PASS. SHA-256 repetido sin cambio; 27 secciones y 30 escenarios preparados. `npm run supabase:check` real no se ejecutó; tampoco SQL ni RLS reales.
+- **Git:** P1/P2 preservados; solo nuevo preflight y ambos documentos de continuidad modificados por P3-A. Rama de relevo y HEAD anterior; sin staging, commit, push ni merge.
+
+**Aprobación externa posterior de M2-B3-P3-A recibida en M2-B3-RESPALDO-P1:** el responsable aprobó el preflight **como documento**. Sus consultas de catálogo permanecen NO EJECUTADAS; la tabla, las políticas y los privilegios remotos siguen sin confirmar. El encabezado del preflight conserva el estado histórico anterior a esta aprobación. M2-B3-P3-B continúa NO AUTORIZADO — NO EJECUTADO.
+
+### M2-B3-RESPALDO-P1 — Preparación de publicación segura
+
+- **Alcance autorizado:** respaldo de seis archivos: plan P1, validación P2, preflight P3-A, migración SQL de P2 y estos dos documentos de continuidad. Ningún cambio de frontend, dependencias o configuración.
+- **Integridad:** SHA-256 aprobado de la migración `5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac`, tamaño 2.165 bytes; SQL intacto. La rama remota coincidió con HEAD base `dae6bbe7516afb5c01660fb143e32e12ee96cd5c` antes del staging.
+- **Estado al preparar este documento:** commit y push pendientes de ejecución y verificación; sus hashes/resultados se informan después, sin crear otro commit para escribir aquí el hash del propio commit. Publicar en GitHub no aplica SQL ni autoriza inventario o despliegue Supabase.
+
 ## 6. Problemas, advertencias y tareas pendientes
 
 - **Cierre funcional del frontend:** M1-B8-P1 y el Módulo 1 fueron aprobados externamente tras 22 comprobaciones manuales satisfactorias. Codex no repitió esas pruebas en su entorno sin navegador.
@@ -639,12 +675,13 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 ## 8. Continuidad operativa actual
 
 - M0 COMPLETADO; M1 COMPLETADO, APROBADO Y PUBLICADO; M2-B1 COMPLETADO Y APROBADO (2/2); M2-B2 COMPLETADO Y APROBADO TÉCNICAMENTE. P1–P8, P9 y P9-C1 aprobados; P4-C1 CORRECCIÓN APROBADA incluida en P4.
-- **Últimos aprobados:** M2-B2-P9-C1 y M2-B2-P9 por decisión externa posterior a R1. El responsable confirmó diez comprobaciones manuales de F-01; Codex no las ejecutó.
-- **Último ejecutado:** M2-B2-CIERRE-P1. Cierre documental preparado; publicación se informa solo después de verificar el push.
+- **Último aprobado:** M2-B3-P3-A como preflight documental; M2-B3-P1/P2 aprobados en sus alcances de diseño y migración local. M2-B2-P9/P9-C1 conservan aprobación; F-01 resuelto.
+- **Actividad actual:** M2-B3-RESPALDO-P1, publicación de seis archivos autorizada; resultado Git posterior al commit se comunica en el informe final.
 - Leer [AUDITORIA_AUTH_NAVEGACION_M2_B2.md](AUDITORIA_AUTH_NAVEGACION_M2_B2.md): P9 conserva la reproducción histórica de F-01; sección 28 registra 22 PASS SIMULADO y 2 NO EJECUTADO de R1; sección 29 registra diez pruebas externas y resolución validada.
 - Registro, login, logout y persistencia reales APROBADOS; rutas protegidas IMPLEMENTADAS Y APROBADAS. **RENOVACIÓN AUTOMÁTICA REAL — OBSERVACIÓN PENDIENTE.**
-- **Próxima tarea propuesta:** M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos; NO EJECUTADO, requiere prompt específico.
-- **Git previo a este cierre:** rama de relevo `relevo/m2-b2-p9c1-20261017`, HEAD `c05b9e87e8364fdc212a47f3bfef5db1691565a5`. Solo tres documentos autorizados contienen R1 y este cierre. El commit y push de CIERRE-P1 se verifican e informan al terminar, sin escribir aquí el hash del propio commit.
+- **M2-B3:** P1/P2/P3-A APROBADOS en sus alcances limitados. Esquema y RLS preparados en archivo, NO APLICADOS; inventario remoto y pruebas RLS reales pendientes. Persistencia frontend, participantes e invitaciones pendientes.
+- **Próxima etapa prevista:** M2-B3-P3-INSPECCIÓN — inventario remoto de solo lectura con autorización específica. P3-B, aplicación y verificación real, NO AUTORIZADO — NO EJECUTADO.
+- **Git al preparar el respaldo:** rama de relevo `relevo/m2-b2-p9c1-20261017`, HEAD publicado previo `dae6bbe7516afb5c01660fb143e32e12ee96cd5c`. El resultado del commit/push de RESPALDO-P1 consta únicamente en su informe final.
 
 ## 9. Indicaciones para el siguiente integrante
 
@@ -656,7 +693,7 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 6. Ejecuta las pruebas pertinentes y contrasta sus resultados con el código real, sin confiar ciegamente en este estado.
 7. Continúa únicamente desde el siguiente prompt autorizado.
 8. Obtén acceso autorizado al mismo proyecto Supabase de desarrollo desde el dashboard, sin utilizar la cuenta personal del responsable. Configura tu propio `.env.local` desde `.env.example` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`; no guardes contraseñas, claves secretas, `service_role` ni tokens administrativos en el frontend o Git.
-9. Ejecuta los scripts aplicables de `package.json` y verifica Git. M2-B2 está aprobado técnicamente; lee la auditoría y su cierre. No presupongas tablas, migraciones, RLS, Stellar o Soroban. La renovación remota real continúa sin observación directa. Espera el prompt específico de M2-B3-P1 antes de diseñar datos contractuales.
+9. Ejecuta los scripts aplicables de `package.json` y verifica Git. P1/P2/P3-A están aprobados en sus alcances limitados; P3-A solo preparó el inventario. Solicita autorización específica antes de inspeccionar Supabase de forma remota. Antes de P3-B confirma proyecto, objetos, historial, permisos, FK, límites, recuperación y cuentas/limpieza; la autorización de modificación debe ser separada. No presupongas RLS aplicada, Storage contractual, Stellar o Soroban. La renovación remota real continúa sin observación directa.
 
 ## 10. Registro del relevo al terminar cada turno
 
