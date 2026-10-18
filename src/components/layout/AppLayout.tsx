@@ -1,14 +1,19 @@
 import { Link, NavLink, Outlet } from 'react-router'
+import { useAuth } from '../../auth/useAuth'
 import { PageContainer } from '../ui'
 
 const navigation = [
   { to: '/', label: 'Inicio' },
+  { to: '/panel', label: 'Panel' },
   { to: '/verificar', label: 'Verificar' },
   { to: '/login', label: 'Iniciar sesión' },
   { to: '/registro', label: 'Registrarse' },
 ]
 
 export function AppLayout() {
+  const { hasSession } = useAuth()
+  const visibleNavigation = navigation.filter(({ to }) => to !== '/panel' || hasSession)
+
   return (
     <div className="flex min-h-svh flex-col">
       <a
@@ -24,7 +29,7 @@ export function AppLayout() {
           </Link>
           <nav aria-label="Navegación principal">
             <ul className="flex flex-wrap items-center gap-2 sm:gap-3">
-              {navigation.map(({ to, label }) => (
+              {visibleNavigation.map(({ to, label }) => (
                 <li key={to}>
                   <NavLink
                     to={to}

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { useAuth } from '../auth/useAuth'
 import { ContractContentForm } from '../components/contracts/ContractContentForm'
+import { ContractEvidence } from '../components/contracts/ContractEvidence'
 import { useContractQuery } from '../components/contracts/useContractQuery'
 import { Badge, Button, Card, PageContainer } from '../components/ui'
 import { getContractDraftById, updateContractDraft } from '../services/supabase/contracts'
@@ -37,6 +38,7 @@ function DraftDetail({ id }: { id: string }) {
           <Button className="mt-6" onClick={() => { setEditing(true); setSaved(false) }}>Editar borrador</Button>
         </>
       )}
+      <ContractEvidence draft={draft} editing={editing} />
     </>
   )
 }
