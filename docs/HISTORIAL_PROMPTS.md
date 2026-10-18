@@ -22,12 +22,12 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 - **Módulo 0:** COMPLETADO y aprobado externamente.
 - **Avance del Módulo 1:** 12 de 12 prompts aprobados.
 - **Estado:** M1-B8-P1 APROBADO; cierre formal del Módulo 1 confirmado.
-- **Bloque actual:** M2-B2 — Autenticación real de usuarios con Supabase.
-- **Último prompt aprobado:** M2-B2-P8 — catorce comprobaciones manuales aprobadas por el responsable.
+- **Último bloque cerrado:** M2-B2 — Autenticación real y navegación protegida, COMPLETADO Y APROBADO TÉCNICAMENTE. Módulo 2 continúa en desarrollo.
+- **Últimos prompts aprobados:** M2-B2-P9-C1 y M2-B2-P9 — aprobación externa tras diez comprobaciones manuales de F-01; P1–P8 conservan sus aprobaciones.
 - **Última actividad administrativa de cierre:** CIERRE-DOC-M1, posterior a la aprobación. **Actividad operativa de relevo:** PUBLICACIÓN-RELEVO-M1. Ninguna cuenta como prompt de implementación.
 - **Incorporación operativa posterior:** INCORPORACIÓN-RELEVO-M1; comprobaciones técnicas satisfactorias y contradicción documental pendiente que se corrige durante M2-B1-P1.
 - **M2-B1:** COMPLETADO Y APROBADO; 2/2 prompts aprobados.
-- **Prompt actual y último ejecutado:** M2-B2-P9 — Auditoría integral de autenticación y navegación protegida. AUDITORÍA ELABORADA — PENDIENTE DE APROBACIÓN EXTERNA. Diez prompts M2 aprobados; último aprobado P8; C1 incluida en P4. Último publicado P2; renovación real aún no observada. F-01 MEDIO requiere corrección antes del cierre recomendado.
+- **Prompt actual y último ejecutado:** M2-B2-CIERRE-P1 — CIERRE DOCUMENTAL PREPARADO; PUBLICACIÓN PENDIENTE hasta comprobar el push. P9 y P9-C1 aprobados externamente; F-01 resuelto y validado. Once prompts M2 aprobados, sin contar correcciones; P4-C1 incluida en P4. Renovación real aún no observada.
 - **Fuente de las aprobaciones:** el responsable confirmó el cierre del Módulo 0, el sistema visual y los componentes UI; la aprobación de M1-B2-P1 consta en el prompt M1-B3-P1, la de M1-B3-P1 en la solicitud expresa de relevo, la de M1-B4-P1 en M1-B4-P2, la de M1-B4-P2 en M1-B5-P1, la de M1-B5-P1 en M1-B6-P1, la de M1-B6-P1 en M1-B6-P2, la de M1-B6-P2 en M1-B7-P1, la de M1-B7-P1 en M1-B7-P2, la de M1-B7-P2 en M1-B8-P1 y la de M1-B8-P1 en CIERRE-DOC-M1 tras 22 pruebas manuales. No se deducen aprobaciones del mero resultado de Codex.
 
 | Prompt | Descripción | Estado |
@@ -62,10 +62,13 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 | M2-B2-P6 | Implementación controlada de persistencia y renovación de sesión | APROBADO por quince comprobaciones manuales externas; renovación real pendiente de observación |
 | M2-B2-P7 | Diseño de protección de rutas y autorización | APROBADO por revisión externa del diseño |
 | M2-B2-P8 | Implementación controlada de rutas protegidas | APROBADO por catorce comprobaciones manuales externas |
-| M2-B2-P9 | Auditoría integral de autenticación y navegación protegida | AUDITORÍA ELABORADA — PENDIENTE DE APROBACIÓN EXTERNA; F-01 requiere corrección antes del cierre |
-| M2-B3-P1 | Diseño del modelo de datos y seguridad RLS de contratos | PROPUESTO — NO EJECUTADO; sujeto a corrección y aprobación de cierre |
+| M2-B2-P9 | Auditoría integral de autenticación y navegación protegida | APROBADO tras resolución externa de F-01 |
+| M2-B2-P9-C1 | Corrección del ciclo de logout entre sesiones | CORRECCIÓN APROBADA; F-01 RESUELTO Y VALIDADO EXTERNAMENTE |
+| M2-B2-P9-C1-R1 | Revisar y validar la corrección recuperada de F-01 | VERIFICACIÓN TÉCNICA FAVORABLE; 22 simulaciones satisfactorias |
+| M2-B2-CIERRE-P1 | Cierre documental y publicación segura del bloque | CIERRE DOCUMENTAL PREPARADO; PUBLICACIÓN PENDIENTE |
+| M2-B3-P1 | Diseño del modelo de datos y seguridad RLS de contratos | PROPUESTO — NO EJECUTADO; requiere prompt específico |
 
-**Siguiente acción:** revisión externa de P9 y autorización del correctivo propuesto P9-C1 para F-01 MEDIO. **Siguiente bloque propuesto:** M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos, sujeto a confirmación después del cierre; NO EJECUTADO.
+**Siguiente acción:** publicar y verificar el único commit documental de M2-B2-CIERRE-P1 en la rama de relevo. **Siguiente bloque propuesto:** M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos; NO EJECUTADO.
 
 ## 3. Evidencia y observaciones por registro
 
@@ -444,6 +447,21 @@ Las pruebas históricas proceden de sus informes; cada registro atribuye las ver
 - **Seguridad:** revisión dirigida de 43 archivos públicos rastreados sin secretos reales detectados por patrones; `.env.local` no abierto, ignorado y no rastreado. Guard no sustituye RLS; I-01 renovación, I-02 modelo/RLS futura e I-03 bundle >500 kB informativos.
 - **Archivos/Git:** solo auditoría nueva y ambos documentos de continuidad actualizados. Código, planes, dependencias y contratos intactos respecto al inicio. main, HEAD `0e23f15039802537ee2708120526d797a8acae59`, staging vacío; sin commit/push/sincronización.
 - **Continuidad:** diez prompts M2 aprobados, C1 incluida en P4. Rutas protegidas aprobadas; registro/login/logout/persistencia aprobados. Renovación automática real pendiente de observación. M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos: PROPUESTO — NO EJECUTADO, sujeto a corrección y aprobación externa del cierre. No se fija total restante de M2.
+
+### M2-B2-P9-C1-R1 — Revisión de la corrección recuperada de F-01
+
+- **Estado:** CORRECCIÓN TÉCNICA VERIFICADA EN SIMULACIÓN DEL COMPONENTE REAL; PENDIENTE DE VALIDACIÓN MANUAL EXTERNA. P9 conserva el registro original de F-01 y está pendiente de aprobación; M2-B2 no está cerrado.
+- **Base:** rama `relevo/m2-b2-p9c1-20261017`, commit `c05b9e87e8364fdc212a47f3bfef5db1691565a5`, limpio al iniciar. El commit WIP incluía identificadores de operación, confirmación y timeout en LoginPage; el historial anterior no describía ese delta parcial. No se cambió código.
+- **Evidencia nueva:** arnés temporal fuera del repositorio transpila y ejecuta `LoginPage.tsx` real con hooks/servicios/estado Auth/reloj controlados. F-01 central, incluidos nuevo login inmediato/tardío, 8,5 s virtuales y segundo logout, no reapareció. Matriz detallada en la sección 28 de la auditoría: 22 PASS SIMULADO y 2 NO EJECUTADO (StrictMode real y recarga privada persistente). No hubo navegador, SDK remoto ni cuentas reales en esta validación.
+- **Verificaciones técnicas:** `npm run build` PASS (advertencia de chunk >500 kB), `npm run lint` PASS, `npm run supabase:check:test` 22/22 PASS y `git diff --check` PASS. La salud HTTP 200 de Supabase corresponde al relevo previo, no se usa como prueba de F-01.
+- **Git y continuidad:** únicamente esta entrada, el estado y la sección de seguimiento de auditoría se modifican en R1. Sin staging, commit ni push. Último prompt aprobado P8; validar manualmente F-01 con dos pestañas reales y revisar P9 antes de decidir cierre. Renovación automática real pendiente; M2-B3 no iniciado.
+
+### M2-B2-CIERRE-P1 — Cierre documental y publicación segura
+
+- **Secuencia:** P9 detectó F-01 MEDIO; el integrante anterior inició P9-C1, quedó interrumpido por falta de tokens y publicó el estado en `relevo/m2-b2-p9c1-20261017` (`c05b9e87e8364fdc212a47f3bfef5db1691565a5`). El nuevo integrante recuperó esa rama y ejecutó R1 sin modificar código: 22 simulaciones satisfactorias de la lógica real de LoginPage, con dos escenarios no ejecutados en ese entorno.
+- **Validación externa posterior:** el responsable confirmó diez comprobaciones manuales satisfactorias con dos pestañas reales y Supabase Auth: logout A, login B, espera de doce segundos, repetición rápida, coherencia, segundo logout, recarga privada, protección sin sesión, consola y Git. No hubo defectos bloqueantes; Codex no realizó esas pruebas. F-01 RESUELTO Y VALIDADO; M2-B2-P9-C1 APROBADO; M2-B2-P9 APROBADO; M2-B2 COMPLETADO Y APROBADO TÉCNICAMENTE.
+- **Alcance:** cierre de autenticación y navegación protegida; la renovación remota real sigue pendiente de observación. El guard React no sustituye RLS. Contratos PostgreSQL/RLS, Stellar y Soroban pendientes. M2-B3-P1 sigue propuesto y no ejecutado.
+- **Estado de este prompt antes del resultado Git:** CIERRE DOCUMENTAL PREPARADO; PUBLICACIÓN PENDIENTE. Solo auditoría, estado e historial autorizados; sin cambio de código ni dependencias. Hash y resultado remoto se comprueban en el informe final, sin crear otro commit para registrar su propio hash.
 
 ## 4. Mantenimiento acumulativo y relevos
 

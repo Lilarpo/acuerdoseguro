@@ -225,3 +225,50 @@ F-01 MEDIO debe resolverse antes del cierre recomendado porque presenta como pen
 6. Mantener frontera Auth/RLS y prohibir acceso a datos reales sin autorización de backend diseñada y probada en su bloque.
 7. Aprobación externa explícita de P9 y cierre de M2-B2 antes de confirmar B3. Este informe no concede esa aprobación.
 8. Solo tres documentos afectados por P9: dos documentos iniciales modificados y un informe nuevo. Comparación SHA-256: 55 de los 57 archivos iniciales idénticos, incluidos todo el código, servicios, planes y dependencias. main/HEAD intactos, staging vacío; sin commits, push o sincronización. `.env.local` ignorado y no rastreado.
+
+## 28. Seguimiento M2-B2-P9-C1-R1 — corrección recuperada
+
+**CORRECCIÓN TÉCNICA VERIFICADA EN SIMULACIÓN DEL COMPONENTE REAL; PENDIENTE DE VALIDACIÓN MANUAL EXTERNA.** Esta sección es posterior a la auditoría P9 y conserva íntegro el hallazgo original F-01. La rama de relevo `relevo/m2-b2-p9c1-20261017`, HEAD `c05b9e87e8364fdc212a47f3bfef5db1691565a5`, ya traía cambios en `LoginPage.tsx` no reflejados en la descripción histórica de P9. No se modificó código en R1.
+
+Cada clic de logout incrementa `nextLogoutOperationRef` y fija `activeLogoutOperationRef`. El resultado del servicio solo se acepta si el componente sigue montado y coincide la operación activa. `signed_out` observado marca `signedOutObservedForRef`; cuando también hay éxito del servicio, la operación pasa a `confirmed` y su referencia activa queda en null. Si el éxito llega primero, comienza `awaiting` con un temporizador de 8 segundos ligado al identificador; el efecto limpia ese temporizador al cambiar de estado. El callback comprueba de nuevo montaje e identificador antes de marcar `delayed`. Un éxito ya confirmado no puede crear otra espera al llegar `session_present` desde otra pestaña. El resultado antiguo permanece en estado React, pero no bloquea el segundo logout y el mensaje de cierre confirmado solo se presenta cuando el estado actual es `signed_out`. Los errores reales del servicio mantienen su mensaje y permiten reintentar.
+
+**Método:** script temporal fuera del repositorio; transpila el `LoginPage.tsx` actual con TypeScript y ejecuta su función, efectos, refs y handlers reales mediante un arnés de hooks/elementos con servicios, estado Auth y reloj virtual controlados. No ejecuta el SDK remoto, un navegador, React DOM ni React.StrictMode real. El escenario central A logout confirmado → B nueva sesión → 8,5 s virtuales → A habilita nuevo logout pasó sin reactivar «Confirmando cierre…» ni mostrar error falso. También pasaron respuesta antes/después de `signed_out`, timeout legítimo, cancelación y segundo logout. Los eventos de Auth se representaron como cambios del estado que consume `useAuth`; no se probaron nuevas transacciones reales. Los resultados de P9 corresponden al código anterior a esta corrección y no se reclasifican retrospectivamente.
+
+| # | Escenario | Clasificación R1 | Evidencia o límite |
+| --- | --- | --- | --- |
+| 1 | Login normal | PASS SIMULADO | Handler real, respuesta y sesión observada controladas |
+| 2 | Logout normal | PASS SIMULADO | Servicio favorable y `signed_out` controlados |
+| 3 | Logout sin sesión posterior | PASS SIMULADO | Confirmación permanece tras 9 s virtuales |
+| 4 | Nuevo login inmediato | PASS SIMULADO | Sin espera/error falso; botón habilitado |
+| 5 | Nuevo login varios segundos después | PASS SIMULADO | Sin espera/error falso tras avanzar reloj |
+| 6 | Nuevo login antes de respuesta logout | PASS SIMULADO | Respuesta tardía no inicia espera ni error falso; no acredita orden real del SDK |
+| 7 | `SIGNED_OUT` antes de respuesta | PASS SIMULADO | Estado controlado observado antes del resultado favorable |
+| 8 | Respuesta sin confirmación | PASS SIMULADO | Mantiene espera legítima |
+| 9 | Timeout legítimo | PASS SIMULADO | A los 8 s sin `signed_out` muestra discrepancia |
+| 10 | Cancelación de timeout | PASS SIMULADO | Al confirmar, el arnés registra cero temporizadores activos |
+| 11 | Timeout obsoleto y nuevo login | PASS SIMULADO | No aparece discrepancia tras 9 s |
+| 12 | Nueva sesión de misma cuenta | PASS SIMULADO | Sin reactivación |
+| 13 | Nueva sesión de otra cuenta | PASS SIMULADO | Sin reactivación |
+| 14 | Dos `SIGNED_OUT` | PASS SIMULADO | Repetir estado no abre espera |
+| 15 | `SIGNED_IN` posterior | PASS SIMULADO | Botón de nuevo logout disponible |
+| 16 | `TOKEN_REFRESHED` | PASS SIMULADO | Estado de sesión equivalente controlado; evento SDK real no ejecutado |
+| 17 | `USER_UPDATED` | PASS SIMULADO | Estado de sesión equivalente controlado; evento SDK real no ejecutado |
+| 18 | Error real del servicio | PASS SIMULADO | Error controlado mostrado, botón reutilizable |
+| 19 | Doble clic logout | PASS SIMULADO | Un solo llamado al servicio |
+| 20 | Desmontaje durante logout | PASS SIMULADO | Cleanup/resultado tardío controlados; sin React DOM |
+| 21 | React.StrictMode real | NO EJECUTADO | No disponible un navegador o renderizador de componentes; remonte del arnés no equivale a StrictMode |
+| 22 | Segundo logout de sesión nueva | PASS SIMULADO | Segundo llamado al servicio después de confirmar el primero |
+| 23 | Login con retorno a `/panel` | PASS SIMULADO | `navigate` recibe `/panel`, replace y state null |
+| 24 | Recarga privada con sesión persistente | NO EJECUTADO | Requiere navegador/SDK de sesión; solo se controló transición `initializing` → `session_present` |
+
+**Balance:** 22 PASS SIMULADO, 2 NO EJECUTADO; ninguna prueba nueva de cuenta real o dos pestañas reales. Build, lint, 22/22 pruebas del diagnóstico y `git diff --check` se ejecutaron nuevamente en R1. Las aprobaciones P1–P8 permanecen; P9 y P9-C1 requieren revisión externa. M2-B2 no está cerrado y M2-B3 no se inició. La renovación automática real permanece pendiente de observación directa.
+
+## 29. Cierre externo de F-01 y aprobación de P9
+
+El hallazgo **F-01 tuvo severidad original MEDIA** y conserva íntegra su evidencia de reproducción en las secciones anteriores. La corrección quedó incluida en el trabajo previo al relevo y fue preservada en R1. Su verificación técnica posterior ejecutó 22 simulaciones satisfactorias sobre la lógica real de `LoginPage.tsx`; dos escenarios de la matriz R1 permanecieron sin ejecución en ese entorno.
+
+El responsable confirmó **diez comprobaciones manuales satisfactorias con dos pestañas reales y Supabase Auth**, realizadas por él y no por Codex: logout en A; nuevo login en B; espera de doce segundos; repetición rápida; coherencia de estados; segundo logout; recarga privada; protección sin sesión; consola; y Git. Comunicó que no hubo defectos bloqueantes y que no realizó staging, commit ni push. Después del logout confirmado y el nuevo login no reapareció «Confirmando cierre…», no surgió el error falso tras doce segundos y el segundo logout funcionó.
+
+**Decisión externa:** F-01 **RESUELTO Y VALIDADO**; M2-B2-P9-C1 **APROBADO**; M2-B2-P9 **APROBADO**. La incidencia pendiente de corrección fue resuelta y validada; no quedan defectos bloqueantes conocidos en el alcance auditado. Esta conclusión no garantiza seguridad absoluta. M2-B2 queda **COMPLETADO Y APROBADO TÉCNICAMENTE** por decisión del responsable.
+
+Límites vigentes: renovación automática real de tokens habilitada pero no observada directamente; RequireAuth protege vistas React, no autoriza datos; RLS y base de datos contractual no implementadas; Stellar y Soroban pendientes; advertencia de bundle superior a 500 kB conocida y no bloqueante. La aprobación de Auth no completa todo el Módulo 2.

@@ -6,11 +6,11 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 
 - **Proyecto:** AcuerdoSeguro.
 - **Repositorio oficial:** https://github.com/Lilarpo/acuerdoseguro.
-- **Rama de trabajo:** `main`.
+- **Rama de trabajo actual:** `relevo/m2-b2-p9c1-20261017`; `main` conserva la línea principal prevista.
 - **Propósito:** plataforma web de contratos digitales verificables mediante Stellar y Soroban.
 - **Versiones comprobadas:** Node.js 24.22.0, npm 11.19.1, React y React DOM 19.3.1, TypeScript 5.9.3, Vite 7.3.7, Tailwind CSS y `@tailwindcss/vite` 4.3.3, ESLint 9.39.5. M1-B2-P1 agrega `react-router` 7.18.4; ninguna dependencia anterior cambia de versión.
 - **Herramientas:** Git local y GitHub configurados; primera publicación realizada y recuperada mediante clonación HTTPS.
-- **Tecnologías futuras sin integración funcional:** PostgreSQL, Supabase Storage, Stellar SDK, Freighter Wallet, Soroban con Rust y Vercel. M2-B2-P1 observa eventos de Supabase Auth en un proveedor React; RegisterPage ejecuta signUp y LoginPage ejecuta signInWithPassword mediante servicios separados; el login de M2-B2-P3 fue aprobado tras doce comprobaciones manuales externas. M2-B2-P4 y su corrección C1 están aprobados por siete comprobaciones manuales externas del responsable. M2-B2-P5 DISEÑO APROBADO externamente; M2-B2-P6 y la persistencia real están APROBADOS por quince comprobaciones manuales externas. Renovación habilitada/probada mediante simulaciones, observación real pendiente. P7 diseño de rutas APROBADO por revisión externa; P8 y las rutas protegidas están APROBADOS tras catorce pruebas manuales externas; P9 audita el conjunto y detecta F-01 MEDIO en el ciclo de resultados de logout. Se recomienda corregirlo antes del cierre. RLS y datos contractuales permanecen fuera del alcance.
+- **Tecnologías futuras sin integración funcional:** PostgreSQL, Supabase Storage, Stellar SDK, Freighter Wallet, Soroban con Rust y Vercel. M2-B2 implementó y aprobó externamente registro, login, logout local, persistencia y rutas protegidas. P9 detectó F-01 MEDIO; P9-C1 lo resolvió y el responsable lo validó con diez comprobaciones manuales. Renovación automática habilitada y probada mediante simulaciones, observación real pendiente. RLS y datos contractuales permanecen fuera del alcance.
 
 ## 2. Estado actual de desarrollo
 
@@ -20,13 +20,13 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 | Actividad operativa de relevo previa | PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; no son prompts de implementación |
 | Estado del Módulo 0 | COMPLETADO, aprobado externamente |
 | Estado del Módulo 1 | COMPLETADO Y APROBADO — 12 de 12 prompts aprobados |
-| Estado del Módulo 2 | EN DESARROLLO — M2-B1 completado y aprobado (2/2); M2-B2-P1 a M2-B2-P8 aprobados; 10 prompts de M2 aprobados; C1 incluida en P4 |
-| Último prompt aprobado | M2-B2-P8 — catorce pruebas manuales aprobadas por el responsable |
-| Prompt actual y último ejecutado | M2-B2-P9 — Auditoría integral de autenticación y navegación protegida |
-| Estado del prompt actual | AUDITORÍA ELABORADA — PENDIENTE DE APROBACIÓN EXTERNA; REQUIERE CORRECCIÓN F-01 antes del cierre recomendado |
+| Estado del Módulo 2 | EN DESARROLLO — M2-B1 y M2-B2 COMPLETADOS Y APROBADOS TÉCNICAMENTE; contratos/RLS pendientes |
+| Últimos prompts aprobados | M2-B2-P9 y M2-B2-P9-C1 — aprobación externa tras diez comprobaciones manuales de F-01; P1–P8 conservan sus aprobaciones |
+| Prompt actual y último ejecutado | M2-B2-CIERRE-P1 — cierre documental y publicación controlada |
+| Estado del prompt actual | CIERRE DOCUMENTAL PREPARADO; PUBLICACIÓN PENDIENTE hasta verificación del push |
 | Corrección puntual local | M2-B2-P4-C1 — CORRECCIÓN APROBADA dentro de P4 por el responsable; no aumenta el conteo funcional |
 | Publicaciones previas verificadas | M1 mediante `353e73706d343bd56fede23cd97f6c77fc2865d4`; M2 hasta M2-B2-P2 mediante `0e23f15039802537ee2708120526d797a8acae59` |
-| Siguiente trabajo previsto | Correctivo P9-C1 propuesto para F-01; después M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos, PROPUESTO — NO EJECUTADO, sujeto a aprobación |
+| Siguiente trabajo previsto | M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos, PROPUESTO — NO EJECUTADO |
 
 El responsable confirmó después del informe de M1-B8-P1 que completó satisfactoriamente 22 comprobaciones manuales de regresión integral, sin defectos bloqueantes comunicados, y aprobó M1-B8-P1 y el cierre del Módulo 1. Codex no ejecutó esas pruebas de navegador. La publicación posterior de M1 se verificó durante PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; ninguna de esas actividades acredita funcionamiento de integraciones futuras.
 
@@ -84,7 +84,7 @@ El registro real con Supabase Auth está implementado y aprobado tras validació
 | --- | --- | --- | --- |
 | 0 | Configuración inicial | COMPLETADO | Ocho prompts aprobados externamente; base publicada en GitHub. |
 | 1 | Frontend e Interfaz de Usuario | COMPLETADO Y APROBADO | 12 de 12 prompts aprobados, incluida M1-B8-P1 tras 22 comprobaciones manuales externas satisfactorias. Publicado en `origin/main` mediante `353e73706d343bd56fede23cd97f6c77fc2865d4`. |
-| 2 | Backend y Supabase | EN DESARROLLO | M2-B1-P1, M2-B1-P2 y M2-B2-P1 aprobados; M2-B1 completado y aprobado (2/2). M2-B2-P2 APROBADO tras diez comprobaciones manuales externas. Registro real aprobado y publicado; M2-B2-P3 APROBADO; M2-B2-P4 y C1 APROBADOS tras siete comprobaciones externas; diez prompts de M2 aprobados, incluidos P5 diseño, P6 persistencia real, P7 diseño de rutas y P8 navegación protegida. Renovación real pendiente de observación. P9 auditoría elaborada pendiente de aprobación externa; F-01 MEDIO requiere corrección antes del cierre recomendado; datos contractuales/RLS pendientes. |
+| 2 | Backend y Supabase | EN DESARROLLO | M2-B1 y M2-B2 completados y aprobados técnicamente. P1–P8, P9 y P9-C1 aprobados; P4-C1 incluida en P4. F-01 resuelto y validado externamente. Renovación real pendiente de observación; datos contractuales/RLS pendientes. |
 | 3 | Stellar y Soroban | PENDIENTE | Carpeta reservada, sin SDK ni contratos. |
 | 4 | Documentos y verificación | PENDIENTE | Carpeta reservada, sin lógica documental. |
 | 5 | Integración, pruebas y despliegue | PENDIENTE | Sin despliegue ni integración entre servicios. |
@@ -586,7 +586,7 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 5. Revisar consola/Network sin divulgar secretos; destinos maliciosos se verificaron con cadenas de prueba, sin abrir sitios externos ni ejecutar sus esquemas.
 6. La solicitud histórica era comunicar aprobación o defectos. El responsable confirmó después catorce comprobaciones satisfactorias y aprobó P8 en el prompt P9. Codex no ejecutó esas pruebas reales. Renovación real sigue pendiente de observación; P9 ya está elaborado, pendiente de aprobación externa y con recomendación correctiva F-01.
 
-### M2-B2-P9 — Auditoría actual
+### M2-B2-P9 — Registro histórico de la auditoría antes del correctivo
 
 - **Estado:** AUDITORÍA ELABORADA — PENDIENTE DE APROBACIÓN EXTERNA. Informe de 27 secciones: [AUDITORIA_AUTH_NAVEGACION_M2_B2.md](AUDITORIA_AUTH_NAVEGACION_M2_B2.md).
 - **Aprobación recibida:** P8 APROBADO por catorce pruebas manuales del responsable sobre públicas/privadas, retorno, persistencia, logout, segunda pestaña, historial, accesibilidad/responsive y regresión/Git. No atribuidas a Codex.
@@ -596,18 +596,25 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 - **Veredicto:** REQUIERE CORRECCIÓN F-01; propuesta P9-C1 no ejecutada. I-01 renovación real pendiente, I-02 RLS futura e I-03 bundle 544,11 kB informativos. M2-B2 permanece abierto hasta revisión externa.
 - **Git:** main y HEAD conocidos intactos, staging vacío. Solo dos documentos de continuidad modificados y auditoría nueva por P9; código/planes/dependencias preservados. Sin staging, commit, push ni sincronización. `.env.local` ignorado y no rastreado.
 
+### Cierre externo M2-B2-P9, P9-C1 y M2-B2
+
+- **Decisión del responsable:** M2-B2-P9 APROBADO; M2-B2-P9-C1 APROBADO; F-01 RESUELTO Y VALIDADO; M2-B2 COMPLETADO Y APROBADO TÉCNICAMENTE. Se preserva arriba el estado histórico de P9 cuando todavía requería corrección.
+- **Evidencia:** R1 ejecutó 22 simulaciones satisfactorias sobre la lógica real de LoginPage, sin cambiar código. Posteriormente el responsable confirmó diez comprobaciones manuales satisfactorias con dos pestañas reales y Supabase Auth: logout A, nuevo login B, espera de doce segundos, repetición rápida, coherencia de estados, segundo logout, recarga privada, protección sin sesión, consola y Git. No aparecieron espera ni error falsos. Codex no ejecutó esas diez pruebas.
+- **Alcance cerrado:** arquitectura y estados Auth, registro, login, logout local, persistencia, renovación automática configurada, rutas privadas y retorno seguro, concurrencia de logout y auditoría. P1–P8, P9 y P9-C1 están aprobados; P4-C1 sigue incluida en P4. R1 fue verificación técnica favorable, no aprobación independiente.
+- **Límites:** renovación remota real todavía no observada directamente; guard React no autoriza filas. Contratos PostgreSQL, RLS contractual, Stellar y Soroban no están implementados. El Módulo 2 sigue en desarrollo. M2-B3-P1 es el siguiente diseño propuesto y NO EJECUTADO.
+
 ## 6. Problemas, advertencias y tareas pendientes
 
 - **Cierre funcional del frontend:** M1-B8-P1 y el Módulo 1 fueron aprobados externamente tras 22 comprobaciones manuales satisfactorias. Codex no repitió esas pruebas en su entorno sin navegador.
 - **Advertencia conocida:** ESLint 9.39.5 fue reportado fuera de soporte; no se migró de versión.
 - **Advertencia npm previa:** autorización de scripts de esbuild pendiente de revisión; no impidió las últimas comprobaciones técnicas.
-- **Tareas pendientes:** revisar auditoría P9 y autorizar correctivo de F-01 (resultado de logout anterior contamina una nueva sesión de otra pestaña). No cerrar M2-B2 todavía. Renovación automática real pendiente de observación. RLS/base de datos contractual y Stellar/Soroban pendientes; reescrituras de hosting pendientes de despliegue.
+- **Tareas pendientes:** renovación automática real pendiente de observación directa. RLS/base de datos contractual y Stellar/Soroban pendientes; reescrituras de hosting pendientes de despliegue. F-01 está resuelto y validado externamente; M2-B2 está cerrado técnicamente.
 - **Advertencia Vite:** bundle mayor de 500 kB; build correcto, sin cambiar configuración ni dependencias para silenciarlo.
 - Los errores de permisos de instalaciones anteriores fueron resueltos y no se consideran bloqueos actuales.
 
 ## 7. Estado de Git y publicación
 
-- **Rama:** `main`; **origin:** `https://github.com/Lilarpo/acuerdoseguro`.
+- **Rama actual de relevo:** `relevo/m2-b2-p9c1-20261017`; **origin:** `https://github.com/Lilarpo/acuerdoseguro.git`. Las referencias a `main` en los hitos siguientes son históricas.
 - **Commit inicial publicado y verificado:** `10bc0ca12af399a0cdc098584894554b11eaf4c0`, mensaje `chore: inicializar base técnica de AcuerdoSeguro M0`.
 - **Cierre del Módulo 0 publicado:** `4efefc6327751993459a27d81202533e4b3a5fc9`; conservado como antecesor del relevo.
 - **Entrega del Módulo 1:** sistema visual, siete componentes UI con exportaciones, AppLayout, rutas, HomePage definitiva, placeholders, 404, React Router y lockfile, estilos y ambos documentos. Son 19 archivos de avance: siete modificados y doce nuevos respecto al cierre del Módulo 0; los seis `.gitkeep` se conservan.
@@ -631,25 +638,25 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 
 ## 8. Continuidad operativa actual
 
-- M0 COMPLETADO; M1 COMPLETADO, APROBADO Y PUBLICADO; M2-B1 COMPLETADO Y APROBADO (2/2); M2-B2-P1–P8 APROBADOS y P4-C1 CORRECCIÓN APROBADA incluida en P4. Diez prompts de M2 aprobados.
-- **Último aprobado:** M2-B2-P8. El responsable confirmó catorce comprobaciones manuales satisfactorias; Codex no ejecutó esas pruebas reales.
-- **Último ejecutado:** M2-B2-P9. **AUDITORÍA ELABORADA — PENDIENTE DE APROBACIÓN EXTERNA. Veredicto: REQUIERE CORRECCIÓN antes del cierre.**
-- Leer [AUDITORIA_AUTH_NAVEGACION_M2_B2.md](AUDITORIA_AUTH_NAVEGACION_M2_B2.md): F-01 MEDIO reproduce espera/error falso de logout al recibir una sesión posterior desde otra pestaña. Propuesto P9-C1 para corregir el ciclo de resultado; no ejecutado ni autorizado por esta auditoría.
+- M0 COMPLETADO; M1 COMPLETADO, APROBADO Y PUBLICADO; M2-B1 COMPLETADO Y APROBADO (2/2); M2-B2 COMPLETADO Y APROBADO TÉCNICAMENTE. P1–P8, P9 y P9-C1 aprobados; P4-C1 CORRECCIÓN APROBADA incluida en P4.
+- **Últimos aprobados:** M2-B2-P9-C1 y M2-B2-P9 por decisión externa posterior a R1. El responsable confirmó diez comprobaciones manuales de F-01; Codex no las ejecutó.
+- **Último ejecutado:** M2-B2-CIERRE-P1. Cierre documental preparado; publicación se informa solo después de verificar el push.
+- Leer [AUDITORIA_AUTH_NAVEGACION_M2_B2.md](AUDITORIA_AUTH_NAVEGACION_M2_B2.md): P9 conserva la reproducción histórica de F-01; sección 28 registra 22 PASS SIMULADO y 2 NO EJECUTADO de R1; sección 29 registra diez pruebas externas y resolución validada.
 - Registro, login, logout y persistencia reales APROBADOS; rutas protegidas IMPLEMENTADAS Y APROBADAS. **RENOVACIÓN AUTOMÁTICA REAL — OBSERVACIÓN PENDIENTE.**
-- **Próximo bloque:** M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos, PROPUESTO — NO EJECUTADO; confirmar después de corrección y aprobación externa del cierre. No hay autorización para avanzar.
-- Conservar los avances locales: GitHub solo tiene publicado hasta P2 en el HEAD conocido; clonar no recupera por sí solo P3–P9. No sincronizar ni publicar sin autorización. Código, planes y dependencias intactos en P9; solo informe nuevo y dos documentos actualizados.
+- **Próxima tarea propuesta:** M2-B3-P1 — Diseño del modelo de datos y seguridad RLS de contratos; NO EJECUTADO, requiere prompt específico.
+- **Git previo a este cierre:** rama de relevo `relevo/m2-b2-p9c1-20261017`, HEAD `c05b9e87e8364fdc212a47f3bfef5db1691565a5`. Solo tres documentos autorizados contienen R1 y este cierre. El commit y push de CIERRE-P1 se verifican e informan al terminar, sin escribir aquí el hash del propio commit.
 
 ## 9. Indicaciones para el siguiente integrante
 
 1. Abre el repositorio en VS Code y confirma la raíz, rama y remoto correctos.
 2. Lee `AGENTS.md`, este documento y, cuando sea necesario, `docs/HISTORIAL_PROMPTS.md`.
 3. Revisa Git y preserva los cambios locales antes de cualquier sincronización autorizada.
-4. Consulta `git ls-remote --heads origin main` y compara su hash con el commit de relevo informado; conserva cualquier cambio local antes de sincronizar.
+4. Consulta la rama remota efectiva de trabajo con `git ls-remote` y compara su hash con el HEAD informado; conserva cualquier cambio local antes de sincronizar.
 5. Comprueba Node.js con `.nvmrc` y las dependencias; usa npm y el lockfile para instalar cuando corresponda.
 6. Ejecuta las pruebas pertinentes y contrasta sus resultados con el código real, sin confiar ciegamente en este estado.
 7. Continúa únicamente desde el siguiente prompt autorizado.
 8. Obtén acceso autorizado al mismo proyecto Supabase de desarrollo desde el dashboard, sin utilizar la cuenta personal del responsable. Configura tu propio `.env.local` desde `.env.example` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`; no guardes contraseñas, claves secretas, `service_role` ni tokens administrativos en el frontend o Git.
-9. Ejecuta `npm run supabase:check`, `npm run supabase:check:test`, `npm run build`, `npm run lint` y `npm run dev`; verifica las rutas y Git. No presupongas usuarios, sesiones persistentes, tablas, migraciones, RLS, Stellar o Soroban. M2-B2-P1–P8 y C1 están aprobados; lee la auditoría P9 y espera autorización del correctivo propuesto de F-01 y revisión externa, sin añadir consultas, roles ni RLS por iniciativa propia.
+9. Ejecuta los scripts aplicables de `package.json` y verifica Git. M2-B2 está aprobado técnicamente; lee la auditoría y su cierre. No presupongas tablas, migraciones, RLS, Stellar o Soroban. La renovación remota real continúa sin observación directa. Espera el prompt específico de M2-B3-P1 antes de diseñar datos contractuales.
 
 ## 10. Registro del relevo al terminar cada turno
 
