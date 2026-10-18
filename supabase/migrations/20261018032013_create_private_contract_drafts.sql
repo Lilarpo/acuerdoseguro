@@ -11,9 +11,11 @@ create table public.contracts (
   title varchar(120) not null
     constraint contracts_title_nonblank check (length(btrim(title)) > 0),
   description text not null
-    constraint contracts_description_nonblank check (length(btrim(description)) > 0),
+    constraint contracts_description_nonblank check (length(btrim(description)) > 0)
+    constraint contracts_description_max_length check (char_length(description) <= 4000),
   terms text not null
-    constraint contracts_terms_nonblank check (length(btrim(terms)) > 0),
+    constraint contracts_terms_nonblank check (length(btrim(terms)) > 0)
+    constraint contracts_terms_max_length check (char_length(terms) <= 20000),
   created_at timestamptz not null default now()
 );
 
