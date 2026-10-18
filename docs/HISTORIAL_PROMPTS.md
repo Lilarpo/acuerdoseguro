@@ -27,7 +27,7 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 - **Última actividad administrativa de cierre:** CIERRE-DOC-M1, posterior a la aprobación. **Actividad operativa de relevo:** PUBLICACIÓN-RELEVO-M1. Ninguna cuenta como prompt de implementación.
 - **Incorporación operativa posterior:** INCORPORACIÓN-RELEVO-M1; comprobaciones técnicas satisfactorias y contradicción documental pendiente que se corrige durante M2-B1-P1.
 - **M2-B1:** COMPLETADO Y APROBADO; 2/2 prompts aprobados.
-- **Actividad actual:** M2-B3-P3-INSPECCIÓN — inventario de catálogo preparado, BLOQUEADO POR AUTORIZACIÓN Y PROYECTO NO CONFIRMADO. M2-B3-RESPALDO-P1 publicado y aprobado; P3-B no autorizado. Renovación real aún no observada.
+- **Actividad actual:** M2-B3-P3-INSPECCIÓN-R5 — A–D externas registradas; inspección completada dentro de su alcance y auditoría estática satisfactoria, pendiente de aprobación externa. Seguridad RLS efectiva no validada; P3-B no autorizado. HEAD bf16db7213c879c75411b0964edfc2c743919c26 conservado.
 - **Fuente de las aprobaciones:** el responsable confirmó el cierre del Módulo 0, el sistema visual y los componentes UI; la aprobación de M1-B2-P1 consta en el prompt M1-B3-P1, la de M1-B3-P1 en la solicitud expresa de relevo, la de M1-B4-P1 en M1-B4-P2, la de M1-B4-P2 en M1-B5-P1, la de M1-B5-P1 en M1-B6-P1, la de M1-B6-P1 en M1-B6-P2, la de M1-B6-P2 en M1-B7-P1, la de M1-B7-P1 en M1-B7-P2, la de M1-B7-P2 en M1-B8-P1 y la de M1-B8-P1 en CIERRE-DOC-M1 tras 22 pruebas manuales. No se deducen aprobaciones del mero resultado de Codex.
 
 | Prompt | Descripción | Estado |
@@ -70,10 +70,16 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 | M2-B3-P2 | Migración local PostgreSQL y RLS para borradores privados | APROBADO COMO MIGRACIÓN LOCAL REVISADA ESTÁTICAMENTE; no aplicada |
 | M2-B3-P3-A | Preflight, inventario remoto preparado y plan de pruebas RLS | APROBADO COMO PREFLIGHT DOCUMENTAL; consultas no ejecutadas |
 | M2-B3-RESPALDO-P1 | Publicación segura de P1, P2 y P3-A en rama de relevo | PUBLICADO Y APROBADO; commit `9770ac1e4a04c563288e5343972858ba12cc4b89` |
-| M2-B3-P3-INSPECCIÓN | Inventario remoto de solo lectura del proyecto compartido | BLOQUEADO POR AUTORIZACIÓN Y PROYECTO NO CONFIRMADO; consultas preparadas, NO EJECUTADAS |
+| M2-B3-P3-INSPECCIÓN | Inventario remoto de solo lectura del proyecto compartido | COMPLETADO EN ALCANCE A–D, pendiente de aprobación externa; RLS funcional no validada |
+| M2-B3-P3-IDENTIDAD | Cotejo del proyecto compartido con configuración React | CONFIRMADA EXTERNAMENTE; VITE_SUPABASE_URL COINCIDE |
+| M2-B3-P3-INSPECCIÓN-R1 | Inventario autorizado de metadatos PostgreSQL | PARCIAL; sin acceso SQL directo, fase A preparada para ejecución manual |
+| M2-B3-P3-INSPECCIÓN-R2 | Registro de fase A real y preparación de fase B | Registro completado; fase A confirmada externamente, fase B NO EJECUTADA |
+| M2-B3-P3-INSPECCIÓN-R3 | Registro de fase B real y preparación de dependencias/roles | Registro completado; fase B confirmada externamente, C1/C2 NO EJECUTADAS |
+| M2-B3-P3-INSPECCIÓN-R4 | Registro de fase C real y preparación de tipos/PK/privilegios | Registro completado; fase C confirmada externamente, D1–D4 NO EJECUTADAS |
+| M2-B3-P3-INSPECCIÓN-R5 | Cierre documental de D y auditoría estática de permisos | COMPLETADO EN SU ALCANCE — PENDIENTE DE APROBACIÓN EXTERNA; no autoriza despliegue |
 | M2-B3-P3-B | Aplicación controlada y verificación real de esquema y RLS | NO AUTORIZADO — NO EJECUTADO |
 
-**Siguiente acción:** confirmar por referencia pública el proyecto Supabase compartido y solicitar autorización específica para consultas SQL de catálogo de solo lectura. **P3-B:** aplicación y validación real NO AUTORIZADA — NO EJECUTADA.
+**Siguiente acción:** revisión externa del cierre R5 y resolución documental de bloqueos del preflight, sin SQL ni cambios de defaults globales. **P3-B:** aplicación y validación real NO AUTORIZADA — NO EJECUTADA.
 
 ## 3. Evidencia y observaciones por registro
 
@@ -511,13 +517,61 @@ Las pruebas históricas proceden de sus informes; cada registro atribuye las ver
 
 **Resultado posterior registrado al iniciar M2-B3-P3-INSPECCIÓN:** el respaldo figura PUBLICADO Y APROBADO; HEAD local `9770ac1e4a04c563288e5343972858ba12cc4b89`, `chore(db): respaldar diseno y preflight RLS M2-B3`. La publicación no ejecutó el SQL de contratos.
 
-### M2-B3-P3-INSPECCIÓN — Inventario remoto de solo lectura
+### M2-B3-P3-INSPECCIÓN — Registro histórico previo a IDENTIDAD/R1
 
 - **Estado:** BLOQUEADO POR AUTORIZACIÓN Y PROYECTO NO CONFIRMADO. [Informe de inspección](INSPECCION_REMOTA_SUPABASE_M2_B3_P3.md) con consultas de catálogo preparadas y clasificadas NO EJECUTADAS.
 - **Evidencia local:** rama `relevo/m2-b2-p9c1-20261017`, HEAD `9770ac1e4a04c563288e5343972858ba12cc4b89`; inicio sin cambios ni staging. Migración P2 íntegra: 2.165 bytes, SHA-256 `5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac`.
 - **Límites:** sin lectura de `.env.local`, conexión administrativa, SQL remoto, migración, datos de prueba ni cambios de permisos. Tabla, índices, políticas, grants e historial remotos NO CONSULTADOS; RLS real NO VALIDADA.
 - **Verificaciones:** `npm run build` PASS con advertencia conocida de bundle de 544,90 kB; `npm run lint` PASS; `npm run supabase:check:test` PASS, 22/22 simulaciones; `git diff --check` PASS. No se ejecutó diagnóstico Auth real ni prueba PostgreSQL/RLS.
 - **Continuidad:** confirmar proyecto exacto sin secretos, obtener autorización separada para SELECT de catálogo y registrar resultados no sensibles. M2-B3-P3-B NO AUTORIZADO — NO EJECUTADO; Módulo 2 incompleto.
+
+### M2-B3-P3-IDENTIDAD — Confirmación del proyecto compartido
+
+- Nombre `acuerdoseguro-dev`; referencia `gaydlycsinbrlanzmsyj`; Project URL `https://gaydlycsinbrlanzmsyj.supabase.co`; Dashboard `https://supabase.com/dashboard/project/gaydlycsinbrlanzmsyj`.
+- Node 24 comparó exclusivamente VITE_SUPABASE_URL en memoria con salida COINCIDE; sin imprimir configuración ni acceder a la clave. Git permaneció limpio en rama de relevo/HEAD bf16db7. El responsable confirmó después visualmente nombre, referencia y URL en el prompt R1. No hubo SQL ni cambios de archivo en IDENTIDAD.
+
+### M2-B3-P3-INSPECCIÓN-R1 — Inventario autorizado de metadatos PostgreSQL (2026-10-18)
+
+- **Identidad del proyecto: CONFIRMADA POR EL RESPONSABLE Y COINCIDENTE CON LA CONFIGURACIÓN LOCAL. Inspección de metadatos: AUTORIZADA EXTERNAMENTE.** La autorización concede exclusivamente catálogo de solo lectura en acuerdoseguro-dev; no se vuelve a pedir autorización genérica.
+- **Estado: PARCIAL.** Ninguna consulta remota ejecutada ni resultado recibido. Sin herramienta Supabase/SQL Editor conectada o conexión SQL disponible; supabase/psql/postgres ausentes de PATH. Docker está disponible, pero no da acceso a la base compartida. No se instalaron herramientas, buscaron secretos ni extrajeron sesiones del navegador.
+- **Entrega:** solo [INSPECCION_REMOTA_SUPABASE_M2_B3_P3.md](INSPECCION_REMOTA_SUPABASE_M2_B3_P3.md), estado e historial actualizados. Sección 23 prepara fase A (contexto y existencia) para ejecución manual, con READ ONLY si el editor lo admite. Fases A–E NO EJECUTADAS. Detener al encontrar public.contracts, índice conflictivo, error de permisos o ambigüedad. No consultar datos de negocio ni contenido SQL del historial.
+- **Continuidad:** responsable ejecuta primero solo fase A y comparte ambos resultados no sensibles; después se decide el siguiente paso dentro del catálogo autorizado. Tabla, políticas, grants e historial remotos NO CONSULTADOS; pruebas RLS reales/A/B/anónimo NO EJECUTADAS. P3-B NO AUTORIZADO. Módulo 2 incompleto.
+- **Integridad/Git:** inicio limpio en relevo/m2-b2-p9c1-20261017, HEAD bf16db7213c879c75411b0964edfc2c743919c26. Migración inalterada, SHA-256 5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac; sin cambios de src, lockfile, configuración privada ni dependencias. Sin staging, commit, push ni SQL de escritura.
+- **Pruebas de R1:** build PASS (108 módulos; JS 544,90 kB, advertencia conocida >500 kB), lint PASS, diagnóstico controlado 22/22 PASS y diff check PASS. No equivalen a resultados de catálogo o validación RLS remota.
+
+### M2-B3-P3-INSPECCIÓN-R2 — Resultados externos de fase A y preparación de fase B (2026-10-18)
+
+- **Fuente:** responsable aporta resultados procedentes de capturas de SQL Editor del proyecto confirmado acuerdoseguro-dev (gaydlycsinbrlanzmsyj). Codex registra evidencia externa, no ejecuta consultas ni inspecciona directamente las capturas. Fecha/hora exacta de ejecución no aportada.
+- **Fase A, EJECUTADA — RESULTADO CONFIRMADO EXTERNAMENTE:** database_name postgres; execution_role postgres; schema_name public; postgres_version 17.11. Contracts_relation NULL, expected_index NULL y migration_history NULL.
+- **Interpretación:** tabla contractual e índice esperado no encontrados; HISTORIAL NO ENCONTRADO EN EL ESQUEMA ESPERADO. No se acredita ausencia de todas las migraciones, RLS contractual instalada ni privilegios de anon/authenticated. El rol administrativo postgres no prueba restricciones de usuarios ordinarios.
+- **Entrega:** tres documentos autorizados actualizados, preservando R1. Dos consultas SELECT de fase B preparadas sobre pg_class/pg_namespace para objetos y esquemas exactos; NO EJECUTADAS. Responsable debe ejecutarlas manualmente y enviar ambos resultados no sensibles. Inventario global PARCIAL; no se declara PostgreSQL listo para despliegue.
+- **Git/verificación:** rama y HEAD esperados conservados; solo cambios documentales previos R1, sin trabajo inesperado/staging. SQL con SHA-256 aprobado intacto; diff check correcto. Sin cambios de código, dependencias, entorno privado, SQL ni main; sin commit/push. Build/lint/22 pruebas siguen siendo evidencia R1, no nuevas ejecuciones R2.
+- **Continuidad:** fase B pendiente; detener ante conflicto/error de permisos. FK ON DELETE RESTRICT, límites de texto, recuperación, privilegios, historial y pruebas A/B/anónimo pendientes. Migración no aplicada por este prompt y P3-B NO AUTORIZADO; Módulo 2 incompleto.
+
+### M2-B3-P3-INSPECCIÓN-R3 — Fase B externa y preparación de C1/C2 (2026-10-18)
+
+- **Fuente:** ejecución manual del responsable en SQL Editor del proyecto confirmado acuerdoseguro-dev (gaydlycsinbrlanzmsyj), no conexión SQL de Codex. Fecha/hora exacta y rol de ejecución de B no aportados; no se presumen a partir de A.
+- **Fase B COMPLETADA MEDIANTE EVIDENCIA EXTERNA:** B1 sobre relaciones filtradas: Success. No rows returned; B2 sobre esquemas relevantes: únicamente schema_name = public. No apareció supabase_migrations. Sin objetos contractuales esperados ni conflicto de nombres entre los objetos consultados. No se deduce ausencia de toda migración anterior, RLS validada o autorización de despliegue.
+- **Entrega:** inventario, estado e historial actualizados; C1 resuelve referencias Auth/UUID y C2 lee atributos de anon/authenticated. Son SELECT de catálogo, sin filas de Auth ni ejecución de funciones referenciadas. C1/C2 NO EJECUTADAS, pendientes de resultados del responsable. No confundir fase C actual con la propuesta histórica R1 de políticas.
+- **Git/verificaciones:** rama y HEAD bf16db7213c879c75411b0964edfc2c743919c26 conservados; solo cambios previos R1/R2 en tres documentos esperados, staging vacío. SHA-256 SQL 5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac intacto; diff check correcto. Sin cambios de código, dependencias, main o SQL, sin commit/push. No se repiten build/lint históricos en esta tarea documental.
+- **Continuidad:** ejecutar manualmente solo C1/C2 y compartir resultados no sensibles; detener después. Si falta dependencia/rol, registrar bloqueo y solicitar revisión, sin crearlo. Límites de texto, baja de cuentas/FK, recuperación, permisos y pruebas A/B/anónimo siguen pendientes. P3-B NO AUTORIZADO; M2-B3 y Módulo 2 incompletos.
+
+### M2-B3-P3-INSPECCIÓN-R4 — Fase C externa y preparación de D1–D4 (2026-10-18)
+
+- **Fuente:** responsable aporta resultados de sus ejecuciones C1/C2 en SQL Editor de acuerdoseguro-dev (gaydlycsinbrlanzmsyj). Codex no realizó conexión SQL ni examinó directamente capturas. Fecha/hora y rol de ejecución no aportados.
+- **Fase C COMPLETADA MEDIANTE EVIDENCIA EXTERNA:** referencias auth.users, auth.uid(), gen_random_uuid() resueltas. Anon y authenticated existen: rolcanlogin false y rolbypassrls false para ambos. NOLOGIN no es problema por sí mismo para API; sin BYPASSRLS no equivale a RLS funcional ni grants comprobados. Retornos y tipo/PK aún pendientes.
+- **Entrega:** solo inventario, estado e historial actualizados; sección 26 prepara D1–D4 de metadatos, NO EJECUTADAS: id/PK Auth, retornos, defaults declarados y USAGE/CREATE de public. No se lee Auth ni se ejecutan funciones inspeccionadas. Cero defaults no demuestra seguridad; grants de esquema no sustituyen permisos de tabla/columna.
+- **Git/verificaciones:** rama/HEAD esperados y avances R1–R3 conservados; SQL con SHA-256 aprobado intacto y diff check correcto; solo tres documentos modificados, sin código/dependencias/main/staging/commit/push. Build/lint anteriores no se presentan como nuevas pruebas R4.
+- **Continuidad:** responsable ejecuta únicamente D1–D4, envía cuatro resultados no sensibles y se detiene. Registrar incompatibilidad o necesidad de permisos como bloqueo para revisión, sin arreglar en remoto. Public.contracts NO ENCONTRADA EN LAS CONSULTAS PREVIAS; RLS contractual NO VALIDADA; migración P2 NO APLICADA POR ESTE PROCESO; P3-B NO AUTORIZADO; Módulo 2 INCOMPLETO.
+
+### M2-B3-P3-INSPECCIÓN-R5 — Cierre documental de D y auditoría estática (2026-10-18)
+
+- **Evidencia externa:** responsable ejecutó manualmente D1–D4; comunicó id Auth uuid/NOT NULL/pertenece PK y retornos uuid. D3/D4 descritas como capturas: defaults SELECT/INSERT/UPDATE/DELETE true para anon/authenticated con tablas futuras de postgres/supabase_admin en public; USAGE public true/CREATE false para ambos roles. Codex no ejecutó SQL ni examinó directamente capturas. No se presume rol/fecha exacta de ejecución ni ACL no aportada.
+- **Auditoría estática:** diez controles de sección 27 del inventario PASS POR INSPECCIÓN: transacción única, RLS antes de COMMIT, REVOKE ALL a PUBLIC/anon/authenticated, ninguna reconcesión anon, SELECT y tres columnas de contenido para INSERT/UPDATE authenticated, políticas de dueño/draft, sin DELETE, columnas inmutables excluidas, sin reconcesión amplia posterior y tipos/esquemas compatibles con metadatos externos.
+- **Resultado:** inspección A–D COMPLETADA dentro de su alcance; revisión estática SATISFACTORIA, PENDIENTE DE APROBACIÓN EXTERNA. Sin defecto importante demostrado del archivo que exija corrección; no se certifica seguridad efectiva ni readiness de despliegue. SQL y defaults/globales no modificados.
+- **Riesgos:** defaults amplios mitigados para concesiones directas por REVOKE/GRANT local; verificar permisos efectivos, columnas/indirectos y A/B/anon tras despliegue futuro autorizado. Resolver FK/retención, límites de texto, recuperación/reversión, ejecutor transaccional/versionado, historial ausente y pruebas/limpieza. Ausencia de supabase_migrations no demuestra inexistencia de toda migración anterior.
+- **Local/Git:** HEAD bf16db7213c879c75411b0964edfc2c743919c26 y rama conservados; solo tres documentos, avances R1–R4 preservados, SHA-256 SQL aprobado intacto y diff check correcto. Sin código/dependencias/SQL/main/staging/commit/push ni SQL remoto. Build/lint históricos no se repiten para R5 documental.
+- **Continuidad:** revisión y aprobación externa del cierre, sin nueva consulta ahora. RLS contractual NO VALIDADA; public.contracts NO ENCONTRADA EN CONSULTAS PREVIAS; P2 NO APLICADA POR ESTE PROCESO; P3-B NO AUTORIZADO; Módulo 2 INCOMPLETO.
 
 ## 4. Mantenimiento acumulativo y relevos
 
