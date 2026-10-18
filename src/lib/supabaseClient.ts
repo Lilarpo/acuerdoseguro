@@ -22,10 +22,10 @@ export function getSupabaseClient(): SupabaseClient | null {
   if (!supabaseClient) {
     supabaseClient = createClient(url, publishableKey, {
       auth: {
-        persistSession: false,
-        autoRefreshToken: false,
+        persistSession: true,
+        autoRefreshToken: true,
         detectSessionInUrl: false,
-        skipAutoInitialize: true,
+        skipAutoInitialize: false,
       },
     })
   }

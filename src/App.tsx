@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { RequireAuth } from './auth/RequireAuth'
 import { AppLayout } from './components/layout/AppLayout'
 import { ContractDetailPage } from './pages/ContractDetailPage'
 import { CreateContractPage } from './pages/CreateContractPage'
@@ -18,9 +19,11 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="registro" element={<RegisterPage />} />
-          <Route path="panel" element={<DashboardPage />} />
-          <Route path="contratos/nuevo" element={<CreateContractPage />} />
-          <Route path="contratos/:id" element={<ContractDetailPage />} />
+          <Route element={<RequireAuth />}>
+            <Route path="panel" element={<DashboardPage />} />
+            <Route path="contratos/nuevo" element={<CreateContractPage />} />
+            <Route path="contratos/:id" element={<ContractDetailPage />} />
+          </Route>
           <Route path="verificar" element={<VerifyDocumentPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

@@ -7,10 +7,15 @@ import type { AuthState } from './authTypes'
 function stateFromSession(session: Session | null): AuthState {
   if (!session) return { status: 'signed_out' }
 
-  const { id, email } = session.user
+  // Stored client data is not trusted identity or data authorization.
+  const user = session.user
+  if (!user || typeof user !== 'object' || typeof user.id !== 'string' || !user.id.trim()) {
+    return { status: 'error' }
+  }
+  const { id, email } = user
   return {
     status: 'session_present',
-    user: { id, ...(email ? { email } : {}) },
+    user: { id, ...(typeof email === 'string' && email ? { email } : {}) },
   }
 }
 
@@ -35,16 +40,24 @@ export function AuthProvider({ children }: PropsWithChildren) {
     if (!client) return
 
     let active = true
+    let observedChange = false
     try {
       const { data: { subscription } } = client.auth.onAuthStateChange((event, session) => {
         if (!active) return
 
         switch (event) {
           case 'INITIAL_SESSION':
-          case 'SIGNED_IN':
+            // A delayed initial snapshot must not replace a newer Auth event.
+            if (!observedChange) setState(stateFromSession(session))
+            break
           case 'SIGNED_OUT':
+            observedChange = true
+            setState({ status: 'signed_out' })
+            break
+          case 'SIGNED_IN':
           case 'TOKEN_REFRESHED':
           case 'USER_UPDATED':
+            observedChange = true
             setState(stateFromSession(session))
             break
           default:
