@@ -116,6 +116,6 @@ export function VerifyDocumentPage() {
     </Card>
     {busy && <p className="mt-5" role="status">Procesando…</p>}
     {error && <p className="mt-5 text-red-700" role="alert">{error}</p>}
-    <Link to="/panel" className="mt-6 inline-flex min-h-11 items-center text-accent-strong underline">Volver al panel</Link>
+    <Link to="/panel" className="mt-6 inline-flex min-h-11 items-center text-accent-strong underline">Ir al panel (requiere sesión)</Link>
   </PageContainer>
 }

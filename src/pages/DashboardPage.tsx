@@ -34,7 +34,7 @@ export function DashboardPage() {
   return (
     <PageContainer className="py-10 sm:py-14">
       <h1 className="text-3xl font-semibold text-brand">Mis acuerdos</h1>
-      <p className="mt-4 leading-relaxed text-ink">Borradores privados de tu cuenta. Las firmas y la verificación blockchain siguen en desarrollo.</p>
+      <p className="mt-4 leading-relaxed text-ink">Borradores privados de tu cuenta. Puedes calcular su huella y consultar evidencia en Stellar Testnet; invitaciones y aceptación bilateral siguen pendientes.</p>
       <Link to="/contratos/nuevo" className="my-6 inline-flex min-h-11 items-center rounded-control bg-accent px-5 font-semibold text-brand">Crear acuerdo</Link>
       {user && <MyDrafts key={user.id} />}
     </PageContainer>

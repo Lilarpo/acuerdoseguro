@@ -10,7 +10,8 @@ export function CreateContractPage() {
       <h1 className="text-3xl font-semibold text-brand">Crear acuerdo</h1>
       <p className="mt-4 max-w-3xl leading-relaxed text-ink">
         Guarda un borrador privado con título, descripción y cláusulas. Solo se guardan estos tres campos.
-        Participantes, invitaciones, firmas y evidencia blockchain todavía no están habilitados.
+        Después podrás calcular su huella y consultar o registrar evidencia en Stellar Testnet desde el detalle.
+        Invitaciones y aceptación bilateral aún no están disponibles.
       </p>
       <Card className="mt-8 max-w-3xl">
         <ContractContentForm submitLabel="Guardar borrador" onSave={createContractDraft}
