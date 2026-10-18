@@ -22,11 +22,11 @@ Fuente principal del estado operativo. Consulta [el historial](HISTORIAL_PROMPTS
 | Estado del Módulo 1 | COMPLETADO Y APROBADO — 12 de 12 prompts aprobados |
 | Estado del Módulo 2 | EN DESARROLLO — M2-B1 y M2-B2 aprobados; M2-B3 iniciado, migración local sin aplicar |
 | Último prompt aprobado | M2-B3-P3-A — aprobado como preflight documental; P1/P2 aprobados en sus alcances limitados |
-| Actividad actual | M2-B3-RESPALDO-P1 — publicación controlada de seis archivos; resultado Git se confirma en el informe final |
+| Actividad actual | M2-B3-P3-INSPECCIÓN — inventario preparado; BLOQUEADO POR AUTORIZACIÓN Y PROYECTO NO CONFIRMADO; ninguna consulta remota ejecutada |
 | Estado del preflight | APROBADO COMO DOCUMENTO; inventario remoto y despliegue siguen pendientes de autorizaciones separadas |
 | Corrección puntual local | M2-B2-P4-C1 — CORRECCIÓN APROBADA dentro de P4 por el responsable; no aumenta el conteo funcional |
-| Última publicación verificada | M2-B2-CIERRE-P1 en rama de relevo, `dae6bbe7516afb5c01660fb143e32e12ee96cd5c` |
-| Siguiente trabajo previsto | M2-B3-P3-INSPECCIÓN — inventario remoto de solo lectura, pendiente de autorización específica; P3-B NO AUTORIZADO |
+| Última publicación verificada | M2-B3-RESPALDO-P1 en rama de relevo, `9770ac1e4a04c563288e5343972858ba12cc4b89` |
+| Siguiente trabajo previsto | Confirmar proyecto Supabase y solicitar autorización específica para SQL de catálogo de solo lectura; P3-B NO AUTORIZADO |
 
 El responsable confirmó después del informe de M1-B8-P1 que completó satisfactoriamente 22 comprobaciones manuales de regresión integral, sin defectos bloqueantes comunicados, y aprobó M1-B8-P1 y el cierre del Módulo 1. Codex no ejecutó esas pruebas de navegador. La publicación posterior de M1 se verificó durante PUBLICACIÓN-RELEVO-M1 e INCORPORACIÓN-RELEVO-M1; ninguna de esas actividades acredita funcionamiento de integraciones futuras.
 
@@ -639,6 +639,15 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 - **Integridad:** SHA-256 aprobado de la migración `5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac`, tamaño 2.165 bytes; SQL intacto. La rama remota coincidió con HEAD base `dae6bbe7516afb5c01660fb143e32e12ee96cd5c` antes del staging.
 - **Estado al preparar este documento:** commit y push pendientes de ejecución y verificación; sus hashes/resultados se informan después, sin crear otro commit para escribir aquí el hash del propio commit. Publicar en GitHub no aplica SQL ni autoriza inventario o despliegue Supabase.
 
+**Publicación posterior comprobada al iniciar M2-B3-P3-INSPECCIÓN:** HEAD local `9770ac1e4a04c563288e5343972858ba12cc4b89`, commit `chore(db): respaldar diseno y preflight RLS M2-B3`; el prompt de inspección registra M2-B3-RESPALDO-P1 como PUBLICADO Y APROBADO. Esta evidencia no acredita aplicación de la migración en Supabase.
+
+### M2-B3-P3-INSPECCIÓN — Inventario remoto de solo lectura
+
+- **Estado:** BLOQUEADO POR AUTORIZACIÓN Y PROYECTO NO CONFIRMADO. [Inventario preparado](INSPECCION_REMOTA_SUPABASE_M2_B3_P3.md); ningún SQL remoto ejecutado, sin conexión administrativa ni resultados de catálogo.
+- **Identidad pendiente:** referencia pública, URL y nombre del Dashboard deben ser confirmados por el responsable frente a la configuración local, sin divulgar claves ni leer `.env.local` en esta sesión. Después corresponde solicitar autorización expresa y separada para consultas SELECT de catálogo.
+- **Integridad local:** migración P2 conservada con 2.165 bytes y SHA-256 `5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac`. `public.contracts`, índices, RLS, grants e historial remotos NO CONSULTADOS. M2-B3-P3-B NO AUTORIZADO — NO EJECUTADO.
+- **Verificaciones locales:** `npm run build` PASS (advertencia conocida de 544,90 kB), `npm run lint` PASS, `npm run supabase:check:test` PASS (22/22 simulaciones), `git diff --check` PASS. No equivalen a inspección de PostgreSQL ni pruebas reales de RLS.
+
 ## 6. Problemas, advertencias y tareas pendientes
 
 - **Cierre funcional del frontend:** M1-B8-P1 y el Módulo 1 fueron aprobados externamente tras 22 comprobaciones manuales satisfactorias. Codex no repitió esas pruebas en su entorno sin navegador.
@@ -662,6 +671,7 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 - **Entrega preparada en PUBLICACIÓN-RELEVO-M2-02:** exclusivamente el servicio nuevo `src/services/supabase/registerUser.ts`, RegisterPage y ambos documentos de continuidad sobre `93c356f8bb03da1352950067faee7a17239e06af`. Cliente, AuthProvider, rutas, UI, dependencias y `.env.local` conservados.
 - **Commit autorizado:** `feat(auth): implementar registro real Supabase M2-B2-P2`. Esta documentación forma parte del commit; su hash y publicación efectiva se verifican en Git y en el informe final posterior al push. No se presupone el resultado de publicación en esta nota.
 - **Publicación de registro confirmada:** HEAD y origin/main al iniciar M2-B2-P3 coinciden en `0e23f15039802537ee2708120526d797a8acae59`, commit `feat(auth): implementar registro real Supabase M2-B2-P2`, cuyo push se verificó en el relevo anterior.
+- **Respaldo M2-B3 publicado:** la rama de relevo tiene el commit `9770ac1e4a04c563288e5343972858ba12cc4b89`, `chore(db): respaldar diseno y preflight RLS M2-B3`, con los seis archivos de P1/P2/P3-A. El prompt actual lo identifica como último commit publicado conocido y M2-B3-RESPALDO-P1 como PUBLICADO Y APROBADO.
 - **M2-B2-P3 local:** únicamente loginUser.ts nuevo, LoginPage y ambos documentos. Sin staging, commit ni push; cliente, AuthProvider, registro, otras páginas, dependencias y configuración conservados.
 - **M2-B2-P4 local:** logoutUser.ts nuevo; adaptaciones exclusivamente en LoginPage y ambos documentos. Los cuatro archivos del prompt anterior se conservan y loginUser.ts permanece idéntico al inicio. Sin staging, commit ni push.
 - **M2-B2-P5 local:** nuevo PLAN_PERSISTENCIA_SESION.md y actualización de ambos documentos; ningún cambio de código ni publicación. P3/P4/C1 aprobados y preservados localmente.
@@ -676,12 +686,12 @@ Responsable validará P8, sin cuentas nuevas automáticas:
 
 - M0 COMPLETADO; M1 COMPLETADO, APROBADO Y PUBLICADO; M2-B1 COMPLETADO Y APROBADO (2/2); M2-B2 COMPLETADO Y APROBADO TÉCNICAMENTE. P1–P8, P9 y P9-C1 aprobados; P4-C1 CORRECCIÓN APROBADA incluida en P4.
 - **Último aprobado:** M2-B3-P3-A como preflight documental; M2-B3-P1/P2 aprobados en sus alcances de diseño y migración local. M2-B2-P9/P9-C1 conservan aprobación; F-01 resuelto.
-- **Actividad actual:** M2-B3-RESPALDO-P1, publicación de seis archivos autorizada; resultado Git posterior al commit se comunica en el informe final.
+- **Actividad actual:** M2-B3-P3-INSPECCIÓN; consultas de catálogo preparadas, proyecto remoto NO CONFIRMADO y autorización expresa PENDIENTE. Ningún resultado remoto inventariado.
 - Leer [AUDITORIA_AUTH_NAVEGACION_M2_B2.md](AUDITORIA_AUTH_NAVEGACION_M2_B2.md): P9 conserva la reproducción histórica de F-01; sección 28 registra 22 PASS SIMULADO y 2 NO EJECUTADO de R1; sección 29 registra diez pruebas externas y resolución validada.
 - Registro, login, logout y persistencia reales APROBADOS; rutas protegidas IMPLEMENTADAS Y APROBADAS. **RENOVACIÓN AUTOMÁTICA REAL — OBSERVACIÓN PENDIENTE.**
 - **M2-B3:** P1/P2/P3-A APROBADOS en sus alcances limitados. Esquema y RLS preparados en archivo, NO APLICADOS; inventario remoto y pruebas RLS reales pendientes. Persistencia frontend, participantes e invitaciones pendientes.
-- **Próxima etapa prevista:** M2-B3-P3-INSPECCIÓN — inventario remoto de solo lectura con autorización específica. P3-B, aplicación y verificación real, NO AUTORIZADO — NO EJECUTADO.
-- **Git al preparar el respaldo:** rama de relevo `relevo/m2-b2-p9c1-20261017`, HEAD publicado previo `dae6bbe7516afb5c01660fb143e32e12ee96cd5c`. El resultado del commit/push de RESPALDO-P1 consta únicamente en su informe final.
+- **Próxima acción:** confirmar inequívocamente la referencia pública del proyecto compartido; luego solicitar autorización explícita para SELECT de catálogo y, si se concede, obtener resultados no sensibles mediante el SQL Editor. P3-B, aplicación y verificación real, NO AUTORIZADO — NO EJECUTADO.
+- **Git al iniciar la inspección:** rama de relevo `relevo/m2-b2-p9c1-20261017`, HEAD `9770ac1e4a04c563288e5343972858ba12cc4b89`; árbol y staging limpios antes de crear el documento de inspección. Este prompt no autoriza staging, commit ni push.
 
 ## 9. Indicaciones para el siguiente integrante
 

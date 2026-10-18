@@ -27,7 +27,7 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 - **Última actividad administrativa de cierre:** CIERRE-DOC-M1, posterior a la aprobación. **Actividad operativa de relevo:** PUBLICACIÓN-RELEVO-M1. Ninguna cuenta como prompt de implementación.
 - **Incorporación operativa posterior:** INCORPORACIÓN-RELEVO-M1; comprobaciones técnicas satisfactorias y contradicción documental pendiente que se corrige durante M2-B1-P1.
 - **M2-B1:** COMPLETADO Y APROBADO; 2/2 prompts aprobados.
-- **Actividad actual:** M2-B3-RESPALDO-P1 — respaldo autorizado de seis archivos. M2-B3-P1/P2/P3-A aprobados solo como diseño, migración local revisada estáticamente y preflight documental; P3-B no autorizado. Renovación real aún no observada.
+- **Actividad actual:** M2-B3-P3-INSPECCIÓN — inventario de catálogo preparado, BLOQUEADO POR AUTORIZACIÓN Y PROYECTO NO CONFIRMADO. M2-B3-RESPALDO-P1 publicado y aprobado; P3-B no autorizado. Renovación real aún no observada.
 - **Fuente de las aprobaciones:** el responsable confirmó el cierre del Módulo 0, el sistema visual y los componentes UI; la aprobación de M1-B2-P1 consta en el prompt M1-B3-P1, la de M1-B3-P1 en la solicitud expresa de relevo, la de M1-B4-P1 en M1-B4-P2, la de M1-B4-P2 en M1-B5-P1, la de M1-B5-P1 en M1-B6-P1, la de M1-B6-P1 en M1-B6-P2, la de M1-B6-P2 en M1-B7-P1, la de M1-B7-P1 en M1-B7-P2, la de M1-B7-P2 en M1-B8-P1 y la de M1-B8-P1 en CIERRE-DOC-M1 tras 22 pruebas manuales. No se deducen aprobaciones del mero resultado de Codex.
 
 | Prompt | Descripción | Estado |
@@ -69,11 +69,11 @@ Identifica cada tarea como `M[modulo]-B[bloque]-P[prompt]`: módulo, bloque y pr
 | M2-B3-P1 | Diseño del modelo de datos y seguridad RLS de contratos | APROBADO externamente para borradores privados |
 | M2-B3-P2 | Migración local PostgreSQL y RLS para borradores privados | APROBADO COMO MIGRACIÓN LOCAL REVISADA ESTÁTICAMENTE; no aplicada |
 | M2-B3-P3-A | Preflight, inventario remoto preparado y plan de pruebas RLS | APROBADO COMO PREFLIGHT DOCUMENTAL; consultas no ejecutadas |
-| M2-B3-RESPALDO-P1 | Publicación segura de P1, P2 y P3-A en rama de relevo | PREPARACIÓN DE PUBLICACIÓN; resultado Git posterior en informe final |
-| M2-B3-P3-INSPECCIÓN | Inventario remoto de solo lectura del proyecto compartido | PREVISTO — PENDIENTE DE AUTORIZACIÓN |
+| M2-B3-RESPALDO-P1 | Publicación segura de P1, P2 y P3-A en rama de relevo | PUBLICADO Y APROBADO; commit `9770ac1e4a04c563288e5343972858ba12cc4b89` |
+| M2-B3-P3-INSPECCIÓN | Inventario remoto de solo lectura del proyecto compartido | BLOQUEADO POR AUTORIZACIÓN Y PROYECTO NO CONFIRMADO; consultas preparadas, NO EJECUTADAS |
 | M2-B3-P3-B | Aplicación controlada y verificación real de esquema y RLS | NO AUTORIZADO — NO EJECUTADO |
 
-**Siguiente acción:** concluir y verificar el respaldo autorizado de seis archivos; después, solicitar autorización específica de M2-B3-P3-INSPECCIÓN. **P3-B:** aplicación y validación real NO AUTORIZADA — NO EJECUTADA.
+**Siguiente acción:** confirmar por referencia pública el proyecto Supabase compartido y solicitar autorización específica para consultas SQL de catálogo de solo lectura. **P3-B:** aplicación y validación real NO AUTORIZADA — NO EJECUTADA.
 
 ## 3. Evidencia y observaciones por registro
 
@@ -508,6 +508,16 @@ Las pruebas históricas proceden de sus informes; cada registro atribuye las ver
 - **Alcance:** exactamente seis archivos de P1/P2/P3-A y continuidad; SQL P2 intacto con SHA-256 `5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac` y 2.165 bytes. Sin cambio de código, dependencias o Supabase.
 - **Git antes de preparar:** rama `relevo/m2-b2-p9c1-20261017`, HEAD `dae6bbe7516afb5c01660fb143e32e12ee96cd5c`, remoto oficial en ese mismo hash, staging vacío. El resultado del único commit y push autorizados se comprueba y comunica después; no se inventa aquí el hash futuro.
 - **Continuidad:** la publicación del archivo SQL no instala tablas ni RLS. Siguiente M2-B3-P3-INSPECCIÓN requiere autorización de solo lectura; M2-B3-P3-B continúa NO AUTORIZADO — NO EJECUTADO.
+
+**Resultado posterior registrado al iniciar M2-B3-P3-INSPECCIÓN:** el respaldo figura PUBLICADO Y APROBADO; HEAD local `9770ac1e4a04c563288e5343972858ba12cc4b89`, `chore(db): respaldar diseno y preflight RLS M2-B3`. La publicación no ejecutó el SQL de contratos.
+
+### M2-B3-P3-INSPECCIÓN — Inventario remoto de solo lectura
+
+- **Estado:** BLOQUEADO POR AUTORIZACIÓN Y PROYECTO NO CONFIRMADO. [Informe de inspección](INSPECCION_REMOTA_SUPABASE_M2_B3_P3.md) con consultas de catálogo preparadas y clasificadas NO EJECUTADAS.
+- **Evidencia local:** rama `relevo/m2-b2-p9c1-20261017`, HEAD `9770ac1e4a04c563288e5343972858ba12cc4b89`; inicio sin cambios ni staging. Migración P2 íntegra: 2.165 bytes, SHA-256 `5e633ec225f325d070d72bc44586292c0584155754535943b2e769f8d38121ac`.
+- **Límites:** sin lectura de `.env.local`, conexión administrativa, SQL remoto, migración, datos de prueba ni cambios de permisos. Tabla, índices, políticas, grants e historial remotos NO CONSULTADOS; RLS real NO VALIDADA.
+- **Verificaciones:** `npm run build` PASS con advertencia conocida de bundle de 544,90 kB; `npm run lint` PASS; `npm run supabase:check:test` PASS, 22/22 simulaciones; `git diff --check` PASS. No se ejecutó diagnóstico Auth real ni prueba PostgreSQL/RLS.
+- **Continuidad:** confirmar proyecto exacto sin secretos, obtener autorización separada para SELECT de catálogo y registrar resultados no sensibles. M2-B3-P3-B NO AUTORIZADO — NO EJECUTADO; Módulo 2 incompleto.
 
 ## 4. Mantenimiento acumulativo y relevos
 
